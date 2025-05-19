@@ -1,0 +1,68 @@
+﻿@model AccountDetailViewModel
+@{
+	ViewData["Title"] = $"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}'s profile";
+}
+
+<div class="container">
+	<section id="account-security">
+		<partial name="_AsideProfile.cshtml" />
+
+		<div class="details">
+			<partial name="~/Views/Shared/Sections/_StatusMessage.cshtml" />
+			
+			<section class="password-info">
+				<form method="post" asp-controller="Account" asp-action="AccountSecurity">
+					<h2>Säkerhet</h2>
+					<h5>Lösenord</h5>
+
+					<div class="content">
+						<div id="current-password" class="input-group">
+							<label asp-for=SecurityInfo.CurrentPassword></label>
+							<span asp-validation-for="SecurityInfo.CurrentPassword"></span>
+							<input asp-for="SecurityInfo.CurrentPassword" />
+						</div>
+						<div id="new-password" class="input-group">
+							<label asp-for=SecurityInfo.Password></label>
+							<span asp-validation-for="SecurityInfo.Password"></span>
+							<input asp-for="SecurityInfo.Password" />
+						</div>
+						<div id="confirm-password" class="input-group">
+							<label asp-for="SecurityInfo.ConfirmPassword"></label>
+							<span asp-validation-for="SecurityInfo.ConfirmPassword"></span>
+							<input asp-for="SecurityInfo.ConfirmPassword" />
+						</div>
+						
+						<div class="form-buttons">
+							<button class="btn-gray" type="reset">Cancel</button>
+							<button class="btn-theme" type="submit">Save password</button>
+						</div>
+					</div>
+				</form>
+
+			</section>
+			<hr />
+			<section class="delete-account">
+				<form method="post" asp-controller="Account" asp-action="AccountSecurity">
+					<h5>Radera konto</h5>
+					<div class="content">
+						<p>When you delete your account, your public profile will be deactivated immediately. If you change your mind before the 14 days are up, sign in with your email and password, and we’ll send you a link to reactivate your account.</p>
+						
+						<div id="form-terms" class="checkbox">
+							<div class="checkbox-group">
+								<div class="input-group">
+									<input asp-for="SecurityInfo.DeleteAccount" />
+									<label asp-for="SecurityInfo.DeleteAccount">Yes, I want to delete my account.</label>
+								</div>
+							</div>
+							<span asp-validation-for="SecurityInfo.DeleteAccount"></span>
+						</div>
+						<div class="form-button">
+						<button class="btn-red" type="submit">Delete</button>
+						</div>
+					</div>
+				</form>
+			</section>
+		</div>
+	</section>
+</div>
+@await Html.PartialAsync("_ValidationScriptPartial");

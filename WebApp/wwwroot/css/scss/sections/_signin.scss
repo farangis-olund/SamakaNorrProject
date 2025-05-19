@@ -1,0 +1,88 @@
+﻿.signin {
+
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 95%;
+
+        .checkbox-group {
+            margin: 0;
+        }
+
+        @include lg {
+            width: 60%;
+        }
+
+        @include xl {
+            width: 50%;
+        }
+
+        @include xxl {
+            width: 35%;
+        }
+
+        form {
+            padding: 1.7rem;
+
+            .content {
+                display: grid;
+                gap: 1rem 2rem;
+                grid-template-columns: 1fr;
+                grid-template-areas: "email" "password" "remember" "button" "forgot" "hr" "external";
+
+
+                #form-email {
+                    grid-area: email;
+                }
+
+                #form-password {
+                    grid-area: password;
+                }
+
+                #form-remember {
+                    grid-area: remember;
+                    padding: 1rem 0;
+                }
+
+                #form-button {
+                    grid-area: button;
+                    padding: 12px 20px;
+                }
+
+                #form-forgot-password {
+                    grid-area: forgot;
+                    margin: 1rem 0 0 0;
+                    text-align: center;
+                }
+
+                hr {
+                    grid-area: hr;
+                }
+
+                .external-signin {
+                    grid-area: external;
+                    gap: 1rem;
+                    display: block;
+                    text-align: center;
+
+                    .providers {
+                        display: grid;
+                        row-gap: 15px;
+
+                        @include md {
+                            display: flex;
+                            gap: 20px;
+                        }
+
+                        a {
+                            padding: 15px 10px;
+                            flex: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

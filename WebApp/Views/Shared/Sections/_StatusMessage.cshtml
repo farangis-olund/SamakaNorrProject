@@ -1,0 +1,20 @@
+﻿@if (ViewData["StatusMessage"] != null)
+{
+    var statusMessage = ViewData["StatusMessage"]?.ToString();
+    if (!string.IsNullOrEmpty(statusMessage))
+    {
+        var messageParts = statusMessage.Split('|');
+        if (messageParts.Length == 2) // Ensure there are exactly two parts
+        {
+            var messageType = messageParts[0];
+            var messageText = messageParts[1];
+
+            <div id="statusMessage" class="alert alert-@messageType">@messageText</div>
+        }
+        else
+        {
+            // Optional: Handle unexpected format gracefully
+            <div id="statusMessage" class="alert alert-warning">Invalid status message format.</div>
+        }
+    }
+}

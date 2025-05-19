@@ -1,0 +1,64 @@
+.taskmaster {
+    padding: 20px 0;
+
+    .container {
+        display: block;
+
+        @include lg {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            padding: 40px 0;
+        }
+
+        img {
+            width: 100%;
+
+            @include lg {
+                width: 60%;
+            }
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+
+            h2 {
+                @include lg {
+                    @include d6;
+                }
+            }
+
+            @include lg {
+                display: block;
+            }
+
+            .checklist {
+                list-style-type: none;
+                padding: 0;
+
+                li {
+                    color: $gray-700;
+                    padding-bottom: 15px;
+                }
+
+                i {
+                    color: $theme;
+                    padding-right: 10px;
+                }
+            }
+
+            .btn-theme-s {
+                display: inline-block;
+
+                i {
+                    padding-left: 15px;
+                }
+            }
+        }
+    }
+}

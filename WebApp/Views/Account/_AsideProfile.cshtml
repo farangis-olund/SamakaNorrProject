@@ -1,0 +1,39 @@
+﻿@model AccountDetailViewModel
+<aside>
+	<div class="profile-info">
+		<div class="profile-img">
+			@if (Model.ProfileInfo.ProfileImgUrl == null)
+			{
+				<img src="~/images/uploads/profiles/avatar.svg" alt="@($"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}")" />
+			}
+			else
+			{
+				<img src="~/images/uploads/profiles/@Model.ProfileInfo.ProfileImgUrl" alt="@($"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}")" />
+			}
+
+			<form enctype="multipart/form-data" method="post" asp-action="UploadProfileImage" asp-controller="Account">
+				<input id="fileUploader" type="file" name="file" hidden />
+				<label for="fileUploader" class="button-circle"><i class="fa-solid fa-refresh"></i> </label>
+			</form>
+		</div>
+		<h5>@($"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}")</h5>
+		<p>@Model.ProfileInfo.Email</p>
+	</div>
+
+	<nav>
+		<a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "btn-theme-s" : "btn-transparent")" asp-controller="Account" asp-action="Index">
+			<i class="fa-solid fa-gear"></i> <span>Kontouppgifter</span>
+		</a>
+		<a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "AccountSecurity" ? "btn-theme-s" : "btn-transparent")" asp-controller="Account" asp-action="AccountSecurity">
+			<i class="fa-solid fa-lock"></i> <span>Säkerhet</span>
+		</a>
+		<a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Driver" ? "btn-theme-s" : "btn-transparent")" asp-controller="Account" asp-action="Driver">
+			<i class="fa-solid fa-car-side"></i> <span>Du är chaufför</span>
+		</a>
+		<a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Passenger" ? "btn-theme-s" : "btn-transparent")" asp-controller="Account" asp-action="Passenger">
+			<i class="fa-solid fa-location-dot"></i> <span>Du är passagerare</span>
+		</a>
+		<a class="btn-transparent" asp-controller="Auth" asp-action="SignOut"><i class="fa-solid fa-right-from-bracket"></i> <span>Sign Out</span></a>
+	</nav>
+
+</aside>

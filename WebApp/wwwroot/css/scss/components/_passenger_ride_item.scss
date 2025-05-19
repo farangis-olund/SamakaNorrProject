@@ -1,0 +1,121 @@
+﻿
+.passenger-ride-item {
+    position: relative;
+    @include theme-secondary-shadow;
+    border-radius: 8px;
+    border: 1px solid $gray-100;
+    padding: 10px 20px 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    color: var(--color-gray-600);
+
+    
+
+    .ride-info {
+        .date {
+            font-size: 16px;
+        }
+
+        .destination-info {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            align-items: center;
+            gap: 10px;
+
+            .text {
+                span {
+                    font-size: 16px;
+                    font-weight: 400;
+                }
+
+                .duration {
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+
+                .time {
+                    font-size: 16px;
+                }
+
+                p {
+                    font-size: 16px !important;
+                }
+            }
+
+            .circle-container {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+
+                .circle {
+                    font-size: 6px;
+                    color: $gray-400;
+                }
+
+                .line {
+                    width: 1px;
+                    height: 55px;
+                    background-color: $gray-400;
+                    margin-left: 2.2px;
+                }
+            }
+
+            p {
+                margin: 0;
+                @include h5;
+            }
+        }
+    }
+
+    .price-status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .price {
+        font-weight: bold;
+        text-align: center;
+        margin-right: 10px;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .ride-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .badge {
+        padding: 5px 10px;
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    .btn {
+        margin-left: 5px;
+    }
+
+
+    .delete-button {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateX(48%);
+    }
+
+    .delete-button .btn {
+        padding: 4px 8px;
+    }
+
+    .delete-button i {
+        margin: 0;
+        color: var(--color-danger-dark);
+    }
+}

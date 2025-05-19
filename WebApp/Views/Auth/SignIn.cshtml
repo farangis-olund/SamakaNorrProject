@@ -1,0 +1,59 @@
+﻿
+@model SignInViewModel
+
+<section class="signin">
+    <div class="container">
+        <form method="post" asp-controller="Auth" asp-action="SignIn" asp-route-ReturnUrl="@ViewData["ReturnUrl"]" novalidate>
+            @await Html.PartialAsync("~/Views/Shared/Sections/_StatusMessage.cshtml")
+            <h1>Välkommen tillbaka</h1>
+            <p>Har du inget konto än? <a asp-controller="Auth" asp-action="SignUp">Registrera dig här</a></p>
+
+            <div class="content">
+                <!-- Email Input -->
+                <div id="form-email" class="input-group">
+                    <label asp-for="Form.Email" class="form-label" for="email">E-postadress</label>
+                    <input asp-for="Form.Email" id="email" aria-required="true" aria-describedby="email-error"  />
+                    <span id="email-error" class="form-error" role="alert">@Html.ValidationMessageFor(m => m.Form.Email)</span>
+                </div>
+
+                <!-- Password Input -->
+                <div id="form-password" class="input-group">
+                    <label asp-for="Form.Password" class="form-label" for="password">Lösenord</label>
+                    <input asp-for="Form.Password" id="password" type="password" aria-required="true" aria-describedby="password-error" />
+                    <span id="password-error" class="form-error" role="alert">@Html.ValidationMessageFor(m => m.Form.Password)</span>
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div id="form-remember" class="checkbox">
+                    <div class="checkbox-group">
+                        <input asp-for="Form.RememberMe" id="rememberMe" aria-labelledby="rememberMeLabel" />
+                        <label asp-for="Form.RememberMe" id="rememberMeLabel">Kom ihåg mig</label>
+                    </div>
+                </div>
+
+                <!-- Sign In Button -->
+                <button id="form-button" class="btn-accent-orange" type="submit" aria-label="Sign in">@Model.Title</button>
+
+                <!-- Forgot Password Link -->
+                <a id="form-forgot-password" asp-controller="Account" asp-action="Forgot" aria-label="Forgot your password?">glömt ditt lösenord?</a>
+
+                <hr>
+
+                <!-- Social Sign-In -->
+                <div class="external-signin">
+                    <h6>Eller logga in med ditt sociala konto</h6>
+                    <div class="providers">
+                        <a class="btn-gray" asp-controller="Auth" asp-action="Google" aria-label="Sign in with Google">
+                            <i class="fa-brands fa-google"></i> Google
+                        </a>
+                        <a class="btn-gray" asp-controller="Auth" asp-action="Facebook" aria-label="Sign in with Facebook">
+                            <i class="fa-brands fa-facebook-f"></i> Facebook
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@await Html.PartialAsync("~/Views/Shared/_ValidationScriptPartial.cshtml")

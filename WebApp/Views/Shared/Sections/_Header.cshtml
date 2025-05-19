@@ -1,0 +1,55 @@
+﻿@inject SignInManager<UserEntity> _signInManager 
+@inject UserManager<UserEntity> _userManager
+
+@{
+    var themMode = Context.Request.Cookies["ThemeMode"] ?? "light";
+    var isDark = (themMode == "dark") ? true : false;
+}
+
+<header class="header @(ViewContext.RouteData.Values["controller"]!.ToString() == "Contact" && ViewContext.RouteData.Values["action"]!.ToString() == "Index" ? "contact-header" : "")">
+    <div class="container">
+        <a id="logo" asp-controller="Home" asp-action="Index"> <img src="~/images/logo.png" alt="logo"> </a>
+        <button class="btn-mobile">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div id="menu">
+            <nav>
+                <a class="menu-link" asp-controller="Home" asp-action="Index" asp-fragment="overview">Om oss</a>
+                <a class="menu-link" asp-controller="Rides" asp-action="Index" >Resor</a>
+                <a class="menu-link" asp-controller="Wanted" asp-action="Index">Sökes</a>
+                <a class="menu-link" asp-controller="Contact" asp-action="Index">Kontakta oss</a>
+            </nav>
+        </div>
+
+        <div class="btn-switch">
+            <label>Light</label>
+            <label class="switch" for="switch-mode">
+                <input type="checkbox" id="switch-mode" checked="@isDark">
+                <span class="slider round"></span>
+            </label>
+            <label>Dark</label>
+        </div>
+
+        <div class="account-buttons">
+            @if (_signInManager.IsSignedIn(User))
+            {                
+                var user = await _userManager.FindByNameAsync(User.Identity!.Name!);
+                if(user!.ProfileImgUrl == null)
+                {
+                    <a asp-controller="Account" asp-action="Index"> <img class="avatar" src="~/images/uploads/profiles/avatar.svg" /></a>
+                }else
+                {
+                    <a asp-controller="Account" asp-action="Index"> <img class="avatar" src="~/images/uploads/profiles/@user!.ProfileImgUrl" /></a>
+                }
+                
+            } else
+            {
+                <a class="btn-gray" asp-controller="Auth" asp-action="SignIn"><i class="fas fa-sign-in-alt"></i><span>Sign In</span></a>
+                <a class="btn-theme" asp-controller="Auth" asp-action="SignUp"><i class="fas fa-user-plus"></i><span>Sign Up</span></a>
+
+            }
+            </div>
+        <div id="menu-overlay"></div>
+       
+    </div>
+</header>

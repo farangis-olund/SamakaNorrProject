@@ -1,0 +1,163 @@
+﻿#single-ride {
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $gray-700;
+
+
+        .ride-content {
+            padding: 0;
+
+            @include lg {
+                padding: 40px 60px;
+            }
+
+            width: 60%;
+
+            p {
+                color: $gray-900;
+                font-weight: 200;
+
+                span {
+                    font-size: 18px;
+                    font-weight: 500;
+                    padding-left: 15px;
+                }
+
+                .time {
+                    padding-left: 15px;
+                    font-size: 20px;
+                    font-weight: 300;
+                }
+            }
+
+
+
+            .ride-info {
+                display: block;
+
+
+                @include lg {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .destination-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+
+                    p {
+                        margin: 0;
+                        @include h4;
+                    }
+                }
+
+                .driver-info {
+                    text-align: center;
+                    padding-top: 20px;
+                    align-items: center;
+
+                    img {
+                        width: 70px;
+                        height: 70px;
+                        border-radius: 50%;
+                    }
+
+                    p {
+                        padding-top: 10px;
+                    }
+
+                    .btn-chat {
+                        background: none;
+                        border: none;
+                        font-size: 20px;
+                        cursor: pointer;
+                        padding: 6px;
+                        color: #555;
+
+                        i {
+                            font-size: 22px;
+                        }
+                    }
+
+                    &:hover {
+                        color: #007bff;
+                        transform: scale(1.1);
+                    }
+                }
+            }
+
+            .free {
+                display: flex;
+                align-items: center;
+
+                span {
+                    color: $success !important;
+                    padding-left: 10px;
+                    font-weight: 900 !important;
+                    @include h5;
+                }
+            }
+
+            .price {
+                display: flex;
+                align-items: center;
+
+                span {
+                    padding-left: 10px;
+                    font-weight: 900 !important;
+                    @include h5;
+                }
+            }
+
+            .details {
+                padding-bottom: 20px;
+
+                span {
+                    padding-left: 10px;
+                    font-weight: 600 !important;
+                    @include h6;
+                }
+            }
+
+            .seats {
+                display: flex;
+                align-items: center;
+
+                span {
+                    padding-left: 10px;
+                    font-weight: 900 !important;
+                    @include h5;
+                }
+            }
+
+            .booking {
+                form {
+                    display: block;
+
+                    .content {
+                        gap: 20px;
+
+                        #form-seat {
+                            input {
+                                width: 70px;
+                            }
+                        }
+
+                        #form-message {
+                            padding-bottom: 20px;
+
+                            input {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        
+    }
+}

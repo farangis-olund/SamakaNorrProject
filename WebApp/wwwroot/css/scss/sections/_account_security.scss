@@ -1,0 +1,109 @@
+﻿#account-security {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+
+    @include lg {
+        display: grid;
+        grid-template-columns: 2fr 5fr;
+        gap: 150px;
+    }
+
+    .details {
+        margin-top: 0;
+
+        @include lg {
+            margin-top: 50px;
+        }
+
+        width: 100%;
+
+
+        .password-info {
+
+            form {
+                padding: 1rem;
+
+                h2 {
+                    text-align: center;
+
+                    @include lg {
+                        text-align: left;
+                    }
+                }
+
+                h5 {
+                    color: $theme;
+                }
+
+                .content {
+                    display: grid;
+                    gap: 1rem 0;
+                    grid-template-columns: 1fr;
+                    grid-template-areas: "current-password" " new-password" "confirm-password" "buttons";
+
+                    @include lg {
+                        gap: 1rem 2rem;
+                        grid-template-columns: 1fr 1fr;
+                        grid-template-areas: "current-password current-password" "new-password confirm-password" "buttons buttons";
+                    }
+
+
+                    #current-password {
+                        grid-area: current-password;
+                    }
+
+                    #new-password {
+                        grid-area: new-password;
+                    }
+
+                    #confirm-password {
+                        grid-area: confirm-password;
+                    }
+
+                    .form-buttons {
+                        grid-area: buttons;
+                        margin: 20px 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 20px;
+
+                        @include lg {
+                            justify-content: left;
+                            align-items: left;
+                        }
+                    }
+                }
+            }
+        }
+
+        .delete-account {
+            margin-top: 30px;
+
+            form {
+                padding: 1rem;
+
+                h5 {
+                    color: $theme;
+                }
+
+                .content {
+                    display: grid;
+                    row-gap: 1rem;
+                    grid-template-columns: 1fr;
+
+                    .form-button {
+                        padding-top: 20px;
+                        display: flex;
+                     
+                        @include lg {
+                            justify-content: left;
+                            align-items: left;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

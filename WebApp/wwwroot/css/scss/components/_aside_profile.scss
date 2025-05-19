@@ -1,0 +1,106 @@
+﻿aside {
+    border: none;
+
+    @include lg {
+        border-right: 1px solid $gray-300;
+        padding-right: 20px;
+    }
+
+
+
+    .profile-info {
+        margin: 20px;
+        text-align: center;
+
+        .profile-img {
+            position: relative;
+            display: inline-block;
+
+            img {
+                width: 120px;
+                border-radius: 50%;
+            }
+
+            form {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                padding-left: 80px;
+                padding-top: 5px;
+
+
+                .button-circle {
+                    position: relative;
+                    display: inline-block;
+                    width: 40px;
+                    height: 40px;
+                    font-size: 12px;
+                    background: $white;
+                    border: 1px solid $gray-300;
+                    border-radius: 50%;
+                    @include shadow-m;
+                    color: $black;
+
+                    i {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        h5 {
+            margin-top: 15px;
+            margin-bottom: 0;
+        }
+
+        p {
+            @include text-m;
+        }
+    }
+
+    nav {
+        margin-top: 20px;
+        text-align: left !important;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-content: center;
+
+        @include lg {
+            display: block;
+            margin-top: 50px;
+            justify-content: left;
+        }
+
+        span {
+            display: none;
+
+            @include lg {
+                display: block;
+            }
+        }
+
+        a {
+            margin: 10px 0;
+            text-align: left;
+            justify-content: flex-start;
+        }
+
+        .btn-transparent {
+            text-align: left;
+            justify-content: flex-start;
+        }
+
+        .btn-theme-s {
+            text-align: left;
+            justify-content: flex-start;
+        }
+    }
+}

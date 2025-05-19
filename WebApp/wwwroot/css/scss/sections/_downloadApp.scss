@@ -1,0 +1,79 @@
+#downloadApp {
+    background-color: $gray-100;
+
+    .container {
+        padding: 20px;
+        background-color: $gray-200;
+        display: grid;
+        gap: 30px;
+
+        @include lg {
+            padding: 40px;
+            grid-template-columns: 1fr 1fr;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        @include xl {
+            padding: 80px 120px;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .image-wrapper {
+            width: 100%;
+        }
+
+        .content {
+            display: block;
+            text-align: center;
+
+            @include lg {
+                text-align: left;
+            }
+
+            h1 {
+                text-align: center;
+
+                @include lg {
+                    @include d4;
+                    text-align: left;
+                }
+            }
+
+            .boxes {
+                display: block;
+                justify-content: center;
+
+                .box {
+                    padding-top: 40px;
+                    display: block;
+                    justify-content: center;
+                    align-items: center;
+
+                    @include lg {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: end;
+                        margin-right: 40px;
+                    }
+
+                    .title {
+                        color: $gray-600;
+                        margin: 0;
+                    }
+
+                    .stars {
+                        color: $warning;
+                    }
+
+                    .rate {
+                        color: $gray-700;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+}

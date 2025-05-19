@@ -1,0 +1,82 @@
+﻿@model AccountDetailViewModel
+
+@{
+	ViewData["Title"] = $"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}'s profile";
+}
+<div class="container">
+	<section id="saved-rides">
+	
+		<partial name="_AsideProfile.cshtml" />
+		
+		<div class="details">
+			<partial name="~/Views/Shared/Sections/_StatusMessage.cshtml" />
+            @if (TempData["StatusMessage"] != null)
+            {
+                var message = TempData["StatusMessage"].ToString();
+                var parts = message.Split('|');
+                var alertType = parts[0];  
+                var alertMessage = parts.Length > 1 ? parts[1] : message;
+
+                <div class="alert alert-@alertType">
+                    @alertMessage
+                </div>
+            }
+			<div class="title-bar">
+                <h2>Som chaufför dina inlagda resor</h2>
+                    <div class="button-group">
+                        <button id="addRideButton" class="btn-accent-orange"><i class="fa-solid fa-plus"></i> Resa</button>
+                        <button class="btn-gray" asp-controller="Rides" asp-action="Delete"><i class="fa-sharp fa-solid fa-trash"></i> Delete all</button>
+                    </div>
+              	</div>
+
+			<section class="content-contaier">
+				<partial name="~/Views/Shared/Sections/_DriverRidesPartial.cshtml" for="@Model.SavedRides.Rides" />
+			</section>
+		</div>
+		
+	</section>
+</div>
+
+<div id="addRideModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h2>Lägg till ny resa</h2>
+        <form asp-action="AddRide" asp-controller="Account" method="post">
+            <div class="form-group">
+                <label for="origin">Origin:</label>
+                <input type="text" id="origin" name="Origin" class="input-group" required />
+            </div>
+            <div class="form-group">
+                <label for="destination">Destination:</label>
+                <input type="text" id="destination" name="Destination" class="input-group" required />
+            </div>
+            <div class="form-group">
+                <label for="departure">AvresaTid:</label>
+                <input type="datetime-local" id="departure" name="DepartureTime" class="input-group" required />
+            </div>
+            <div class="form-group">
+                <label for="seats">Antal platser:</label>
+                <input type="number" id="seats" name="AvailableSeats" class="input-group" required />
+            </div>
+            <div class="form-group">
+                <label for="TripDetails">Resedetaljer:</label>
+                <input id="tripDetails" name="TripDetails" class="input-group" />
+            </div>
+            <div class="form-group">
+                <label for="price">Pris:</label>
+                <input type="number" id="price" name="Price" class="input-group" step="0.01" />
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="free" name="Free" value="true" />
+                    Gratis
+                </label>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn-accent-orange">Spara</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script defer src="/js/show-modal-form.js"></script>

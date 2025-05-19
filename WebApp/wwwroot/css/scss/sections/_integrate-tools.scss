@@ -1,0 +1,50 @@
+.integrate-tools {
+    .container {
+        padding: 20px;
+        text-align: center;
+
+        @include lg {
+            padding: 60px 0;
+        }
+
+        h1 {
+            @include h2;
+
+            @include lg {
+                @include d4;
+            }
+        }
+
+        #sub-title {
+            color: $gray-600;
+
+            @include xl {
+                margin: 0 300px;
+            }
+        }
+
+        .content {
+            display: grid;
+            padding: 20px;
+
+            @include md {
+                grid-template-columns: 1fr 1fr;
+                column-gap: 30px;
+                padding: 80px 40px;
+                text-align: left;
+            }
+
+            @include lg {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+
+            .tool {
+                padding: 20px;
+                p {
+                    padding-top: 10px;
+                    color: $gray-700;
+                }
+            }
+        }
+    }
+}

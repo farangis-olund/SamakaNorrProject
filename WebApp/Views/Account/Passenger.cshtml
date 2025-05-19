@@ -1,0 +1,36 @@
+﻿@model AccountDetailViewModel
+
+@{
+	ViewData["Title"] = $"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}'s profile";
+}
+<div class="container">
+	<section id="saved-rides">
+
+		<partial name="_AsideProfile.cshtml" />
+
+		<div class="details">
+			<partial name="~/Views/Shared/Sections/_StatusMessage.cshtml" />
+			@if (TempData["StatusMessage"] != null)
+			{
+				var message = TempData["StatusMessage"].ToString();
+				var parts = message.Split('|');
+				var alertType = parts[0];
+				var alertMessage = parts.Length > 1 ? parts[1] : message;
+
+				<div class="alert alert-@alertType">
+					@alertMessage
+				</div>
+			}
+			<div class="title-bar">
+				<h2>Som passagerare dina bokade resor</h2>
+				<button class="btn-gray" asp-controller="Rides" asp-action="Delete"><i class="fa-sharp fa-solid fa-trash"></i> Delete all</button>
+			</div>
+
+			<section class="content-contaier">
+				<partial name="~/Views/Shared/Sections/_PassengerRidePartial.cshtml" for="@Model.PassengerRides" />
+			</section>
+		</div>
+
+
+	</section>
+</div>

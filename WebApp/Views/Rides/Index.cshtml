@@ -1,0 +1,31 @@
+﻿@model RidesViewModel
+
+<section id="rides">
+    <div class="container">
+        @await Html.PartialAsync("~/Views/Shared/Sections/_StatusMessage.cshtml")
+        <h1>Tillgängliga Resor</h1>
+        <div class="heading">
+           <form method="post" asp-controller="Rides" asp-action="Index">
+                <div class="content">
+
+                    <div id="form-departure" class="input-group">
+                        <input asp-for="SearchModel!.Origin" id="origin" />
+                    </div>
+                    <div id="form-destination" class="input-group">
+                        <input asp-for="SearchModel!.Destination" id="destination" />
+                    </div>
+                    <div id="form-date" class="input-group">
+                        <input asp-for="SearchModel!.DepartureTime" />
+                    </div>
+                    <button id="form-button" class="btn-accent-orange" type="submit">Sök resan</button>
+                </div>
+            </form>
+        </div>
+
+		<div class="content-contaier">
+            @await Html.PartialAsync("~/Views/Shared/Sections/_RidePartial.cshtml", Model.Rides)
+		</div>
+
+    </div>
+</section>
+

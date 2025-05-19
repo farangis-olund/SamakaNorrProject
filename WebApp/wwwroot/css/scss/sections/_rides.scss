@@ -1,0 +1,95 @@
+﻿#rides {
+    .container {
+        width: 100%;
+        max-width: 1320px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding: 0 15px;
+
+        h1 {
+            text-align: center;
+            width: 100%;
+            margin: 0 auto;
+
+            @include xl {
+                text-align: left;
+                width: 90%;
+            }
+
+            @include xxl {
+                width: 70%;
+            }
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        .heading {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0 auto;
+
+            @include xl {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                width: 90%;
+            }
+
+            @include xxl {
+                width: 70%;
+            }
+
+            h2 {
+                margin: 0;
+                padding: 0;
+            }
+
+            input {
+                padding: 10px 10px 10px 15px;
+            }
+
+            i {
+                right: 15px;
+                color: $gray-700;
+            }
+
+            form {
+                .content {
+                    display: flex;
+                    gap: 20px;
+                    flex-direction: column;
+                    width: 100%;
+
+                    @include lg {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+
+                    .btn-accent-orange {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        .content-contaier {
+            padding-top: 50px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem 1.7rem;
+            width: 100%;
+            margin: 0 auto;
+
+            @include lg {
+                width: 70%;
+            }
+        }
+    }
+}

@@ -1,0 +1,134 @@
+.subscribe {
+    background-color: $gray-100;
+
+    .container {
+        text-align: center;
+        display: grid;
+        padding: 40px 20px;
+        width: 100%;
+
+        @include md {
+            padding: 80px 0;
+            text-align: left;
+            width: 60%;
+        }
+
+        @include lg {
+            width: 80%;
+        }
+
+        @include xxl {
+            padding: 40px 180px;
+        }
+
+        .title {
+            position: relative;
+
+            h1 {
+
+                @include h2;
+                text-align: center;
+
+                @include lg {
+                    text-align: left;
+                    @include d4;
+                }
+            }
+
+            .decorArrows {
+                display: none;
+                position: absolute;
+
+                @include xl {
+                    display: flex;
+                    top: 0px;
+                    right: 0px;
+                    margin-top: 20px;
+                    margin-right: 40px;
+                }
+            }
+        }
+
+        .checkbox-container {
+            display: grid;
+            padding: 20px;
+            text-align: center;
+
+            @include lg {
+                padding: 40px 0;
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+                text-align: left;
+                gap: 40px;
+            }
+
+            h5 {
+                flex: 0.5;
+            }
+
+            .checkboxes {
+                display: grid;
+                justify-content: center;
+                gap: 20px;
+
+                @include md {
+                    grid-template-columns: 1fr 1fr;
+                    justify-content: left;
+                    gap: 10px 60px;
+                }
+
+                @include xl {
+                    grid-template-columns: 1fr 1fr 1fr;
+                }
+
+                .checkbox {
+                    display: flex;
+
+                    input[type="checkbox"] {
+                        transform: scale(1.5);
+                        color: $gray-100;
+                        margin-right: 12px;
+                    }
+
+                    :checked {
+                        accent-color: $theme;
+                    }
+                }
+            }
+        }
+
+        .inputbox-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            @include lg {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .inputgroup {
+               i {
+                   left: 15px;                
+                }
+            }
+
+            .button {
+
+                @include lg {
+                    display: flex;
+                    height: 100%;
+                }
+            }
+        }
+
+        p {
+            padding-top: 20px;
+        }
+
+        .asterisk {
+            color: $theme;
+        }
+    }
+}

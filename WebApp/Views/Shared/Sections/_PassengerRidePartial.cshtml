@@ -1,0 +1,163 @@
+﻿@model List<BookedRideModel>
+@using Microsoft.AspNetCore.SignalR.Client
+@using Infrastructure.Enums
+@Html.AntiForgeryToken()
+<input type="hidden" id="currentUsername" value="@User.Identity.Name" />
+@{
+
+    if (Model != null && Model.Any())
+    {
+        foreach (var ride in Model)
+        {
+            var statusClass = ride.BookingStatus == BookingStatus.Confirmed
+             ? "bg-green-100"
+             : ride.BookingStatus == BookingStatus.Pending
+                 ? "bg-orange-100"
+                 : ride.BookingStatus == BookingStatus.Completed
+                     ? "bg-secondary-100"
+             : "bg-secondary-100";
+        <div class="driver-ride-item-section @statusClass">
+            <div class="passenger-ride-item ">
+                <button class="btn-message bottom-0 end-0 m-2"
+                        id="chatButton-@ride.RideId"
+                        data-ride-id="@ride.RideId"
+                        data-receiver="@ride.DriverId"
+                        onclick="toggleChat(this)"
+                        title="Visa chat">
+                    <i style="color:@(ride.HasUnreadMessages ? "#636363" : "#636363")" class="fa-solid fa-comment-dots"></i>
+                    <span id="unreadBadge-@ride.RideId" class="badge-unread" style="display:none;">0</span>
+                </button>
+
+                <div class="ride-info">
+                    <p class="date">@ride.DepartureTime.ToShortDateString()</p>
+                    <div class="destination-info">
+                        <div class="circle-container">
+                            <i class="fa-solid fa-circle circle"></i>
+                            <div class="line"></div>
+                            <i class="fa-solid fa-circle circle"></i>
+                        </div>
+                        <div class="text">
+                            <p><span class="time">@ride.DepartureTime.ToString("HH:mm")</span> &nbsp; @ride.Origin </p>
+                            <span class="duration">1h 15m</span>
+                            <p><span class="time">@ride.DepartureTime.ToString("HH:mm")</span> &nbsp; @ride.Destination </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="price-status">
+                    <div class="price">
+                        @if (ride.Free)
+                        {
+                            <p class="free">Gratis</p>
+                        }
+                        else
+                        {
+                            <p>@ride.Price kr</p>
+                        }
+                    </div>
+
+                    <div class="ride-status">
+                        @switch (ride.BookingStatus)
+                        {
+                            case BookingStatus.Pending:
+                                <span class="badge bg-warning text-dark">Inväntar</span>
+                                <button type="button" class="btn btn-transparent-accent-orange" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadDriverInfo('@ride.RideId')">Chaufför</button>
+
+                                <form asp-controller="Booking" asp-action="Cancel" method="post">
+                                    <input type="hidden" name="bookingId" value="@ride.BookingId" />
+                                    <button type="submit" class="btn btn-red">Avboka</button>
+                                </form>
+                             
+                                break;
+
+                            case BookingStatus.Confirmed:
+                                <span class="badge bg-success">Bekräftad</span>
+                                <button type="button" class="btn btn-transparent-accent-orange" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadDriverInfo('@ride.RideId')">Chaufför</button>
+
+                                break;
+                            case BookingStatus.Completed:
+                                <form asp-controller="Booking" asp-action="Delete" method="post" class="delete-button top-0 end-0 m-2">
+                                    <input type="hidden" name="bookingId" value="@ride.BookingId" />
+                                    <button type="submit" class="btn btn-sm" title="Ta bort resa">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                                <span class="badge bg-secondary">Avslutad</span>
+                               
+                                break;
+
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <div id="rideChat-@ride.RideId" class="ride-messages" style="display: none;">
+                <div id="messagesBox-@ride.RideId" class="messages-box">
+                    @if (ride.Messages != null && ride.Messages.Any())
+                    {
+                        foreach (var msg in ride.Messages)
+                        {
+                            <div class="message-item">
+                                <strong>@msg.Sender:</strong> @msg.Text
+                                <div class="timestamp">@msg.Timestamp.ToString("g")</div>
+                            </div>
+                        }
+                    }
+                </div>
+                <form onsubmit="sendMessage(event, '@ride.RideId')">
+                    <input type="text" id="messageText-@ride.RideId" placeholder="Skriv ett meddelande..." required />
+                    <button type="submit" class="btn-gray">Skicka</button>
+                </form>
+            </div>
+           </div>
+        }
+    }
+}
+
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingModalLabel">Förares information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="driverInfo">
+                Loading...
+            </div>
+            <strong>Observera:</strong> Om resan är redan bekräftad. För att avboka, vänligen kontakta föraren direkt.
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function loadDriverInfo(rideId) {
+        console.log("Loading driver info for ride ID: " + rideId);
+
+        $.ajax({
+            url: `/Booking/GetDriverInfo?rideId=${rideId}`,
+            method: "GET",
+            success: function (data) {
+                if (data && data.driverName) {
+                    $('#driverInfo').html(`
+                            <p><strong>Förarnamn:</strong> ${data.driverName}</p>
+                            <p><strong>Kontakt:</strong> ${data.contact || 'N/A'}</p>
+                        `);
+                } else {
+                    $('#driverInfo').html('<p>Ingen förarinformation tillgänglig.</p>');
+                }
+
+                var modalElement = document.getElementById('bookingModal');
+                var modal = new bootstrap.Modal(modalElement);
+                modal.show();
+                $('.modal-backdrop').remove(); 
+            },
+            error: function () {
+                $('#driverInfo').html('<p>Kunde inte ladda förarinformation.</p>');
+            }
+        });
+    }
+</script>
+
+<script src="~/js/chatbox-driver-passenger.js"></script>
+<script src="~/js/init-unread-badges-passenger.js"></script>

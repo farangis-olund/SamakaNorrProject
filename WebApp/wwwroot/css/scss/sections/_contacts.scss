@@ -1,0 +1,123 @@
+﻿
+.contacts {
+    header {
+        background-color: $gray-100;
+    }
+
+    background-color: $gray-100;
+    position: relative;
+
+    .container {
+        position: relative;
+        padding-bottom: 40px;
+
+        @include lg {
+            padding-bottom: 80px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr;
+            column-gap: 2rem;
+            padding: 20px 40px;
+
+
+            @include lg {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .text-content {
+                position: relative;
+                display: block;
+                padding-bottom: 40px;
+
+                @include lg {
+                }
+
+                .item {
+                    display: flex;
+                    justify-content: left;
+                    gap: 17px;
+                    padding-top: 40px;
+
+                    .text {
+                        width: 250px;
+
+                        .arrow-link {
+                            color: $theme;
+
+                            &:hover {
+                                color: $theme-secondary;
+                            }
+                        }
+                    }
+
+                    .circle {
+                        position: relative;
+                        border-radius: 50%;
+                        width: 50px;
+                        height: 50px;
+                        background-color: $white;
+
+                        i {
+                            position: absolute;
+                            padding-left: 15px;
+                            padding-top: 15px;
+                            font-size: 18px;
+                            color: $theme;
+                        }
+                    }
+                }
+            }
+
+            form {
+                background-color: $white;
+                border-radius: 10px;
+                position: static;
+                width: 100%;
+                padding: 30px;
+                height: auto;
+
+                @include md {
+                    padding: 20px 30px;
+           
+                }
+
+                @include lg {
+                    position: absolute;
+                    right: 20px;
+                    height: 800px;
+                    width: 50%;
+                    padding: 30px 60px;
+                }
+
+                .input-group {
+                    span {
+                        color: $gray-500;
+                    }
+
+
+                    .inputgroup {
+
+                        select {
+                            padding: 15px 25px 15px 15px;
+
+                            .color-gray {
+                                color: $gray-200;
+                            }
+                        }
+
+                        i {
+                            right: 15px;
+                            color: $gray-800;
+                        }
+                    }
+                }
+
+                textarea {
+                    height: 200px;
+                }
+            }
+        }
+    }
+}

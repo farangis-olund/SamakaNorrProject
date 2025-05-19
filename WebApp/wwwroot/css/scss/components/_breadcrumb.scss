@@ -1,0 +1,27 @@
+﻿.breadcrumb {
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    a {
+        font-size: 16px;
+        color: $gray-600;
+        text-decoration: none;
+        font-weight: 300;
+    }
+
+    i {
+        font-size: 12px;
+    }
+
+    .fa-house {
+        color: $gray-600;
+        padding-right: 5px;
+        font-size: 16px;
+    }
+
+    .active {
+        color: $theme;
+    }
+}

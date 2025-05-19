@@ -1,0 +1,61 @@
+﻿@model List<RideModel>
+
+@{
+	if (Model != null && Model.Any())
+	{
+		foreach (var ride in Model)
+		{
+			<a asp-controller="Rides" asp-action="SingleRide" asp-route-id="@ride.Id">
+				<div class="ride-item">
+
+					<div class="ride-info">
+						<p class="date">@ride.DepartureTime.ToShortDateString()</p>
+
+						<div class="destination-info">
+							<div class="circle-container">
+								<i class="fa-solid fa-circle circle"></i>
+								<div class="line"></div>
+								<i class="fa-solid fa-circle circle"></i>
+							</div>
+						
+							<div class="text">
+								<p><span class="time">@ride.DepartureTime.ToString("HH:mm")</span> &nbsp; @ride.Origin </p>
+								<span class="duration">1h 15m</span>
+								<p> <span class="time">@ride.DepartureTime.ToString("HH:mm")</span> &nbsp; @ride.Destination </p>
+							</div>
+							
+						</div>
+
+						
+					</div>
+
+					<div class="price">
+						@if (ride.Free)
+						{
+							<p class="free">Gratis</p>
+						}
+						else
+						{
+							<p>@ride.Price kr</p>
+						}
+						<div class="driver-info">
+
+							@if (ride.UserImgUrl != null)
+							{
+								<img src="~/images/uploads/profiles/@ride.UserImgUrl" />
+							}
+							else
+							{
+								<img src="~/images/uploads/profiles/avatar.svg" />
+							}
+							<p>@ride.DriverName</p>
+						</div>
+					</div>
+
+				</div>
+			</a>
+		
+		}
+
+	}
+}

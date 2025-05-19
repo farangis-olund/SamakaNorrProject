@@ -1,0 +1,137 @@
+﻿#saved-rides {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+   
+    @include lg {
+        display: grid;
+        grid-template-columns: 2fr 5fr;
+        gap: 150px;
+    }
+
+    .details {
+        padding-top: 40px;
+        padding-bottom: 80px;
+        width:100%;
+
+        .title-bar {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+            justify-content: space-between;
+          
+
+            .button-group {
+                display: flex;
+                justify-content: space-between;
+                gap: 15px;
+            }
+
+            @include lg {
+                padding-top: 0;
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+
+            .btn-gray {
+                background-color: transparent;
+                border: 1px solid var(--color-danger-dark);
+                color: var(--color-danger-dark);
+                display: inline-flex;
+
+                &:hover {
+                    background-color: var(--color-danger-dark);
+                    color: var(--color-white);
+                }
+            }
+
+            h2 {
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+
+
+        .content-contaier {
+            padding-top: 50px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem 1.5rem;
+                        
+
+            .ride-item {
+                @include theme-secondary-shadow;
+                border-radius: 8px;
+                border: 1px solid $gray-100;
+
+                .image-container {
+                    position: relative;
+
+                    img {
+                        border: none;
+                        border-radius: 8px;
+                        width: 100%;
+                    }
+
+                    .btn-sell {
+                        height: 40px;
+                        width: 40px;
+                        background-color: $white;
+                        border: none;
+                        position: absolute;
+                        border-radius: 50%;
+                        top: 15px;
+                        right: 15px;
+                        z-index: 2;
+
+                        i {
+                            font-size: 15px;
+                        }
+
+                        &:hover {
+
+                            i {
+                                color: var(--color-theme);
+                            }
+                        }
+                    }
+                }
+
+                .info {
+                    padding: 20px;
+
+                    .price {
+                        p {
+                            font-size: 22px;
+                            font-weight: 700;
+                            color: var(--color-theme);
+                        }
+                    }
+
+                    .duration-rating {
+                        display: flex;
+                        gap: 25px;
+
+                        .duration {
+                            i {
+                                padding-right: 7px;
+                            }
+                        }
+
+                        .rating {
+                            i {
+                                font-size: 20px;
+                            }
+
+                            display: flex;
+                            gap: 7px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

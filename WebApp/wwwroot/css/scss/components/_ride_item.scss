@@ -1,0 +1,104 @@
+﻿.ride-item {
+    @include theme-secondary-shadow;
+    border-radius: 8px;
+    border: 1px solid $gray-100;
+    padding: 10px 20px 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    color: var(--color-gray-600);
+
+    .ride-info {
+        .date {
+            font-size: 16px;
+        }
+
+        .destination-info {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            align-items: center;
+            gap: 10px;
+
+            .text {
+                span {
+                    font-size: 16px;
+                    font-weight: 400;
+                }
+
+                .duration {
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+
+                .time {
+                    font-size: 16px;
+                }
+
+                p {
+                    font-size: 16px !important;
+                }
+            }
+
+            .circle-container {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+
+                .circle {
+                    font-size: 6px;
+                    color: $gray-400;
+                }
+
+                .line {
+                    width: 1px;
+                    height: 55px;
+                    background-color: $gray-400;
+                    margin-left: 2.2px;
+                }
+            }
+
+            p {
+                margin: 0;
+                @include h5;
+            }
+        }
+    }
+
+    .price {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-weight: 700 !important;
+        @include h5;
+
+        .free {
+            color: var(--color-success-dark) !important;
+            @include h5;
+        }
+
+        .driver-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-items: center;
+
+            img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+            }
+
+            p {
+                font-size: 12px;
+                margin: 0;
+            }
+        }
+    }
+
+  
+    &:hover {
+        background-color: $gray-100;
+        cursor: pointer;
+    }
+}
