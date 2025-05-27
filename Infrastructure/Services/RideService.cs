@@ -200,7 +200,7 @@ public class RideService(RideRepository rideRepository, BookingRepository bookin
         try
         {
             // Retrieve all rides using your existing method
-            var allRidesResponse = await GetAllRidesAsync();
+            var allRidesResponse = await GetAllNotApprovedRidesAsync();
 
             if (allRidesResponse.StatusCode == StatusCode.Ok)
             {
@@ -224,11 +224,98 @@ public class RideService(RideRepository rideRepository, BookingRepository bookin
         }
     }
 
+    //public async Task<ResponseResult> GetAllRidesWithStatusAsync(string userId)
+    //{
+    //    try
+    //    {
+
+    //        var allRides = await _rideRepository.GetAllAsync(c => c.DriverId == userId);
+
+    //        if (allRides.StatusCode != StatusCode.Ok || allRides.ContentResult == null)
+    //            return ResponseFactory.NotFound("No rides found.");
+
+    //        var ridesWithStatus = new List<RideModel>();
+
+    //        foreach (var ride in (List<RideEntity>)allRides.ContentResult)
+    //        {
+
+    //            var bookingResponse = await _bookingRepository.GetAllAsync(b => b.RideId == ride.Id);
+    //            BookingStatus rideStatus;
+    //            int bookingId = 0;
+    //            if (bookingResponse.StatusCode == StatusCode.Ok && bookingResponse.ContentResult != null)
+    //            {
+    //                var booking = (List<BookingEntity>)bookingResponse.ContentResult;
+
+    //                if (!booking.Any())
+    //                {
+    //                    rideStatus = BookingStatus.NotBooked;
+    //                }
+    //                else if (booking.Any(b => b.BookingStatus == BookingStatus.Pending))
+    //                {
+    //                    rideStatus = BookingStatus.Pending;
+    //                    bookingId = booking.Id;
+    //                }
+    //                else if (booking.Any(b => b.BookingStatus == BookingStatus.Confirmed))
+    //                {
+    //                    rideStatus = BookingStatus.Confirmed;
+    //                    bookingId = booking.Id;
+    //                }
+    //                else if (booking.Any(b => b.BookingStatus == BookingStatus.Completed))
+    //                {
+    //                    rideStatus = BookingStatus.Completed;
+    //                    bookingId = booking.Id;
+    //                }
+    //                else
+    //                {
+    //                    rideStatus = BookingStatus.NotBooked;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                rideStatus = BookingStatus.NotBooked;
+    //            }
+
+
+
+    //            var rideModel = new RideModel
+    //            {
+    //                Id = ride.Id,
+    //                Origin = ride.Origin,
+    //                Destination = ride.Destination,
+    //                DepartureTime = ride.DepartureTime,
+    //                DriverName = ride.DriverId,
+    //                DriverId = ride.DriverId,
+    //                Price = ride.Price,
+    //                Free = ride.Free,
+    //                TripDetails = ride.TripDetails,
+    //                AvailableSeats = ride.AvailableSeats,
+    //                BookingStatus = rideStatus,
+    //                Messages = ride.Messages
+    //                    .OrderBy(m => m.Timestamp)
+    //                    .Select(m => new MessageModel
+    //                    {
+    //                        Sender = m.SenderId,
+    //                        Text = m.MessageContent,
+    //                        Timestamp = m.Timestamp
+    //                    }).ToList(),
+    //                HasUnreadMessages = ride.Messages.Any(m => m.IsRead==false && m.ReceiverId == userId && m.SenderId != userId)
+    //            };
+
+    //            ridesWithStatus.Add(rideModel);
+    //        }
+
+    //        return ResponseFactory.Ok(ridesWithStatus.OrderByDescending(r => r.DepartureTime).ToList());
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return ResponseFactory.Error($"Error retrieving rides with status: {ex.Message}");
+    //    }
+    //}
+
     public async Task<ResponseResult> GetAllRidesWithStatusAsync(string userId)
     {
         try
         {
-           
             var allRides = await _rideRepository.GetAllAsync(c => c.DriverId == userId);
 
             if (allRides.StatusCode != StatusCode.Ok || allRides.ContentResult == null)
@@ -238,67 +325,74 @@ public class RideService(RideRepository rideRepository, BookingRepository bookin
 
             foreach (var ride in (List<RideEntity>)allRides.ContentResult)
             {
-               
                 var bookingResponse = await _bookingRepository.GetAllAsync(b => b.RideId == ride.Id);
-                BookingStatus rideStatus;
 
-                if (bookingResponse.StatusCode == StatusCode.Ok && bookingResponse.ContentResult != null)
+                if (bookingResponse.StatusCode == StatusCode.Ok &&
+                    bookingResponse.ContentResult is List<BookingEntity> bookings &&
+                    bookings.Any())
                 {
-                    var booking = (List<BookingEntity>)bookingResponse.ContentResult;
+                    foreach (var booking in bookings)
+                    {
+                        var rideModel = new RideModel
+                        {
+                            Id = ride.Id,
+                            Origin = ride.Origin,
+                            Destination = ride.Destination,
+                            DepartureTime = ride.DepartureTime,
+                            DriverName = ride.DriverId,
+                            DriverId = ride.DriverId,
+                            Price = ride.Price,
+                            Free = ride.Free,
+                            TripDetails = ride.TripDetails,
+                            AvailableSeats = ride.AvailableSeats,
+                            BookingStatus = booking.BookingStatus,
+                            BookingId = booking.Id,
+                            Messages = ride.Messages
+                                .OrderBy(m => m.Timestamp)
+                                .Select(m => new MessageModel
+                                {
+                                    Sender = m.SenderId,
+                                    Text = m.MessageContent,
+                                    Timestamp = m.Timestamp
+                                }).ToList(),
+                            HasUnreadMessages = ride.Messages.Any(m =>
+                                !m.IsRead && m.ReceiverId == userId && m.SenderId != userId)
+                        };
 
-                    if (!booking.Any())
-                    {
-                        rideStatus = BookingStatus.NotBooked;
-                    }
-                    else if (booking.Any(b => b.BookingStatus == BookingStatus.Pending))
-                    {
-                        rideStatus = BookingStatus.Pending;
-                    }
-                    else if (booking.Any(b => b.BookingStatus == BookingStatus.Confirmed))
-                    {
-                        rideStatus = BookingStatus.Confirmed;
-                    }
-                    else if (booking.Any(b => b.BookingStatus == BookingStatus.Completed))
-                    {
-                        rideStatus = BookingStatus.Completed;
-                    }
-                    else
-                    {
-                        rideStatus = BookingStatus.NotBooked;
+                        ridesWithStatus.Add(rideModel);
                     }
                 }
                 else
                 {
-                    rideStatus = BookingStatus.NotBooked;
+                    
+                    var rideModel = new RideModel
+                    {
+                        Id = ride.Id,
+                        Origin = ride.Origin,
+                        Destination = ride.Destination,
+                        DepartureTime = ride.DepartureTime,
+                        DriverName = ride.DriverId,
+                        DriverId = ride.DriverId,
+                        Price = ride.Price,
+                        Free = ride.Free,
+                        TripDetails = ride.TripDetails,
+                        AvailableSeats = ride.AvailableSeats,
+                        BookingStatus = BookingStatus.NotBooked,
+                        BookingId = 0,
+                        Messages = ride.Messages
+                            .OrderBy(m => m.Timestamp)
+                            .Select(m => new MessageModel
+                            {
+                                Sender = m.SenderId,
+                                Text = m.MessageContent,
+                                Timestamp = m.Timestamp
+                            }).ToList(),
+                        HasUnreadMessages = ride.Messages.Any(m =>
+                            !m.IsRead && m.ReceiverId == userId && m.SenderId != userId)
+                    };
+
+                    ridesWithStatus.Add(rideModel);
                 }
-
-
-
-                var rideModel = new RideModel
-                {
-                    Id = ride.Id,
-                    Origin = ride.Origin,
-                    Destination = ride.Destination,
-                    DepartureTime = ride.DepartureTime,
-                    DriverName = ride.DriverId,
-                    DriverId = ride.DriverId,
-                    Price = ride.Price,
-                    Free = ride.Free,
-                    TripDetails = ride.TripDetails,
-                    AvailableSeats = ride.AvailableSeats,
-                    BookingStatus = rideStatus,
-                    Messages = ride.Messages
-                        .OrderBy(m => m.Timestamp)
-                        .Select(m => new MessageModel
-                        {
-                            Sender = m.SenderId,
-                            Text = m.MessageContent,
-                            Timestamp = m.Timestamp
-                        }).ToList(),
-                    HasUnreadMessages = ride.Messages.Any(m => m.IsRead==false && m.ReceiverId == userId && m.SenderId != userId)
-                };
-                
-                ridesWithStatus.Add(rideModel);
             }
 
             return ResponseFactory.Ok(ridesWithStatus.OrderByDescending(r => r.DepartureTime).ToList());
@@ -308,6 +402,7 @@ public class RideService(RideRepository rideRepository, BookingRepository bookin
             return ResponseFactory.Error($"Error retrieving rides with status: {ex.Message}");
         }
     }
+
 
     public async Task<ResponseResult> GetAllPassengerRidesAsync(string userId)
     {

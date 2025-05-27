@@ -7,7 +7,8 @@ namespace Infrastructure.Enums
         Confirmed,
         Completed,
         Cancelled,
-        NotBooked
+        NotBooked,
+        Rejected
 
     }
 }

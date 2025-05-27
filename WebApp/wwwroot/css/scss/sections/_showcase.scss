@@ -1,100 +1,90 @@
+
 .showcase {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 40px;
-    padding-top: 20px;
-
-
+    position: relative;
+    padding:20px;
+    @include lg {
+        padding: 60px 0 60px 0;
+    }
 
     .container {
-        padding-top: 40px;
-        height: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        img {
-            display: none;
-            top: 0;
-            right: 0;
-            height: auto;
-            width: 57%;
-            border-radius: 8px;
-
-            @include lg {
-                display: block;
-            }
-        }
-
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
 
         .content {
-            width: 100%;
-            text-align: center;
-            padding: 10px;
-
-            @include lg {
-                width: 80%;
-                text-align: left;
-                padding: 0;
-            }
+            max-width: 600px;
+            text-align: left;
 
             .text-block {
-
                 h1 {
-                    @include h3;
-                    line-height: 1.2 !important;
-                    font-weight: 400;
-                    color: var(--color-gray-700)!important;
-                    @include lg {
-                        @include h2;
-
-                    }
+                    font-size: 2.5rem;
+                    font-weight: 700;
+                    color: var(--color-accent-yellow) !important;
 
                     span {
-                        @include d6;
-                        color: var(--color-accent-orange) !important;
+                        color: var(--color-theme-secondary) !important;
+                    }
 
-                        @include lg {
+                    @include lg {
+                        @include d2;
+
+                        span {
                             @include d2;
                         }
-
-                        .theme-text {
-                            color: var(--color-theme) !important;
-                        }
                     }
+                }
+
+                h2 {
+                    margin-top: 0.5rem;
+                    color: var(--color-theme-secondary) !important;
                 }
 
                 p {
-                    @include text-m;
-                    margin: 30px 0 20px 0;
-                    width: 100%;
-
-                    @include lg {
-                        margin: 10px 0 10px 0;
-                        width: 80%;
-                    }
+                   width: 400px;
                 }
             }
 
-
             form {
-                .content {
-                    border-radius: 8px;
-                    text-align: left;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                max-width: 300px;
 
-                    #form-date {
-                        padding-bottom: 20px;
-                    }
+                input {
+                    padding: 0.75rem;
+                    border-radius: 6px;
+                    border: 1px solid #ccc;
                 }
-
-                display: block;
-                border-radius: 8px;
 
                 .btn-accent-orange {
-                    width: 100%;
-                    padding: 12px 20px;
+                    background-color: #f4a300;
+                    color: #fff;
+                    border: none;
+                    padding: 12px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    font-size: 1rem;
+                    cursor: pointer;
                 }
+            }
+        }
+
+        .floating-image {
+            position: absolute;
+            left: -60px;
+            top: 60px;
+            transform: translate(40%, -10%);
+            width: 1000px;
+            height: auto;
+            max-width: 100%;
+            display: none;
+
+            @include lg {
+                display: block;
             }
         }
     }
 }
+
+

@@ -43,4 +43,6 @@ public class RideModel
 	public List<MessageModel>? Messages { get; set; } = [];
     public bool HasUnreadMessages { get; set; }
 
+    public int BookingId { get; set; }
+
 }

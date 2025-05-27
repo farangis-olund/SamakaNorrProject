@@ -18,14 +18,14 @@
 
     &:hover {
         text-decoration: none;
-        background: var(--color-theme-secondary);
+        background: var(--color-theme-hover);
         color: var(--color-white);
     }
 }
 
-.btn-accent-orange {
+.btn-accent-yellow {
     @include button;
-    background: var(--color-accent-orange);
+    background: var(--color-accent-yellow);
     color: var(--color-white);
     border: none;
     padding: 12px 28px;
@@ -63,7 +63,7 @@
     &:hover {
         @include theme-secondary-shadow;
         text-decoration: none;
-        background: var(--color-theme-secondary);
+        background: var(--color-theme-hover);
         color: var(--color-white);
     }
 }
@@ -217,7 +217,7 @@
     width: 44px;
     height: 44px;
     background-color: var(--color-gray-200);
-    color: var(--color-theme);
+    color: var(--color-theme-secondary);
     text-decoration: none;
 
     &:hover {

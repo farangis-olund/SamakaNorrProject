@@ -15,12 +15,15 @@
                  ? "bg-orange-100"
                  : ride.BookingStatus == BookingStatus.Completed
                      ? "bg-secondary-100"
+                      : ride.BookingStatus == BookingStatus.Rejected
+                     ? "bg-red-100"
              : "bg-secondary-100";
         <div class="driver-ride-item-section @statusClass">
             <div class="passenger-ride-item ">
                 <button class="btn-message bottom-0 end-0 m-2"
                         id="chatButton-@ride.RideId"
                         data-ride-id="@ride.RideId"
+                        data-booking-id="@ride.BookingId"
                         data-receiver="@ride.DriverId"
                         onclick="toggleChat(this)"
                         title="Visa chat">
@@ -78,37 +81,47 @@
                             case BookingStatus.Completed:
                                 <form asp-controller="Booking" asp-action="Delete" method="post" class="delete-button top-0 end-0 m-2">
                                     <input type="hidden" name="bookingId" value="@ride.BookingId" />
-                                    <button type="submit" class="btn btn-sm" title="Ta bort resa">
+                                    <button type="submit" class="btn btn-sm" title="Ta bort">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </form>
                                 <span class="badge bg-secondary">Avslutad</span>
                                
                                 break;
+                                case BookingStatus.Rejected:
+                                    <form asp-controller="Booking" asp-action="Delete" method="post" class="delete-button top-0 end-0 m-2">
+                                        <input type="hidden" name="bookingId" value="@ride.BookingId" />
+                                        <button type="submit" class="btn btn-sm" title="Ta bort">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                    <span class="badge text-danger">Avvisad</span>
+
+                                    break;
 
                         }
                     </div>
                 </div>
             </div>
-            
-            <div id="rideChat-@ride.RideId" class="ride-messages" style="display: none;">
-                <div id="messagesBox-@ride.RideId" class="messages-box">
-                    @if (ride.Messages != null && ride.Messages.Any())
-                    {
-                        foreach (var msg in ride.Messages)
+
+                <div id="rideChat-@ride.RideId-booking-@ride.BookingId" class="ride-messages" style="display: none;">
+                    <div id="messagesBox-@ride.RideId-booking-@ride.BookingId" class="messages-box">
+                        @if (ride.Messages != null && ride.Messages.Any())
                         {
-                            <div class="message-item">
-                                <strong>@msg.Sender:</strong> @msg.Text
-                                <div class="timestamp">@msg.Timestamp.ToString("g")</div>
-                            </div>
+                            foreach (var msg in ride.Messages)
+                            {
+                                <div class="message-item">
+                                    <strong>@msg.Sender:</strong> @msg.Text
+                                    <div class="timestamp">@msg.Timestamp.ToString("g")</div>
+                                </div>
+                            }
                         }
-                    }
+                    </div>
+                    <form onsubmit="sendMessage(event, '@ride.RideId')">
+                        <input type="text" id="messageText-@ride.RideId" placeholder="Skriv ett meddelande..." required />
+                        <button type="submit" class="btn-gray">Skicka</button>
+                    </form>
                 </div>
-                <form onsubmit="sendMessage(event, '@ride.RideId')">
-                    <input type="text" id="messageText-@ride.RideId" placeholder="Skriv ett meddelande..." required />
-                    <button type="submit" class="btn-gray">Skicka</button>
-                </form>
-            </div>
            </div>
         }
     }

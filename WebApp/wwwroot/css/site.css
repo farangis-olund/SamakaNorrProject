@@ -227,6 +227,10 @@ a {
   background-color: #bbf7d0;
 }
 
+.bg-red-100 {
+  background-color: #f8d7da;
+}
+
 :root {
   --color-gray-000: #FFFFFF;
   --color-gray-100: #F3F6FF;
@@ -243,11 +247,12 @@ a {
   --color-gray: #B4B7C9;
   --color-black: #000000;
   /* Primary Theme Colors */
-  --color-theme: #67664b; /* Dark Teal - Primary */
-  --color-theme-secondary: #8b8b65; /* Pacific Blue */
+  --color-theme: #f4b740;
+  --color-theme-secondary: #2b4b5a;
+  --color-theme-hover: #d89f36;
   /* Accent Colors */
-  --color-accent-yellow: #FFCC00; /* For buttons or highlights */
-  --color-accent-orange: #C47A00; /* for contrast buttons */
+  --color-accent-yellow: #f4b740;
+  --color-accent-orange: #C47A00;
   /* Alert Colors */
   --color-danger-dark: #D10000;
   --color-danger: #F5D7DA;
@@ -386,11 +391,11 @@ a:hover {
 }
 .btn-theme:hover {
   text-decoration: none;
-  background: var(--color-theme-secondary);
+  background: var(--color-theme-hover);
   color: var(--color-white);
 }
 
-.btn-accent-orange {
+.btn-accent-yellow {
   border-radius: 6px;
   text-align: center;
   font-size: 14px;
@@ -400,12 +405,12 @@ a:hover {
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  background: var(--color-accent-orange);
+  background: var(--color-accent-yellow);
   color: var(--color-white);
   border: none;
   padding: 12px 28px;
 }
-.btn-accent-orange:hover {
+.btn-accent-yellow:hover {
   text-decoration: none;
   background: #E0A800;
   color: var(--color-white);
@@ -451,7 +456,7 @@ a:hover {
 .btn-theme-s:hover {
   box-shadow: 0px 6px 14px -6px rgba(139, 139, 101, 0.4), 0px 2px 4px -1px rgba(0, 0, 0, 0.1);
   text-decoration: none;
-  background: var(--color-theme-secondary);
+  background: var(--color-theme-hover);
   color: var(--color-white);
 }
 
@@ -640,7 +645,7 @@ a:hover {
   width: 44px;
   height: 44px;
   background-color: var(--color-gray-200);
-  color: var(--color-theme);
+  color: var(--color-theme-secondary);
   text-decoration: none;
 }
 .btn-social:hover {
@@ -1507,54 +1512,31 @@ header .container .btn-mobile {
 }
 
 .showcase {
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 40px;
-  padding-top: 20px;
+  position: relative;
+  padding: 20px;
+}
+@media (min-width: 992px) {
+  .showcase {
+    padding: 60px 0 60px 0;
+  }
 }
 .showcase .container {
-  padding-top: 40px;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.showcase .container img {
-  display: none;
-  top: 0;
-  right: 0;
-  height: auto;
-  width: 57%;
-  border-radius: 8px;
-}
-@media (min-width: 992px) {
-  .showcase .container img {
-    display: block;
-  }
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 .showcase .container .content {
-  width: 100%;
-  text-align: center;
-  padding: 10px;
-}
-@media (min-width: 992px) {
-  .showcase .container .content {
-    width: 80%;
-    text-align: left;
-    padding: 0;
-  }
+  max-width: 600px;
+  text-align: left;
 }
 .showcase .container .content .text-block h1 {
-  line-height: 160%;
-  font-weight: 400;
-  color: #565973;
-  font-family: "Manrope", sans-serif;
-  font-weight: 800;
-  color: #0B0F19;
-  font-size: 28px !important;
-  line-height: 1.2 !important;
-  font-weight: 400;
-  color: var(--color-gray-700) !important;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-accent-yellow) !important;
+}
+.showcase .container .content .text-block h1 span {
+  color: var(--color-theme-secondary) !important;
 }
 @media (min-width: 992px) {
   .showcase .container .content .text-block h1 {
@@ -1564,20 +1546,8 @@ header .container .btn-mobile {
     font-family: "Manrope", sans-serif;
     font-weight: 800;
     color: #0B0F19;
-    font-size: 32px !important;
+    font-size: 72px !important;
   }
-}
-.showcase .container .content .text-block h1 span {
-  line-height: 160%;
-  font-weight: 400;
-  color: #565973;
-  font-family: "Manrope", sans-serif;
-  font-weight: 800;
-  color: #0B0F19;
-  font-size: 42px !important;
-  color: var(--color-accent-orange) !important;
-}
-@media (min-width: 992px) {
   .showcase .container .content .text-block h1 span {
     line-height: 160%;
     font-weight: 400;
@@ -1588,38 +1558,48 @@ header .container .btn-mobile {
     font-size: 72px !important;
   }
 }
-.showcase .container .content .text-block h1 span .theme-text {
-  color: var(--color-theme) !important;
+.showcase .container .content .text-block h2 {
+  margin-top: 0.5rem;
+  color: var(--color-theme-secondary) !important;
 }
 .showcase .container .content .text-block p {
-  line-height: 160%;
-  font-weight: 400;
-  color: #565973;
-  font-family: "Manrope", sans-serif;
-  font-size: 16px !important;
-  margin: 30px 0 20px 0;
-  width: 100%;
-}
-@media (min-width: 992px) {
-  .showcase .container .content .text-block p {
-    margin: 10px 0 10px 0;
-    width: 80%;
-  }
+  width: 400px;
 }
 .showcase .container .content form {
-  display: block;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 300px;
 }
-.showcase .container .content form .content {
-  border-radius: 8px;
-  text-align: left;
-}
-.showcase .container .content form .content #form-date {
-  padding-bottom: 20px;
+.showcase .container .content form input {
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 .showcase .container .content form .btn-accent-orange {
-  width: 100%;
-  padding: 12px 20px;
+  background-color: #f4a300;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.showcase .container .floating-image {
+  position: absolute;
+  left: -60px;
+  top: 60px;
+  transform: translate(40%, -10%);
+  width: 1000px;
+  height: auto;
+  max-width: 100%;
+  display: none;
+}
+@media (min-width: 992px) {
+  .showcase .container .floating-image {
+    display: block;
+  }
 }
 
 .features {
@@ -2903,6 +2883,14 @@ footer .container .copyright span {
 }
 #saved-rides .details .content-contaier .ride-item .info .duration-rating .rating i {
   font-size: 20px;
+}
+
+.modal-content-form {
+  max-width: 500px;
+  width: 50%;
+  margin: auto;
+  background-color: white;
+  padding: 30px;
 }
 
 .contacts {

@@ -197,11 +197,48 @@ public class BookingService(BookingRepository bookingRepository, UserManager<Use
         }
     }
 
-    public async Task<ResponseResult> GetBookingInfoByRideIdAsync(int rideId)
+
+    public async Task<ResponseResult> RejectBookingAsync(int bookingId)
     {
         try
         {
-            var bookingResponse = await _bookingRepository.GetAllAsync(b => b.RideId == rideId);
+            var response = await _bookingRepository.GetOneAsync(c => c.Id == bookingId);
+
+            if (response.StatusCode != StatusCode.Ok || response.ContentResult == null)
+                return ResponseFactory.NotFound("Booking not found.");
+
+
+            var bookingEntity = response.ContentResult as BookingEntity;
+
+            if (bookingEntity == null)
+            {
+                var bookingList = response.ContentResult as IEnumerable<BookingEntity>;
+                bookingEntity = bookingList?.FirstOrDefault();
+            }
+
+            if (bookingEntity == null)
+                return ResponseFactory.NotFound("Booking not found.");
+
+            bookingEntity.BookingStatus = BookingStatus.Rejected;
+
+            var updateResponse = await _bookingRepository.UpdateAsync(bookingEntity);
+            if (updateResponse.StatusCode == StatusCode.Ok)
+                return ResponseFactory.Ok(bookingEntity, "Booking status updated to Rejected.");
+
+            return ResponseFactory.Error("Failed to update booking status.");
+        }
+        catch (Exception ex)
+        {
+            return ResponseFactory.Error($"Error rejecting booking: {ex.Message}");
+        }
+    }
+
+
+    public async Task<ResponseResult> GetBookingInfoByRideAndBookingIdAsync(int rideId, int bookingId)
+    {
+        try
+        {
+            var bookingResponse = await _bookingRepository.GetAllAsync(b => b.RideId == rideId && b.Id == bookingId);
             if (bookingResponse.StatusCode == StatusCode.Ok && bookingResponse.ContentResult != null)
             {
                 var booking = ((List<BookingEntity>)bookingResponse.ContentResult).FirstOrDefault();

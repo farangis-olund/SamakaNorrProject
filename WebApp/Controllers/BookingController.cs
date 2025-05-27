@@ -1,8 +1,4 @@
-﻿using Azure;
-using Infrastructure.Entities;
-using Infrastructure.Factories;
-using Infrastructure.Models;
-using Infrastructure.Repositories;
+﻿using Infrastructure.Entities;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +19,9 @@ public class BookingController : Controller
     }
 
     [HttpGet("GetBookingInfo")]
-    public async Task<IActionResult> GetBookingInfo(int rideId)
+    public async Task<IActionResult> GetBookingInfo(int rideId, int bookingId)
     {
-        var response = await _bookingService.GetBookingInfoByRideIdAsync(rideId);
+        var response = await _bookingService.GetBookingInfoByRideAndBookingIdAsync(rideId, bookingId);
         if (response.StatusCode == Infrastructure.Models.StatusCode.Ok && response.ContentResult != null)
         {
             var booking = (BookingEntity)response.ContentResult!;
@@ -44,7 +40,7 @@ public class BookingController : Controller
                 passengerName = passenger.FirstName + " " + passenger.LastName,
                 contact = contact,
                 numberOfSeats = booking.NumberOfSeatsBooked,
-                message = booking.BookingDetails
+                message = booking.BookingDetails 
             });
         }
         return Json(new { message = "Booking info not found." });
@@ -83,16 +79,7 @@ public class BookingController : Controller
     [HttpPost("Confirm")]
     public async Task<IActionResult> Confirm([FromForm] int bookingId)
     {
-        var rideResponse = await _rideService.GetRideAsync(bookingId);
-        if (rideResponse.StatusCode == Infrastructure.Models.StatusCode.Ok)
-        {
-            var ride = (RideEntity)rideResponse.ContentResult!;
-            var bookingResponse = await _bookingService.GetBookingByRideIdAsync(ride.Id);
-
-            if (bookingResponse.StatusCode == Infrastructure.Models.StatusCode.Ok)
-            {
-                var booking = (BookingEntity)bookingResponse.ContentResult!;
-                var response = await _bookingService.ConfirmBookingAsync(booking.Id);
+        var response = await _bookingService.ConfirmBookingAsync(bookingId);
 
                 if (response.StatusCode == Infrastructure.Models.StatusCode.Ok)
                 {
@@ -101,28 +88,14 @@ public class BookingController : Controller
                 }
                 TempData["StatusMessage"] = "danger|Misslyckades att bekräfta bokning!";
                 return RedirectToAction("Driver", "Account");
-            }
-            TempData["StatusMessage"] = "danger|Bokning hittades inte!";
-            return RedirectToAction("Driver", "Account");
-        }
-        TempData["StatusMessage"] = "danger|Resan hittades inte!";
-        return RedirectToAction("Driver", "Account");
+           
     }
 
     // Complete booking
     [HttpPost("Complete")]
     public async Task<IActionResult> Complete([FromForm] int bookingId)
     {
-        var rideResponse = await _rideService.GetRideAsync(bookingId);
-        if (rideResponse.StatusCode == Infrastructure.Models.StatusCode.Ok)
-        {
-            var ride = (RideEntity)rideResponse.ContentResult!;
-            var bookingResponse = await _bookingService.GetBookingByRideIdAsync(ride.Id);
-
-            if (bookingResponse.StatusCode == Infrastructure.Models.StatusCode.Ok)
-            {
-                var booking = (BookingEntity)bookingResponse.ContentResult!;
-                var response = await _bookingService.CompleteBookingAsync(booking.Id);
+             var response = await _bookingService.CompleteBookingAsync(bookingId);
 
                 if (response.StatusCode == Infrastructure.Models.StatusCode.Ok)
                 {
@@ -132,14 +105,7 @@ public class BookingController : Controller
 
                 TempData["StatusMessage"] = "danger|Misslyckades att avsluta bokning!";
                 return RedirectToAction("Driver", "Account");
-            }
-
-            TempData["StatusMessage"] = "danger|Bokning hittades inte!";
-            return RedirectToAction("Driver", "Account");
-        }
-
-        TempData["StatusMessage"] = "danger|Resan hittades inte!";
-        return RedirectToAction("Driver", "Account");
+           
     }
 
 
@@ -159,6 +125,22 @@ public class BookingController : Controller
         return RedirectToAction("Passenger", "Account");
     }
 
+
+    // Reject  booking request
+    [HttpPost("Reject")]
+    public async Task<IActionResult> Reject(int bookingId)
+    {
+        var response = await _bookingService.RejectBookingAsync(bookingId);
+
+        if (response.StatusCode == Infrastructure.Models.StatusCode.Ok)
+        {
+            TempData["StatusMessage"] = "success|Bokningen har avvisad!";
+            return RedirectToAction("Driver", "Account");
+        }
+
+        TempData["StatusMessage"] = "danger|Misslyckades att avvisa bokningen!";
+        return RedirectToAction("Driver", "Account");
+    }
     // Delete booking
     [HttpPost("Delete")]
     public async Task<IActionResult> Delete([FromForm] int bookingId)

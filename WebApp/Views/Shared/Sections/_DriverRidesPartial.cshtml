@@ -16,14 +16,17 @@
                  ? "bg-orange-100"
                  : ride.BookingStatus == BookingStatus.Completed
                      ? "bg-green-400"
-                     
+                 : ride.BookingStatus == BookingStatus.Rejected
+                     ? "bg-red-100"
              : "bg-secondary-100";
 
             <div class="driver-ride-item-section @statusClass">
                 <div class="driver-ride-item">
-                    <button class="btn-message bottom-0 end-0 m-2"
-                            id="chatButton-@ride.Id"
+                    <button id="chatButton-@ride.Id" class="btn-message bottom-0 end-0 m-2"
+                          
                             data-ride-id="@ride.Id"
+                            data-booking-id="@ride.BookingId"
+                          
                             data-receiver="@ride.DriverId"
                             onclick="toggleChat(this)"
                             title="Visa chat">
@@ -64,25 +67,25 @@
                             {
                                 case BookingStatus.Pending:
                                     <span class="badge bg-warning text-dark">Förfrågan</span>
-                                    <button type="button" class="btn btn-transparent-accent-orange" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadBookingInfo('@ride.Id')">Bokningsinformation</button>
+                                    <button type="button" class="btn btn-transparent-accent-orange" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadBookingInfo('@ride.Id', '@ride.BookingId')">Bokningsinformation</button>
 
                                     <form asp-controller="Booking" asp-action="Confirm" method="post">
-                                        <input type="hidden" name="bookingId" value="@ride.Id" />
+                                        <input type="hidden" name="bookingId" value="@ride.BookingId" />
                                         <button type="submit" class="btn btn-success"><i class="fa-solid fa-circle-check"></i></button>
                                     </form>
 
-                                    <form asp-controller="Booking" asp-action="Cancel" method="post">
-                                        <input type="hidden" name="bookingId" value="@ride.Id" />
+                                    <form asp-controller="Booking" asp-action="Reject" method="post">
+                                        <input type="hidden" name="bookingId" value="@ride.BookingId" />
                                         <button type="submit" class="btn btn-danger"><i class="fa-solid fa-circle-xmark"></i></button>
                                     </form>
                                     break;
 
                                 case BookingStatus.Confirmed:
                                     <span class="badge bg-success">Bekräftad</span>
-                                    <button type="button" class="btn btn-transparent-accent-orange" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadBookingInfo('@ride.Id')">Bokningsinformation</button>
+                                    <button type="button" class="btn btn-transparent-accent-orange" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadBookingInfo('@ride.Id', '@ride.BookingId')">Bokningsinformation</button>
 
                                     <form asp-controller="Booking" asp-action="Complete" method="post">
-                                        <input type="hidden" name="bookingId" value="@ride.Id" />
+                                        <input type="hidden" name="bookingId" value="@ride.BookingId" />
                                         <button type="submit" class="btn btn-primary">Slutför</button>
                                     </form>
 
@@ -106,6 +109,15 @@
                                     </form>
                                     <span class="badge bg-success">Avslutad</span>
                                     break;
+                                case BookingStatus.Rejected:
+                                    <form asp-controller="Rides" asp-action="Delete" method="post" class="delete-button top-0 end-0 m-2">
+                                        <input type="hidden" name="rideId" value="@ride.Id" />
+                                        <button type="submit" class="btn btn-sm" title="Ta bort resa">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                    <span class="badge text-danger">Avvisad</span>
+                                    break;
 
                                 default:
                                     <span class="badge bg-info">Unknown Status</span>
@@ -115,8 +127,8 @@
                     </div>
                 </div>
 
-                <div id="rideChat-@ride.Id" class="ride-messages" style="display: none;">
-                    <div id="messagesBox-@ride.Id" class="messages-box">
+                <div id="rideChat-@ride.Id-booking-@ride.BookingId" class="ride-messages" style="display: none;">
+                    <div id="messagesBox-@ride.Id-booking-@ride.BookingId" class="messages-box">
                         @if (ride.Messages != null && ride.Messages.Any())
                         {
                             foreach (var msg in ride.Messages)
@@ -133,6 +145,7 @@
                         <button type="submit" class="btn-gray">Skicka</button>
                     </form>
                 </div>
+
 
 
             </div>
@@ -159,25 +172,26 @@
 
 
 <script>
-    function loadBookingInfo(rideId) {
-        console.log("Loading booking info for ride ID: " + rideId);
+    function loadBookingInfo(rideId, bookingId) {
+        console.log(`Loading booking info for ride ID: ${rideId}, booking ID: ${bookingId}`);
 
         $.ajax({
-            url: `/Booking/GetBookingInfo?rideId=${rideId}`,
+            url: `/Booking/GetBookingInfo?rideId=${rideId}&bookingId=${bookingId}`,
             method: "GET",
             success: function (data) {
                 if (data && data.passengerName) {
                     $('#bookingInfo').html(`
-                            <p><strong>Passagerarnamn:</strong> ${data.passengerName}</p>
-                            <p><strong>Kontakt:</strong> ${data.contact || 'N/A'}</p>
-                            <p><strong>Antal platser:</strong> ${data.numberOfSeats}</p>
-                            <p><strong>Meddelande:</strong> ${data.message}</p>
-                        `);
+                        <p><strong>Passagerarnamn:</strong> ${data.passengerName}</p>
+                        <p><strong>Kontakt:</strong> ${data.contact || 'N/A'}</p>
+                        <p><strong>Antal platser:</strong> ${data.numberOfSeats}</p>
+                        <p><strong>Meddelande:</strong> ${data.message}</p>
+                    `);
                 } else {
                     $('#bookingInfo').html('<p>No booking info available.</p>');
                 }
-                var modalElement = document.getElementById('bookingModal');
-                var modal = new bootstrap.Modal(modalElement);
+
+                const modalElement = document.getElementById('bookingModal');
+                const modal = new bootstrap.Modal(modalElement);
                 modal.show();
                 $('.modal-backdrop').remove();
             },
@@ -186,6 +200,7 @@
             }
         });
     }
+
 
 </script>
 

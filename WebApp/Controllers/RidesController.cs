@@ -1,4 +1,5 @@
-﻿using Infrastructure.Entities;
+﻿using Infrastructure.Contexts;
+using Infrastructure.Entities;
 using Infrastructure.Enums;
 using Infrastructure.Models;
 using Infrastructure.Services;
@@ -9,14 +10,16 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
 
-public class RidesController(RideService rideService, UserManager<UserEntity> userManager, BookingService bookingService) : Controller
+public class RidesController(DataContext context, RideService rideService, UserManager<UserEntity> userManager, BookingService bookingService) : Controller
 {
     private readonly UserManager<UserEntity> _userManager = userManager;
     private readonly RideService _rideService = rideService;
     private readonly BookingService _bookingService = bookingService;
+    private readonly DataContext _context = context;
 
-	#region Index
-	[HttpGet]
+
+    #region Index
+    [HttpGet]
 	[Route("/trips")]
 	public async Task<IActionResult> Index(string? statusMessage)
 	{
@@ -31,9 +34,19 @@ public class RidesController(RideService rideService, UserManager<UserEntity> us
 		}
 		
 		var result = await _rideService.GetAllNotApprovedRidesAsync();
-		if (result.StatusCode == Infrastructure.Models.StatusCode.Ok)
+
+     
+        if (result.StatusCode == Infrastructure.Models.StatusCode.Ok)
 		{
-			foreach (var ride in (List<RideEntity>)result.ContentResult!)
+            var rides = (List<RideEntity>)result.ContentResult!;
+
+            var futureRides = rides
+            .Where(r => r.DepartureTime >= DateTime.Now)
+            .OrderByDescending(r => r.DepartureTime)
+            .ToList();
+
+
+            foreach (var ride in futureRides)
 			{
 				var userEntity = await _userManager.FindByIdAsync(ride.DriverId); 
 				var rideItem = new RideModel
@@ -42,7 +55,7 @@ public class RidesController(RideService rideService, UserManager<UserEntity> us
 					Origin = ride.Origin,
 					Destination = ride.Destination,
 					DepartureTime = ride.DepartureTime,
-					DriverName = userEntity!.FirstName,
+					DriverName = userEntity!.FirstName + " " + userEntity.LastName,
 					UserImgUrl = userEntity.ProfileImgUrl,
 					Price = ride.Price,
 					Free = ride.Free,
@@ -51,7 +64,7 @@ public class RidesController(RideService rideService, UserManager<UserEntity> us
 				viewModel.Rides.Add(rideItem);
 			}
             			
-			viewModel.Rides = viewModel.Rides.OrderByDescending(r => r.DepartureTime).ToList();
+			//viewModel.Rides = viewModel.Rides.OrderByDescending(r => r.DepartureTime).ToList();
 		}
 		
 		return View(viewModel);
@@ -71,7 +84,11 @@ public class RidesController(RideService rideService, UserManager<UserEntity> us
             {
                 var rides = (List<RideEntity>)result.ContentResult!;
 
-                viewModel.Rides = rides.Select(ride => new RideModel
+                var upcomingRides = rides
+                  .Where(ride => ride.DepartureTime >= DateTime.Now)
+                  .ToList();
+
+                viewModel.Rides = upcomingRides.Select(ride => new RideModel
                 {
                     Id = ride.Id,
                     Origin = ride.Origin,
@@ -111,7 +128,7 @@ public class RidesController(RideService rideService, UserManager<UserEntity> us
             Origin = ride.Origin,
             Destination = ride.Destination,
             DepartureTime = ride.DepartureTime,
-            DriverName = userEntity.Result!.FirstName,
+            DriverName = userEntity.Result!.FirstName + " " + userEntity.Result!.LastName,
             UserImgUrl = userEntity.Result!.ProfileImgUrl,
             Price = ride.Price,
             Free = ride.Free,
@@ -119,14 +136,18 @@ public class RidesController(RideService rideService, UserManager<UserEntity> us
             AvailableSeats = ride.AvailableSeats,
             DriverId= ride.DriverId,
             Messages = ride.Messages
-						.OrderBy(m => m.Timestamp)
-						.Select(m => new MessageModel
-						{
-							Sender = m.SenderId,
-							Text = m.MessageContent,
-							Timestamp = m.Timestamp
-						}).ToList()
-		};
+            .OrderBy(m => m.Timestamp)
+            .Select(m => new MessageModel
+            {
+                Sender = _context.Users
+                    .Where(u => u.Email == m.SenderId)
+                    .Select(u => u.FirstName + " " + u.LastName)
+                    .FirstOrDefault() ?? m.SenderId, 
+
+                Text = m.MessageContent,
+                Timestamp = m.Timestamp
+            }).ToList()
+        };
 
         return View(viewModel);
     }

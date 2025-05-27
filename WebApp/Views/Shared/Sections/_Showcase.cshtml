@@ -1,33 +1,67 @@
 ﻿@model RidesViewModel
-<div class="showcase">
+@* <div class="showcase">
     <div class="container">
         <div class="content">
             <div class="text-block">
                 <h1>
-                    <span>SAMÅKA <span class="theme-text">NORR</span></span> Erbjud eller Efterfråga Resor
+                    SAMÅKA <span>NORR</span>
                 </h1>
+                <h3>Erbjud eller Efterfråga Resor</h3>
                 <p>Vår plattform kopplar samman resenärer för att göra resor mer hållbara, prisvärda och sociala. Börja erbjuda eller boka din resa idag!</p>
             </div>
 
             <form method="post" asp-controller="Rides" asp-action="Index">
-                <div class="content">
-                    <div id="form-departure" class="input-group">
-                        <label asp-for="SearchModel!.Origin"></label>
-                        <input asp-for="SearchModel!.Origin" id="origin" />
-                    </div>
-                    <div id="form-destination" class="input-group">
-                        <label asp-for="SearchModel!.Destination"></label>
-                        <input asp-for="SearchModel!.Destination" id="destination" />
-                    </div>
-                    <div id="form-date" class="input-group">
-                        <label asp-for="SearchModel!.DepartureTime"></label>
-                        <input asp-for="SearchModel!.DepartureTime" type="datetime-local" />
-                    </div>
-                    <button id="form-button" class="btn-accent-orange" type="submit">Sök resan</button>
+                <div id="form-departure" class="input-group">
+                    <label asp-for="SearchModel!.Origin"></label>
+                    <input asp-for="SearchModel!.Origin" id="origin" />
                 </div>
+                <div id="form-destination" class="input-group">
+                    <label asp-for="SearchModel!.Destination"></label>
+                    <input asp-for="SearchModel!.Destination" id="destination" />
+                </div>
+                <div id="form-date" class="input-group">
+                    <label asp-for="SearchModel!.DepartureTime"></label>
+                    <input asp-for="SearchModel!.DepartureTime" type="datetime-local" />
+                </div>
+                <button id="form-button" class="btn-accent-orange" type="submit">Sök resan</button>
             </form>
+
 
         </div>
         <img src="~/images/showcase.png" />
     </div>
+</div> *@
+
+<div class="showcase">
+    <div class="container">
+        <div class="content">
+            <div class="text-block">
+                <h1>SAMÅKA <span>NORR</span></h1>
+                <h2>Erbjud eller Efterfråga Resor</h2>
+                <p>
+                    Vår plattform kopplar samman resenärer för att göra resor mer hållbara,
+                    prisvärda och sociala. Börja erbjuda eller boka din resa idag!
+                </p>
+            </div>
+            <form method="post" asp-controller="Rides" asp-action="Index">
+                <div class="input-group">
+                    <label asp-for="SearchModel!.Origin"></label>
+                    <input asp-for="SearchModel!.Origin" id="origin" />
+                </div>
+                <div class="input-group">
+                    <label asp-for="SearchModel!.Destination"></label>
+                    <input asp-for="SearchModel!.Destination" id="destination" />
+                </div>
+                <div class="input-group">
+                    <label asp-for="SearchModel!.DepartureTime"></label>
+                    <input asp-for="SearchModel!.DepartureTime" type="datetime-local" />
+                </div>
+                <button class="btn-accent-yellow" type="submit">Sök resan</button>
+            </form>
+        </div>
+        
+        <img class="floating-image" src="~/images/showcase.png" alt="Showcase" />
+       
+    </div>
 </div>
+

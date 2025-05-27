@@ -24,7 +24,7 @@
 			<div class="title-bar">
                 <h2>Som chaufför dina inlagda resor</h2>
                     <div class="button-group">
-                        <button id="addRideButton" class="btn-accent-orange"><i class="fa-solid fa-plus"></i> Resa</button>
+                    <button id="addRideButton" class="btn-accent-yellow"><i class="fa-solid fa-plus"></i> Resa</button>
                         <button class="btn-gray" asp-controller="Rides" asp-action="Delete"><i class="fa-sharp fa-solid fa-trash"></i> Delete all</button>
                     </div>
               	</div>
@@ -38,7 +38,7 @@
 </div>
 
 <div id="addRideModal" class="modal" style="display:none;">
-    <div class="modal-content">
+    <div class="modal-content-form">
         <span id="closeModal" class="close">&times;</span>
         <h2>Lägg till ny resa</h2>
         <form asp-action="AddRide" asp-controller="Account" method="post">
@@ -73,7 +73,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn-accent-orange">Spara</button>
+                <button type="submit" class="btn-accent-yellow">Spara</button>
             </div>
         </form>
 

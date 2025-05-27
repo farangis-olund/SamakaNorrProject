@@ -1,19 +1,22 @@
-﻿using Infrastructure.Entities;
+﻿using Infrastructure.Contexts;
+using Infrastructure.Entities;
 using Infrastructure.Enums;
 using Infrastructure.Models;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WebApp.ViewModels;
 
 namespace WebApp.Services;
 
 public class AccountService(UserManager<UserEntity> userManager,
 						  AddressService addressService,
-						  RideService rideService )
+						  RideService rideService, DataContext context )
 {
 	private readonly UserManager<UserEntity> _userManager = userManager;
 	private readonly AddressService _addressService = addressService;
 	private readonly RideService _rideService = rideService;
+	private readonly DataContext _context = context;
 	
 
 	public async Task<AccountDetailViewModel> GetAccountDetailsAsync(UserEntity user)
@@ -78,15 +81,19 @@ public class AccountService(UserManager<UserEntity> userManager,
                     TripDetails = ride.TripDetails,
                     AvailableSeats = ride.AvailableSeats,
                     BookingStatus = ride.BookingStatus,
+					BookingId = ride.BookingId,
                     Messages = ride.Messages
-                        .OrderBy(m => m.Timestamp)
-                        .Select(m => new MessageModel
-                        {
-                            Sender = m.Sender,
-							Receiver = m.Receiver,
-                            Text = m.Text,
-                            Timestamp = m.Timestamp
-                        }).ToList(),
+					.OrderBy(m => m.Timestamp)
+					.Select(m => new MessageModel
+					{
+						Sender = _context.Users
+							.Where(u => u.Email == m.Sender)
+							.Select(u => u.FirstName + " " + u.LastName)
+							.FirstOrDefault() ?? m.Sender,
+
+						Text = m.Text,
+						Timestamp = m.Timestamp
+					}).ToList(),
                     HasUnreadMessages = ride.HasUnreadMessages
 
                 };
@@ -116,14 +123,17 @@ public class AccountService(UserManager<UserEntity> userManager,
                 BookingStatus = ride.BookingStatus,
 				DriverId = ride.DriverId,
                 Messages = ride.Messages
-                        .OrderBy(m => m.Timestamp)
-                        .Select(m => new MessageModel
-                        {
-                            Sender = m.Sender,
-                            Receiver = m.Receiver,
-                            Text = m.Text,
-                            Timestamp = m.Timestamp
-                        }).ToList(),
+                    .OrderBy(m => m.Timestamp)
+                    .Select(m => new MessageModel
+                    {
+                        Sender = _context.Users
+                            .Where(u => u.Email == m.Sender)
+                            .Select(u => u.FirstName + " " + u.LastName)
+                            .FirstOrDefault() ?? m.Sender,
+
+                        Text = m.Text,
+                        Timestamp = m.Timestamp
+                    }).ToList(),
                 HasUnreadMessages = ride.HasUnreadMessages
             }).ToList();
         }
