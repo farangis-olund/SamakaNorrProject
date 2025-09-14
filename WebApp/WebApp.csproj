@@ -6,8 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
 
 	  <PublishTrimmed>false</PublishTrimmed>
-	  <SelfContained>true</SelfContained>
-	  <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+	  <SelfContained>false</SelfContained>
+	  <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
 	
 	  
   </PropertyGroup>
@@ -24,7 +24,7 @@
 	 
   </ItemGroup>
 
-
+	
 	<ItemGroup>
 		<ViewFiles Include="$(ProjectDir)Views\**\*.cshtml" />
 	</ItemGroup>
