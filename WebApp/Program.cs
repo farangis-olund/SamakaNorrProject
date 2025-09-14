@@ -70,6 +70,12 @@ builder.Services.AddHttpClient<OpenRouteService>();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
 app.UseHsts();
 app.UseStatusCodePagesWithReExecute("/error", "?statusCode={0}");
 app.UseHttpsRedirection();
