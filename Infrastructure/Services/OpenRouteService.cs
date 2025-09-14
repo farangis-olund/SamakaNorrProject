@@ -14,8 +14,8 @@ public class OpenRouteService
 	public OpenRouteService(HttpClient http, IConfiguration config)
 	{
 		_http = http;
-		_apiKey = config["OpenRouteService:ApiKey"];
-	}
+        _apiKey = config["OpenRouteServiceApiKey"];
+    }
 
 	public async Task<(double DistanceKm, TimeSpan Duration)?> GetDrivingInfoAsync(string origin, string destination)
 	{
