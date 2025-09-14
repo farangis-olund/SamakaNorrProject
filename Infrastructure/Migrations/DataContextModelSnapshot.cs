@@ -47,7 +47,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.BookingEntity", b =>
@@ -84,7 +84,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RideId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.MessageEntity", b =>
@@ -125,7 +125,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.ReviewEntity", b =>
@@ -164,7 +164,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.RideEntity", b =>
@@ -209,7 +209,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserEntityId");
 
-                    b.ToTable("Rides");
+                    b.ToTable("Rides", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.SearchMessageEntity", b =>
@@ -246,7 +246,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SearchMessages");
+                    b.ToTable("SearchMessages", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.SearchRequestEntity", b =>
@@ -283,7 +283,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SearchRequests");
+                    b.ToTable("SearchRequests", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.UserEntity", b =>

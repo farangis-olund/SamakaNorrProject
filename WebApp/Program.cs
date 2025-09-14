@@ -76,29 +76,39 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+    db.Database.Migrate();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+else
+{
+    app.UseHsts();
+}
 
-app.UseHsts();
 app.UseStatusCodePagesWithReExecute("/error", "?statusCode={0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseCors();
 
 app.UseAuthentication();
 app.UseUserSessionValidation();
 app.UseAuthorization();
 
-app.UseCors();
 
 app.MapControllerRoute(
     name: "default",
