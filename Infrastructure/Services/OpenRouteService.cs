@@ -9,12 +9,13 @@ namespace Infrastructure.Services;
 public class OpenRouteService
 {
 	private readonly HttpClient _http;
-	private readonly string _apiKey = null!;
-
-	public OpenRouteService(HttpClient http, IConfiguration config)
+	
+	private const string _apiKey = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImNkNmQ0Yjc3YzM5ODQ2N2I4NTRkNmQ3ODQ4NTU3MTM1IiwiaCI6Im11cm11cjY0In0=";
+    public OpenRouteService(HttpClient http)
 	{
 		_http = http;
-        _apiKey = config["OpenRouteServiceApiKey"];
+       
+        
     }
 
 	public async Task<(double DistanceKm, TimeSpan Duration)?> GetDrivingInfoAsync(string origin, string destination)
@@ -25,13 +26,15 @@ public class OpenRouteService
 
 		var (lat1, lon1) = LocationData.Coordinates[origin];
 		var (lat2, lon2) = LocationData.Coordinates[destination];
-		Console.WriteLine("API Key: " + _apiKey);
-		var url = Environment.GetEnvironmentVariable("OpenRouteServiceApiKey");
 
+         var url = $"https://api.openrouteservice.org/v2/directions/driving-car?api_key={_apiKey}&start={lon1.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lat1.ToString(System.Globalization.CultureInfo.InvariantCulture)}&end={lon2.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lat2.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
 
-
-		var response = await _http.GetAsync(url);
-		if (!response.IsSuccessStatusCode) return null;
+        var response = await _http.GetAsync(url);
+        if (!response.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"Error: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}");
+            return null;
+        }
 
 		var json = await response.Content.ReadAsStringAsync();
 
