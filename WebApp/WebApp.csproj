@@ -4,11 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-
-	  <PreserveCompilationContext>true</PreserveCompilationContext>
-	  <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
-	  <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
-	  
+	
 	  
   </PropertyGroup>
 
@@ -21,10 +17,28 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-
 	 
   </ItemGroup>
-	
+
+
+	<ItemGroup>
+		<ViewFiles Include="$(ProjectDir)Views\**\*.cshtml" />
+	</ItemGroup>
+
+	<Target Name="CopyViewFilesAfterPublish" AfterTargets="Publish">
+		<Copy SourceFiles="@(ViewFiles)" DestinationFolder="$(PublishDir)\Views\%(RecursiveDir)" />
+	</Target>
+
+	<ItemGroup>
+		<ViewFiles Include="$(ProjectDir)Areas\**\*.cshtml" />
+	</ItemGroup>
+
+	<Target Name="CopyViewFilesAfterPublishAreas" AfterTargets="Publish">
+		<Copy SourceFiles="@(ViewFiles)" DestinationFolder="$(PublishDir)\Areas\%(RecursiveDir)" />
+	</Target>
+
+
+
 	<ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
