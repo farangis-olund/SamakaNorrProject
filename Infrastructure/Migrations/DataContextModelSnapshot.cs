@@ -212,6 +212,80 @@ namespace Infrastructure.Migrations
                     b.ToTable("Rides");
                 });
 
+            modelBuilder.Entity("Infrastructure.Entities.SearchMessageEntity", b =>
+                {
+                    b.Property<int>("MessageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageId"));
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MessageContent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SearchRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("SearchRequestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SearchMessages");
+                });
+
+            modelBuilder.Entity("Infrastructure.Entities.SearchRequestEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeatsRequired")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SearchRequests");
+                });
+
             modelBuilder.Entity("Infrastructure.Entities.UserEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -488,6 +562,21 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserEntityId");
                 });
 
+            modelBuilder.Entity("Infrastructure.Entities.SearchMessageEntity", b =>
+                {
+                    b.HasOne("Infrastructure.Entities.SearchRequestEntity", "SearchRequest")
+                        .WithMany("Messages")
+                        .HasForeignKey("SearchRequestId");
+
+                    b.HasOne("Infrastructure.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("SearchRequest");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Infrastructure.Entities.UserEntity", b =>
                 {
                     b.HasOne("Infrastructure.Entities.AddressEntity", "Address")
@@ -557,6 +646,11 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("Bookings");
 
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Infrastructure.Entities.SearchRequestEntity", b =>
+                {
                     b.Navigation("Messages");
                 });
 

@@ -10,16 +10,16 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
 
-public class RidesController(DataContext context, RideService rideService, UserManager<UserEntity> userManager, BookingService bookingService) : Controller
+public class RidesController(DataContext context, RideService rideService, UserManager<UserEntity> userManager, BookingService bookingService, OpenRouteService openRouteService) : Controller
 {
     private readonly UserManager<UserEntity> _userManager = userManager;
     private readonly RideService _rideService = rideService;
     private readonly BookingService _bookingService = bookingService;
     private readonly DataContext _context = context;
+	private readonly OpenRouteService _openRouteService = openRouteService;
 
-
-    #region Index
-    [HttpGet]
+	#region Index
+	[HttpGet]
 	[Route("/trips")]
 	public async Task<IActionResult> Index(string? statusMessage)
 	{
@@ -48,7 +48,13 @@ public class RidesController(DataContext context, RideService rideService, UserM
 
             foreach (var ride in futureRides)
 			{
-				var userEntity = await _userManager.FindByIdAsync(ride.DriverId); 
+				var userEntity = await _userManager.FindByIdAsync(ride.DriverId);
+
+				// ✅ Get driving info from ORS
+				var drivingInfo = await _openRouteService.GetDrivingInfoAsync(ride.Origin, ride.Destination);
+
+
+
 				var rideItem = new RideModel
 				{
 					Id = ride.Id,
@@ -59,7 +65,10 @@ public class RidesController(DataContext context, RideService rideService, UserM
 					UserImgUrl = userEntity.ProfileImgUrl,
 					Price = ride.Price,
 					Free = ride.Free,
-					TripDetails = ride.TripDetails
+					TripDetails = ride.TripDetails,
+					DistanceKm = drivingInfo?.DistanceKm ?? 0,
+					Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
+					EstimatedArrival = ride.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero)
 				};
 				viewModel.Rides.Add(rideItem);
 			}
@@ -69,14 +78,13 @@ public class RidesController(DataContext context, RideService rideService, UserM
 		
 		return View(viewModel);
 	}
-	
+
     [HttpPost]
     [Route("/trips")]
     public async Task<IActionResult> Index(RidesViewModel viewModel)
     {
         if (viewModel.SearchModel != null)
         {
-           
             var searchModel = viewModel.SearchModel;
             var result = await _rideService.SearchRidesAsync(searchModel);
 
@@ -85,18 +93,32 @@ public class RidesController(DataContext context, RideService rideService, UserM
                 var rides = (List<RideEntity>)result.ContentResult!;
 
                 var upcomingRides = rides
-                  .Where(ride => ride.DepartureTime >= DateTime.Now)
-                  .ToList();
+                    .Where(ride => ride.DepartureTime >= DateTime.Now)
+                    .ToList();
 
-                viewModel.Rides = upcomingRides.Select(ride => new RideModel
+                var rideModels = new List<RideModel>();
+
+                foreach (var ride in upcomingRides)
                 {
-                    Id = ride.Id,
-                    Origin = ride.Origin,
-                    Destination = ride.Destination,
-                    DepartureTime = ride.DepartureTime,
-                    Price = ride.Price,
-                    Free = ride.Free
-                }).ToList();
+                    // ✅ Get driving info (same as in GET)
+                    var drivingInfo = await _openRouteService.GetDrivingInfoAsync(ride.Origin, ride.Destination);
+
+                    rideModels.Add(new RideModel
+                    {
+                        Id = ride.Id,
+                        Origin = ride.Origin,
+                        Destination = ride.Destination,
+                        DepartureTime = ride.DepartureTime,
+                        Price = ride.Price,
+                        Free = ride.Free,
+
+                        DistanceKm = drivingInfo?.DistanceKm ?? 0,
+                        Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
+                        EstimatedArrival = ride.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero)
+                    });
+                }
+
+                viewModel.Rides = rideModels;
 
                 return View(viewModel);
             }
@@ -106,15 +128,15 @@ public class RidesController(DataContext context, RideService rideService, UserM
         }
 
         ViewData["StatusMessage"] = "warning|Invalid search criteria.";
-        viewModel.Rides = []; 
+        viewModel.Rides = [];
         return View(viewModel);
     }
 
 
-	#endregion
+    #endregion
 
-	#region Single trip
-	[Authorize]
+    #region Single trip
+    [Authorize]
 	[HttpGet]
     [Route("/trip")]
     public async Task<IActionResult> SingleRide(int id)
@@ -122,7 +144,12 @@ public class RidesController(DataContext context, RideService rideService, UserM
         var result = await _rideService.GetRideAsync(id);
         var ride = (RideEntity)result.ContentResult!;
         var userEntity = _userManager.FindByIdAsync(ride.DriverId);
-        var viewModel = new RideModel
+
+		// ✅ Get driving info from ORS
+		var drivingInfo = await _openRouteService.GetDrivingInfoAsync(ride.Origin, ride.Destination);
+
+
+		var viewModel = new RideModel
         {
             Id = ride.Id,
             Origin = ride.Origin,
@@ -135,7 +162,11 @@ public class RidesController(DataContext context, RideService rideService, UserM
             TripDetails = ride.TripDetails,
             AvailableSeats = ride.AvailableSeats,
             DriverId= ride.DriverId,
-            Messages = ride.Messages
+			DistanceKm = drivingInfo?.DistanceKm ?? 0,
+			Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
+			EstimatedArrival = ride.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero),
+
+			Messages = ride.Messages
             .OrderBy(m => m.Timestamp)
             .Select(m => new MessageModel
             {

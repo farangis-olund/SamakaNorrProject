@@ -1,0 +1,129 @@
+﻿#search {
+    .container {
+        width: 100%;
+        max-width: 1320px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding: 0 15px;
+
+        form {
+            .content {
+                display: flex;
+                gap: 20px;
+                flex-direction: column;
+                width: 100%;
+
+                @include lg {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+
+                .btn-accent-orange {
+                    width: 100%;
+                }
+            }
+        }
+
+        button {
+            padding: 16px 28px;
+        }
+
+        h1 {
+            padding-bottom: 20px;
+            text-align: center;
+            width: 100%;
+            margin: 0 auto;
+
+            @include xl {
+                text-align: left;
+                width: 90%;
+            }
+
+            @include xxl {
+                width: 70%;
+            }
+        }
+
+
+
+        a {
+            text-decoration: none !important;
+        }
+
+        .heading {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0 auto;
+            gap: 20px;
+
+            @include xl {
+                align-items: center;
+                width: 90%;
+            }
+
+            @include xxl {
+                width: 70%;
+            }
+
+            h2 {
+                margin: 0;
+                padding: 0;
+            }
+
+            input {
+                padding: 10px 10px 10px 15px;
+            }
+
+            i {
+                right: 15px;
+                color: $gray-700;
+            }
+
+            .card-header {
+                background-color: var(--color-gray-300) !important;
+                border-bottom: 1px solid var(--color-gray-300);
+            }
+
+            .request-card {
+                background: #fff;
+                border-left: 5px solid #f9c80e; /* yellow accent strip */
+                border-radius: 8px;
+                padding: 20px;
+                margin: 20px auto; /* center them */
+                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+                transition: transform 0.2s;
+                width: 100%; /* take full width of container */
+                max-width: 750px; /* but don’t shrink beyond this */
+                min-width: 300px; /* avoid becoming too narrow */
+            }
+
+            .system-note {
+                background: #fff8b3; /* light yellow */
+                border: 1px solid #f5e27f; /* soft border */
+                padding: 15px 20px;
+                border-radius: 6px;
+                margin: 20px auto;
+                max-width: 750px;
+                font-size: 15px;
+                line-height: 1.5;
+                color: #444;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                position: relative;
+            }
+            /* little folded-corner effect */
+            .system-note::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                border-width: 0 20px 20px 0;
+                border-style: solid;
+                border-color: #f5e27f transparent transparent transparent;
+            }
+        }
+    }
+}

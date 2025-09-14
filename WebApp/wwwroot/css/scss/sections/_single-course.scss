@@ -11,9 +11,10 @@
 
             @include lg {
                 padding: 40px 60px;
+                width: 60%;
             }
 
-            width: 60%;
+            width: 100%;
 
             p {
                 color: $gray-900;
@@ -33,131 +34,80 @@
             }
 
 
+            .ride-meta {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+                margin-top: 20px;
 
-            .ride-info {
-                display: block;
-
-
-                @include lg {
+                .ride-top {
                     display: flex;
                     justify-content: space-between;
+                    align-items: flex-start;
+                    gap: 40px;
                 }
 
-                .destination-info {
-                    display: flex;
-                    align-items: center;
-                    gap: 20px;
-
-                    p {
-                        margin: 0;
-                        @include h4;
-                    }
+                .ride-left {
+                    flex: 1;
                 }
 
+                .ride-messages{
+                   width: 100%;
+                } 
+                
                 .driver-info {
-                    text-align: center;
-                    padding-top: 20px;
+                    display: flex;
+                    flex-direction: column;
                     align-items: center;
+                    text-align: center;
+                    min-width: 120px;
 
                     img {
                         width: 70px;
                         height: 70px;
                         border-radius: 50%;
+                        object-fit: cover;
+                        margin-bottom: 8px;
                     }
 
-                    p {
-                        padding-top: 10px;
-                    }
+                    .driver-meta {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 6px;
 
-                    .btn-chat {
-                        background: none;
-                        border: none;
-                        font-size: 20px;
-                        cursor: pointer;
-                        padding: 6px;
-                        color: #555;
-
-                        i {
-                            font-size: 22px;
+                        p {
+                            margin: 0;
+                            font-size: 14px;
+                            font-weight: 500;
                         }
                     }
-
-                    &:hover {
-                        color: #007bff;
-                        transform: scale(1.1);
-                    }
                 }
-            }
 
-            .free {
-                display: flex;
-                align-items: center;
-
-                span {
-                    color: $success !important;
-                    padding-left: 10px;
-                    font-weight: 900 !important;
-                    @include h5;
+                .ride-bottom {
+                    width: 100%; /* booking frame spans full width */
                 }
-            }
 
-            .price {
-                display: flex;
-                align-items: center;
+                .booking-frame {
+                    border: 1px solid #ddd;
+                    border-radius: 12px;
+                    padding: 20px;
+                    background-color: #fff;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    width: 100%;
 
-                span {
-                    padding-left: 10px;
-                    font-weight: 900 !important;
-                    @include h5;
-                }
-            }
-
-            .details {
-                padding-bottom: 20px;
-
-                span {
-                    padding-left: 10px;
-                    font-weight: 600 !important;
-                    @include h6;
-                }
-            }
-
-            .seats {
-                display: flex;
-                align-items: center;
-
-                span {
-                    padding-left: 10px;
-                    font-weight: 900 !important;
-                    @include h5;
-                }
-            }
-
-            .booking {
-                form {
-                    display: block;
-
-                    .content {
-                        gap: 20px;
-
-                        #form-seat {
-                            input {
-                                width: 70px;
-                            }
-                        }
-
-                        #form-message {
-                            padding-bottom: 20px;
-
-                            input {
-                                width: 100%;
-                            }
-                        }
+                    textarea {
+                        width: 100%; /* make it span full width */
+                        min-height: 80px; /* nice default height */
+                        border-radius: 8px;
+                        padding: 10px;
+                        font-size: 14px;
+                        line-height: 1.4;
+                        resize: vertical; /* user can resize vertically only */
+                        box-sizing: border-box; /* prevents weird shrinking */
                     }
                 }
             }
         }
-
-        
     }
 }

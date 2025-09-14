@@ -11,62 +11,65 @@ namespace WebApp.Services;
 
 public class AccountService(UserManager<UserEntity> userManager,
 						  AddressService addressService,
-						  RideService rideService, DataContext context )
+						  RideService rideService, DataContext context, OpenRouteService openRouteService )
 {
 	private readonly UserManager<UserEntity> _userManager = userManager;
 	private readonly AddressService _addressService = addressService;
 	private readonly RideService _rideService = rideService;
 	private readonly DataContext _context = context;
-	
+    private readonly OpenRouteService _openRouteService = openRouteService;
 
-	public async Task<AccountDetailViewModel> GetAccountDetailsAsync(UserEntity user)
-	{
-		// Fetch user details
-		var userDetails = new AccountDetailViewModel
-		{
-			ProfileInfo = new AccountProfileModel
-			{
-				ProfileImgUrl = user.ProfileImgUrl,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				UserName = user.Email!,
-				Email = user.Email!,
-				IsExternalAccount = user.IsExternalAccount
-			},
-			BasicInfo = new AccountDetailBasicInfoModel
-			{
-				UserId = user.Id,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				Email = user.Email!,
-				Phone = user.PhoneNumber!,
-				Biography = user.Bio
-			}
-		};
+    public async Task<AccountDetailViewModel> GetAccountDetailsAsync(UserEntity user)
+    {
+        // Build basic profile
+        var userDetails = new AccountDetailViewModel
+        {
+            ProfileInfo = new AccountProfileModel
+            {
+                ProfileImgUrl = user.ProfileImgUrl,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.Email!,
+                Email = user.Email!,
+                IsExternalAccount = user.IsExternalAccount
+            },
+            BasicInfo = new AccountDetailBasicInfoModel
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email!,
+                Phone = user.PhoneNumber!,
+                Biography = user.Bio
+            }
+        };
 
-		
-		if (user.AddressId.HasValue)
-		{
-			var addressResponse = await _addressService.GetAddressAsync(user.AddressId.Value);
-			if (addressResponse.StatusCode == StatusCode.Ok)
-			{
-				var address = (AddressEntity)addressResponse.ContentResult!;
-				userDetails.AddressInfo = new AccountDetailAddressInfoModel
-				{
-					Addressline_1 = address.Addressline_1,
-					Addressline_2 = address.Addressline_2,
-					City = address.City,
-					PostalCode = address.PostalCode
-				};
-			}
-		}
-        // Saved rides (as driver)
+        // Address
+        if (user.AddressId.HasValue)
+        {
+            var addressResponse = await _addressService.GetAddressAsync(user.AddressId.Value);
+            if (addressResponse.StatusCode == StatusCode.Ok)
+            {
+                var address = (AddressEntity)addressResponse.ContentResult!;
+                userDetails.AddressInfo = new AccountDetailAddressInfoModel
+                {
+                    Addressline_1 = address.Addressline_1,
+                    Addressline_2 = address.Addressline_2,
+                    City = address.City,
+                    PostalCode = address.PostalCode
+                };
+            }
+        }
+
+        // Driver rides
         userDetails.SavedRides ??= new RidesViewModel { Rides = [] };
         var savedRidesResponse = await _rideService.GetAllRidesWithStatusAsync(user.Id);
         if (savedRidesResponse.StatusCode == StatusCode.Ok)
         {
             foreach (var ride in (List<RideModel>)savedRidesResponse.ContentResult!)
             {
+                var drivingInfo = await _openRouteService.GetDrivingInfoAsync(ride.Origin, ride.Destination);
+
                 var rideItem = new RideModel
                 {
                     Id = ride.Id,
@@ -76,28 +79,33 @@ public class AccountService(UserManager<UserEntity> userManager,
                     DriverName = user.FirstName,
                     UserImgUrl = user.ProfileImgUrl,
                     Price = ride.Price,
-					DriverId = ride.DriverId,
+                    DriverId = ride.DriverId,
                     Free = ride.Free,
                     TripDetails = ride.TripDetails,
                     AvailableSeats = ride.AvailableSeats,
                     BookingStatus = ride.BookingStatus,
-					BookingId = ride.BookingId,
+                    BookingId = ride.BookingId,
+
+                    DistanceKm = drivingInfo?.DistanceKm ?? 0,
+                    Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
+                    EstimatedArrival = ride.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero),
+
                     Messages = ride.Messages
-					.OrderBy(m => m.Timestamp)
-					.Select(m => new MessageModel
-					{
-						Sender = _context.Users
-							.Where(u => u.Email == m.Sender)
-							.Select(u => u.FirstName + " " + u.LastName)
-							.FirstOrDefault() ?? m.Sender,
+                        .OrderBy(m => m.Timestamp)
+                        .Select(m => new MessageModel
+                        {
+                            Sender = _context.Users
+                                .Where(u => u.Email == m.Sender)
+                                .Select(u => u.FirstName + " " + u.LastName)
+                                .FirstOrDefault() ?? m.Sender,
 
-						Text = m.Text,
-						Timestamp = m.Timestamp
-					}).ToList(),
+                            Text = m.Text,
+                            Timestamp = m.Timestamp
+                        }).ToList(),
                     HasUnreadMessages = ride.HasUnreadMessages
-
                 };
-				userDetails.SavedRides.Rides.Add(rideItem);
+
+                userDetails.SavedRides.Rides.Add(rideItem);
             }
         }
 
@@ -106,41 +114,57 @@ public class AccountService(UserManager<UserEntity> userManager,
         if (passengerRideResponse.StatusCode == StatusCode.Ok)
         {
             var passengerRides = (List<BookedRideModel>)passengerRideResponse.ContentResult!;
+            var passengerRideList = new List<BookedRideModel>();
 
-            userDetails.PassengerRides = passengerRides.Select(ride => new BookedRideModel
+            foreach (var ride in passengerRides)
             {
-                RideId = ride.RideId,
-				BookingId = ride.BookingId,
-                Origin = ride.Origin,
-                Destination = ride.Destination,
-                DepartureTime = ride.DepartureTime,
-                DriverName = ride.DriverName,
-                Price = ride.Price,
-                Free = ride.Free,
-                TripDetails = ride.TripDetails,
-                AvailableSeats = ride.AvailableSeats,
-                RequiredSeats = ride.RequiredSeats,
-                BookingStatus = ride.BookingStatus,
-				DriverId = ride.DriverId,
-                Messages = ride.Messages
-                    .OrderBy(m => m.Timestamp)
-                    .Select(m => new MessageModel
-                    {
-                        Sender = _context.Users
-                            .Where(u => u.Email == m.Sender)
-                            .Select(u => u.FirstName + " " + u.LastName)
-                            .FirstOrDefault() ?? m.Sender,
+                var drivingInfo = await _openRouteService.GetDrivingInfoAsync(ride.Origin, ride.Destination);
 
-                        Text = m.Text,
-                        Timestamp = m.Timestamp
-                    }).ToList(),
-                HasUnreadMessages = ride.HasUnreadMessages
-            }).ToList();
+                var rideItem = new BookedRideModel
+                {
+                    RideId = ride.RideId,
+                    BookingId = ride.BookingId,
+                    Origin = ride.Origin,
+                    Destination = ride.Destination,
+                    DepartureTime = ride.DepartureTime,
+                    DriverName = ride.DriverName,
+                    Price = ride.Price,
+                    Free = ride.Free,
+                    TripDetails = ride.TripDetails,
+                    AvailableSeats = ride.AvailableSeats,
+                    RequiredSeats = ride.RequiredSeats,
+                    BookingStatus = ride.BookingStatus,
+                    DriverId = ride.DriverId,
+
+                    DistanceKm = drivingInfo?.DistanceKm ?? 0,
+                    Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
+                    EstimatedArrival = ride.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero),
+
+                    Messages = ride.Messages
+                        .OrderBy(m => m.Timestamp)
+                        .Select(m => new MessageModel
+                        {
+                            Sender = _context.Users
+                                .Where(u => u.Email == m.Sender)
+                                .Select(u => u.FirstName + " " + u.LastName)
+                                .FirstOrDefault() ?? m.Sender,
+
+                            Text = m.Text,
+                            Timestamp = m.Timestamp
+                        }).ToList(),
+                    HasUnreadMessages = ride.HasUnreadMessages
+                };
+
+                passengerRideList.Add(rideItem);
+            }
+
+            userDetails.PassengerRides = passengerRideList;
         }
-        return userDetails;
-	}
 
-	public async Task<bool> UpdateAccountAsync(UserEntity user, AccountDetailViewModel viewModel)
+        return userDetails;
+    }
+
+    public async Task<bool> UpdateAccountAsync(UserEntity user, AccountDetailViewModel viewModel)
 	{
 		// Fetch the current user
 		if (user == null)

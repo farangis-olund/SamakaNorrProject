@@ -19,18 +19,8 @@
                      ? "bg-red-100"
              : "bg-secondary-100";
         <div class="driver-ride-item-section @statusClass">
-            <div class="passenger-ride-item ">
-                <button class="btn-message bottom-0 end-0 m-2"
-                        id="chatButton-@ride.RideId"
-                        data-ride-id="@ride.RideId"
-                        data-booking-id="@ride.BookingId"
-                        data-receiver="@ride.DriverId"
-                        onclick="toggleChat(this)"
-                        title="Visa chat">
-                    <i style="color:@(ride.HasUnreadMessages ? "#636363" : "#636363")" class="fa-solid fa-comment-dots"></i>
-                    <span id="unreadBadge-@ride.RideId" class="badge-unread" style="display:none;">0</span>
-                </button>
-
+            <div class="driver-ride-item ">
+              
                 <div class="ride-info">
                     <p class="date">@ride.DepartureTime.ToShortDateString()</p>
                     <div class="destination-info">
@@ -40,12 +30,28 @@
                             <i class="fa-solid fa-circle circle"></i>
                         </div>
                         <div class="text">
-                            <p><span class="time">@ride.DepartureTime.ToString("HH:mm")</span> &nbsp; @ride.Origin </p>
-                            <span class="duration">1h 15m</span>
-                            <p><span class="time">@ride.DepartureTime.ToString("HH:mm")</span> &nbsp; @ride.Destination </p>
-                        </div>
+                                <p><span class="time">@ride.DepartureTime.ToString("HH:mm")</span> &nbsp; @ride.Origin </p>
+                                <span class="duration">
+                                    @string.Format("{0}h {1}m", (int)ride.Duration.TotalHours, ride.Duration.Minutes)
+                                </span>
+                                <p><span class="time">@ride.EstimatedArrival.ToString("HH:mm")</span> &nbsp; @ride.Destination </p>
+
+                            </div>
                     </div>
+
+                    <button class="btn-message"
+                            id="chatButton-@ride.RideId"
+                            data-ride-id="@ride.RideId"
+                            data-booking-id="@ride.BookingId"
+                            data-receiver="@ride.DriverId"
+                            onclick="toggleChat(this)"
+                            title="Visa chat">
+                        <i style="color:@(ride.HasUnreadMessages ? "#636363" : "#636363")" class="fa-solid fa-comment-dots"></i>
+                        <span id="unreadBadge-@ride.RideId" class="badge-unread" style="display:none;">0</span>
+                    </button>
                 </div>
+
+              
 
                 <div class="price-status">
                     <div class="price">
@@ -79,7 +85,7 @@
 
                                 break;
                             case BookingStatus.Completed:
-                                <form asp-controller="Booking" asp-action="Delete" method="post" class="delete-button top-0 end-0 m-2">
+                                <form asp-controller="Booking" asp-action="Delete" method="post" class="delete-button">
                                     <input type="hidden" name="bookingId" value="@ride.BookingId" />
                                     <button type="submit" class="btn btn-sm" title="Ta bort">
                                         <i class="fa fa-trash"></i>
@@ -89,7 +95,7 @@
                                
                                 break;
                                 case BookingStatus.Rejected:
-                                    <form asp-controller="Booking" asp-action="Delete" method="post" class="delete-button top-0 end-0 m-2">
+                                    <form asp-controller="Booking" asp-action="Delete" method="post" class="delete-button">
                                         <input type="hidden" name="bookingId" value="@ride.BookingId" />
                                         <button type="submit" class="btn btn-sm" title="Ta bort">
                                             <i class="fa fa-trash"></i>

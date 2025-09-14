@@ -33,8 +33,8 @@
 						</div>
 						
 						<div class="form-buttons">
-							<button class="btn-gray" type="reset">Cancel</button>
-							<button class="btn-theme" type="submit">Save password</button>
+							<button class="btn-gray" type="reset">Avbryt</button>
+							<button class="btn-theme" type="submit">Spara lösenord</button>
 						</div>
 					</div>
 				</form>
@@ -45,19 +45,19 @@
 				<form method="post" asp-controller="Account" asp-action="AccountSecurity">
 					<h5>Radera konto</h5>
 					<div class="content">
-						<p>When you delete your account, your public profile will be deactivated immediately. If you change your mind before the 14 days are up, sign in with your email and password, and we’ll send you a link to reactivate your account.</p>
+						<p>När du raderar ditt konto kommer din offentliga profil att inaktiveras omedelbart. Om du ändrar dig inom 14 dagar kan du logga in med din e-postadress och ditt lösenord, så skickar vi en länk för att återaktivera ditt konto.</p>
 						
 						<div id="form-terms" class="checkbox">
 							<div class="checkbox-group">
 								<div class="input-group">
 									<input asp-for="SecurityInfo.DeleteAccount" />
-									<label asp-for="SecurityInfo.DeleteAccount">Yes, I want to delete my account.</label>
+									<label asp-for="SecurityInfo.DeleteAccount">Ja, jag vill radera mitt konto.</label>
 								</div>
 							</div>
 							<span asp-validation-for="SecurityInfo.DeleteAccount"></span>
 						</div>
 						<div class="form-button">
-						<button class="btn-red" type="submit">Delete</button>
+							<button class="btn-red" type="submit">Radera</button>
 						</div>
 					</div>
 				</form>

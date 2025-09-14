@@ -1,7 +1,7 @@
 
 .showcase {
     position: relative;
-    padding:20px;
+
     @include lg {
         padding: 60px 0 60px 0;
     }
@@ -10,13 +10,34 @@
         position: relative;
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 20px;
+        padding: 0;
+
+        @include lg {
+            padding: 0 20px;
+        }
 
         .content {
+            display: flex;
             max-width: 600px;
-            text-align: left;
+            text-align: center;
+            align-items: center;
+            width: 100%;
+            flex-direction: column;
+
+            @include lg {
+                align-items: flex-start !important;
+                text-align: left;
+            }
 
             .text-block {
+                text-align: center;
+                padding: 10px;
+
+                @include lg {
+                    text-align: left;
+                    padding: 0;
+                }
+
                 h1 {
                     font-size: 2.5rem;
                     font-weight: 700;
@@ -41,7 +62,7 @@
                 }
 
                 p {
-                   width: 400px;
+                    width: 400px;
                 }
             }
 
@@ -50,6 +71,13 @@
                 flex-direction: column;
                 gap: 1rem;
                 max-width: 300px;
+                width: 100%;
+                align-items: center;
+
+                @include lg {
+                    align-items: flex-start !important;
+                    text-align: left;
+                }
 
                 input {
                     padding: 0.75rem;
@@ -86,5 +114,3 @@
         }
     }
 }
-
-

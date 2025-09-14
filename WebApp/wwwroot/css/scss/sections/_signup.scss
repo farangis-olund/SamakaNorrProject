@@ -19,7 +19,11 @@
         }
 
         form {
-            padding: 1.7rem;
+            padding: 0;
+
+            @include lg {
+                padding: 1.7rem;
+            }
 
             .content {
                 display: grid;
@@ -67,9 +71,6 @@
                     grid-area: button;
                 }
 
-                .btn-accent-orange {
-                    padding: 14px 20px;
-                }
             }
         }
     }

@@ -25,5 +25,6 @@ public class MessageEntity
     public UserEntity User { get; set; } = null!;
     public RideEntity Ride { get; set; } = null!;
     public bool IsRead { get; set; } = false;
-	
+
+
 }

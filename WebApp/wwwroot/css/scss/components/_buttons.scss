@@ -28,8 +28,7 @@
     background: var(--color-accent-yellow);
     color: var(--color-white);
     border: none;
-    padding: 12px 28px;
-
+   
     &:hover {
         text-decoration: none;
         background: #E0A800;
@@ -111,8 +110,8 @@
 
     &:hover {
         text-decoration: none;
-        background: var(--color-gray-700);
-        color: var(--color-white);
+        background: var(--color-gray-300);
+        color: var(--color-gray-900);
     }
 }
 
@@ -246,5 +245,23 @@
     &:hover {
         text-decoration: none;
         background: var(--color-gray-700);
+    }
+}
+
+.btn-chat {
+    background: none; /* no background */
+    border: none; /* no border */
+    cursor: pointer;
+    padding: 4px; /* small clickable area */
+    color: #666; /* neutral gray */
+    transition: color 0.2s ease, transform 0.2s ease;
+
+    i {
+        font-size: 18px; /* clean size */
+    }
+
+    &:hover {
+        color: #007bff; /* blue hover */
+        transform: scale(1.1); /* subtle grow */
     }
 }

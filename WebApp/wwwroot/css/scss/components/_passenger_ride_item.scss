@@ -9,10 +9,27 @@
     justify-content: space-between;
     width: 100%;
     color: var(--color-gray-600);
+    height: 200px;
 
-    
+    .delete-button {
+        position: absolute;
+        top: -78px;
+        right: 0px;
+
+
+        .btn {
+            padding: 4px 8px;
+        }
+
+        i {
+            margin: 0;
+            color: var(--color-danger-dark);
+        }
+    }
 
     .ride-info {
+        position: relative;
+
         .date {
             font-size: 16px;
         }
@@ -26,7 +43,7 @@
 
             .text {
                 span {
-                    font-size: 16px;
+                    font-size: 14px;
                     font-weight: 400;
                 }
 
@@ -36,11 +53,11 @@
                 }
 
                 .time {
-                    font-size: 16px;
+                    font-size: 14px;
                 }
 
                 p {
-                    font-size: 16px !important;
+                    font-size: 14px !important;
                 }
             }
 
@@ -74,6 +91,14 @@
         align-items: center;
         justify-content: center;
         gap: 15px;
+
+        .ride-status {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
     }
 
     .price {
@@ -86,36 +111,11 @@
         }
     }
 
-    .ride-status {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+
 
     .badge {
         padding: 5px 10px;
         font-size: 14px;
         line-height: 1;
-    }
-
-    .btn {
-        margin-left: 5px;
-    }
-
-
-    .delete-button {
-        position: absolute;
-        top: 50%;
-        right: 8px;
-        transform: translateX(48%);
-    }
-
-    .delete-button .btn {
-        padding: 4px 8px;
-    }
-
-    .delete-button i {
-        margin: 0;
-        color: var(--color-danger-dark);
     }
 }

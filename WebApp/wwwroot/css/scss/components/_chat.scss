@@ -43,37 +43,34 @@
     }
 }
 
-.badge-unread {
-    position: absolute;
-    top: 15px;
-    right: -3px;
-    background: red;
-    color: white;
-    font-size: 10px;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    line-height: 14px;
-    font-weight: bold;
-    z-index: 2;
-    padding-top: 1px;
-}
-
 .btn-message {
-    position: absolute;
-    top: 65%;
-    right: 5px;
-    transform: translateX(10%);
+    position: relative;
     background: none;
     border: none;
     cursor: pointer;
     padding: 5px;
-
+    top:35px;
     i {
         font-size: 24px;
+        color: #636363;
+    }
+
+    .badge-unread {
+        position: absolute;
+        top: 6px;
+        right: -3px;
+        background: red;
+        color: white;
+        font-size: 10px;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        font-weight: bold;
+        line-height: 1;
+        padding-top: 2px;
     }
 }
 

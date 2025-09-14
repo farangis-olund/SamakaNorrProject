@@ -6,34 +6,34 @@ namespace Infrastructure.Models;
 public class AccountDetailBasicInfoModel
 {
 	public string UserId { get; set; } = null!;
+
 	[DataType(DataType.ImageUrl)]
 	public string? ProfileImgUrl { get; set; }
-	
-	[Display(Name = "First name", Prompt = "Enter your first name", Order = 0)]
-	[Required(ErrorMessage = "First name is required")]
+
+	[Display(Name = "Förnamn", Prompt = "Ange ditt förnamn", Order = 0)]
+	[Required(ErrorMessage = "Förnamn är obligatoriskt")]
 	[DataType(DataType.Text)]
 	public string FirstName { get; set; } = null!;
 
-
-	[Display(Name = "Last name", Prompt = "Enter your last name", Order = 1)]
-	[Required(ErrorMessage = "Last name is required")]
+	[Display(Name = "Efternamn", Prompt = "Ange ditt efternamn", Order = 1)]
+	[Required(ErrorMessage = "Efternamn är obligatoriskt")]
 	[DataType(DataType.Text)]
 	public string LastName { get; set; } = null!;
 
-
-	[Display(Name = "Email address", Prompt = "Enter your email address", Order = 2)]
-	[Required(ErrorMessage = "Email address is required")]
+	[Display(Name = "E-postadress", Prompt = "Ange din e-postadress", Order = 2)]
+	[Required(ErrorMessage = "E-postadress är obligatorisk")]
 	[EmailAddress]
-	[RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Invalid email address")]
+	[RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Ogiltig e-postadress")]
 	public string Email { get; set; } = null!;
 
-	[Display(Name = "Phone", Prompt = "Enter your phone", Order = 3)]
-	[Required(ErrorMessage = "Phone is required")]
+	[Display(Name = "Telefon", Prompt = "Ange ditt telefonnummer", Order = 3)]
+	[Required(ErrorMessage = "Telefonnummer är obligatoriskt")]
 	[DataType(DataType.PhoneNumber)]
 	public string Phone { get; set; } = null!;
 
-	[Display(Name = "Bio", Prompt = "Add a short bio...", Order = 4)]
+	[Display(Name = "Biografi", Prompt = "Lägg till en kort beskrivning...", Order = 4)]
 	[DataType(DataType.MultilineText)]
 	public string? Biography { get; set; }
+
 
 }

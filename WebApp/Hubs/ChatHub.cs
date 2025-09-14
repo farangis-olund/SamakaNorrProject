@@ -8,13 +8,13 @@ namespace WebApp.Hubs;
 
 public class ChatHub : Hub
 {
-	private readonly DataContext _context;
+    private readonly DataContext _context;
 
-	public ChatHub(DataContext context)
-	{
-		_context = context;
-	}
-	public async Task SendMessage(string rideId, string sender, string receiver, string message)
+    public ChatHub(DataContext context)
+    {
+        _context = context;
+    }
+    public async Task SendMessage(string rideId, string sender, string receiver, string message)
     {
 
         Console.WriteLine($"rideId: {rideId}");
@@ -26,7 +26,7 @@ public class ChatHub : Hub
 
         if (senderUser == null)
         {
-            
+
             await Clients.Group(rideId).SendAsync("ReceiveMessage", "Unknown User", message);
             return;
         }

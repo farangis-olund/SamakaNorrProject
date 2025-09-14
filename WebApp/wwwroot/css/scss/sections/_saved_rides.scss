@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
-   
+
     @include lg {
         display: grid;
         grid-template-columns: 2fr 5fr;
@@ -12,7 +12,7 @@
     .details {
         padding-top: 40px;
         padding-bottom: 80px;
-        width:100%;
+        width: 100%;
 
         .title-bar {
             display: flex;
@@ -20,7 +20,7 @@
             text-align: center;
             gap: 10px;
             justify-content: space-between;
-          
+
 
             .button-group {
                 display: flex;
@@ -60,12 +60,13 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem 1.5rem;
-                        
+
 
             .ride-item {
                 @include theme-secondary-shadow;
                 border-radius: 8px;
                 border: 1px solid $gray-100;
+                flex-direction: column;
 
                 .image-container {
                     position: relative;
@@ -133,12 +134,23 @@
                 }
             }
         }
+
+        @include md {
+            grid-template-columns: 1fr 1fr; // 2 columns on tablets
+        }
+
+        @include lg {
+            grid-template-columns: 1fr 1fr 1fr; // more columns on large screens
+        }
     }
 }
 .modal-content-form {
-    max-width: 500px;
-    width: 50%;
     margin: auto;
     background-color: white;
     padding: 30px;
+    width: 100%;
+    @include lg {
+        max-width: 500px;
+        width: 50%;
+    }
 }

@@ -17,11 +17,15 @@
 								<div class="line"></div>
 								<i class="fa-solid fa-circle circle"></i>
 							</div>
-						
+
 							<div class="text">
 								<p><span class="time">@ride.DepartureTime.ToString("HH:mm")</span> &nbsp; @ride.Origin </p>
-								<span class="duration">1h 15m</span>
-								<p> <span class="time">@ride.DepartureTime.ToString("HH:mm")</span> &nbsp; @ride.Destination </p>
+								<span class="duration">
+									@string.Format("{0}h {1}m", (int)ride.Duration.TotalHours, ride.Duration.Minutes)
+								</span>
+								<p><span class="time">@ride.EstimatedArrival.ToString("HH:mm")</span> &nbsp; @ride.Destination </p>
+								
+
 							</div>
 							
 						</div>

@@ -17,10 +17,13 @@ builder.Services.AddScoped<AddressRepository>();
 builder.Services.AddScoped<AddressService>();
 
 builder.Services.AddScoped<RideRepository>();
+builder.Services.AddScoped<SearchRequestRepository>();
 builder.Services.AddScoped<RideService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<BookingRepository>();
 builder.Services.AddScoped<BookingService>();
+builder.Services.AddScoped< OpenRouteService > ();
+builder.Services.AddScoped<SearchService>();
 
 builder.Services.AddHttpClient();
 
@@ -59,6 +62,11 @@ builder.Services.AddAuthentication().AddGoogle(x =>
 
 });
 
+
+builder.Services.AddHttpClient<OpenRouteService>();
+
+
+
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -79,4 +87,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapHub<ChatHub>("/chathub");
+
+app.MapHub<SearchChatHub>("/searchChatHub");
+
 app.Run();

@@ -33,5 +33,30 @@
     text-decoration: none;
     cursor: pointer;
 }
+/* Remove browser's default arrow */
+.village-select {
+    -webkit-appearance: none; /* Chrome/Safari */
+    -moz-appearance: none; /* Firefox */
+    appearance: none; /* Standard */
+    background: none; /* remove extra styling */
+}
 
+/* Wrapper to hold the custom arrow */
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+/* Custom arrow */
+.select-wrapper::after {
+    content: "▾";
+    font-size: 22px;
+    color: #666;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
 

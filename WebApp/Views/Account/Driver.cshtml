@@ -1,7 +1,7 @@
 ﻿@model AccountDetailViewModel
 
 @{
-	ViewData["Title"] = $"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}'s profile";
+	ViewData["Title"] = $"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName} profil";
 }
 <div class="container">
 	<section id="saved-rides">
@@ -25,7 +25,7 @@
                 <h2>Som chaufför dina inlagda resor</h2>
                     <div class="button-group">
                     <button id="addRideButton" class="btn-accent-yellow"><i class="fa-solid fa-plus"></i> Resa</button>
-                        <button class="btn-gray" asp-controller="Rides" asp-action="Delete"><i class="fa-sharp fa-solid fa-trash"></i> Delete all</button>
+                    <button class="btn-gray" asp-controller="Rides" asp-action="Delete"><i class="fa-sharp fa-solid fa-trash"></i> Radera allt</button>
                     </div>
               	</div>
 
@@ -42,14 +42,23 @@
         <span id="closeModal" class="close">&times;</span>
         <h2>Lägg till ny resa</h2>
         <form asp-action="AddRide" asp-controller="Account" method="post">
+
+            <!-- Origin -->
             <div class="form-group">
                 <label for="origin">Origin:</label>
-                <input type="text" id="origin" name="Origin" class="input-group" required />
+                <div class="select-wrapper">
+                    @await Html.PartialAsync("~/Views/Shared/Sections/_VillageSelect.cshtml", "Origin")
+                </div>
             </div>
+
+            <!-- Destination -->
             <div class="form-group">
                 <label for="destination">Destination:</label>
-                <input type="text" id="destination" name="Destination" class="input-group" required />
+                <div class="select-wrapper">
+                    @await Html.PartialAsync("~/Views/Shared/Sections/_VillageSelect.cshtml", "Destination")
+                </div>
             </div>
+
             <div class="form-group">
                 <label for="departure">AvresaTid:</label>
                 <input type="datetime-local" id="departure" name="DepartureTime" class="input-group" required />
@@ -59,7 +68,7 @@
                 <input type="number" id="seats" name="AvailableSeats" class="input-group" required />
             </div>
             <div class="form-group">
-                <label for="TripDetails">Resedetaljer:</label>
+                <label for="tripDetails">Resedetaljer:</label>
                 <input id="tripDetails" name="TripDetails" class="input-group" />
             </div>
             <div class="form-group">
@@ -76,7 +85,50 @@
                 <button type="submit" class="btn-accent-yellow">Spara</button>
             </div>
         </form>
-
     </div>
 </div>
+
 <script defer src="/js/show-modal-form.js"></script>
+
+@* <script defer src="/js/load-villages.js"></script> *@
+@* 
+<script>
+    async function loadVillages() {
+        try {
+            const response = await fetch('/api/locations');
+            if (!response.ok) throw new Error("Failed to fetch villages");
+
+            const villages = await response.json();
+
+            // Get selects
+            const originSelect = document.getElementById('origin');
+            const destinationSelect = document.getElementById('destination');
+
+            // Populate options
+            villages.forEach(village => {
+                originSelect.add(new Option(village, village));
+                destinationSelect.add(new Option(village, village));
+            });
+
+            // Turn selects into searchable comboboxes
+            new Choices(originSelect, {
+                searchEnabled: true,
+                itemSelectText: '',
+                placeholderValue: 'Välj ort',
+            });
+
+            new Choices(destinationSelect, {
+                searchEnabled: true,
+                itemSelectText: '',
+                placeholderValue: 'Välj ort',
+            });
+
+        } catch (err) {
+            console.error("Error loading villages:", err);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadVillages);
+</script>
+
+ *@

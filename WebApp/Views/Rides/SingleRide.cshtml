@@ -6,92 +6,91 @@
 		@await Html.PartialAsync("~/Views/Shared/Sections/_StatusMessage.cshtml")
 		<div class="ride-content">
 			<p>Avgångstid: <span>@Model.DepartureTime.ToString("dd MMM yyyy")</span> <span class="time">@Model.DepartureTime.ToString("HH:mm")</span> </p>
-			<div class="ride-info">
-				<div class="destination-info">
-					<p>@Model.Origin</p>
-					<i class="fa-solid fa-arrow-right"></i>
-					<p>@Model.Destination</p>
-				</div>
+            
+            <div class="ride-meta">
+                <div class="ride-top">
+                    <div class="ride-left">
+                        @if (Model.Free)
+                        {
+                            <p class="free">Pris:<span>Gratis</span></p>
+                        }
+                        else
+                        {
+                            <p class="price">Pris:<span>@Model.Price kr</span></p>
+                        }
 
-				<div class="driver-info">
+                        <p class="seats">Tillgängliga platser: <span>@Model.AvailableSeats</span></p>
+                        <p class="details">Resedetaljer: <span>@Model.TripDetails</span></p>
+                    </div>
 
-					@if (Model.UserImgUrl != null)
-					{
-						<img src="~/images/uploads/profiles/@Model.UserImgUrl" />
-					}
-					else
-					{
-						<img src="~/images/uploads/profiles/avatar.svg" />
-					}
-					<p>@Model.DriverName</p>
+                    <div class="driver-info">
+                        @if (Model.UserImgUrl != null)
+                        {
+                            <img src="~/images/uploads/profiles/@Model.UserImgUrl" />
+                        }
+                        else
+                        {
+                            <img src="~/images/uploads/profiles/avatar.svg" />
+                        }
 
-					<button class="btn-chat" type="button" onclick="toggleChat()" title="Öppna meddelanden">
-						<i class="fa-regular fa-comment"></i>
-					</button>
+                        <div class="driver-meta">
+                            <p>@Model.DriverName</p>
+                            <button class="btn-chat" type="button" onclick="toggleChat()" title="Öppna meddelanden">
+                                <i class="fa-regular fa-comment"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-					
-				</div>
-				
-				
+                <div id="rideChat" class="ride-messages" style="display: none;">
+                    <div id="messagesBox" class="messages-box">
+                        @if (Model.Messages != null && Model.Messages.Any())
+                        {
+                            foreach (var msg in Model.Messages)
+                            {
+                                <div class="message-item">
+                                    <strong>@msg.Sender:</strong> @msg.Text
+                                    <div class="timestamp">@msg.Timestamp.ToString("g")</div>
+                                </div>
+                            }
+                        }
 
-			</div>
+                    </div>
+                    <form id="chatForm" onsubmit="sendMessage(event)">
+                        <input type="text" id="messageText" placeholder="Skriv ett meddelande..." required />
+                        <button type="submit" class="btn-gray">Skicka</button>
+                    </form>
 
-			
-			@if (Model.Free)
-			{
-				<p class="free">Pris:<span>Gratis</span></p>
-			}
-			else
-			{
-				<p class="price">Pris:<span>@Model.Price kr</span></p>
-			}
-			
-			<p class="seats">Tillgängliga platser: <span>@Model.AvailableSeats</span></p>
-			<p class="details">Resedetaljer: <span>@Model.TripDetails</span></p>
-			<div class="booking">
-				<form method="post" asp-controller="Rides" asp-action="Booking">
-					<div class="content">
-						<div id="form-seat">
-							<label asp-for="@Model.RequiredSeats"></label>
-							<input asp-for="@Model.RequiredSeats" />
-						</div>
-						<div id="form-message" class="input-group">
-							<label asp-for="@Model.PassangerMessage"></label>
-							<input asp-for="@Model.PassangerMessage" />
-						</div>
-						<input type="hidden" asp-for="@Model.Id" />
-						<input type="hidden" asp-for="@Model.Origin" />
-						<input type="hidden" asp-for="@Model.DriverName" />
-						<input type="hidden" asp-for="@Model.Destination" />
-						
-					</div>
-					<button id="form-button" class="btn-accent-yellow" type="submit">Boka</button>
-				</form>
-				
-			</div>
-		
+                </div>
+
+                <div class="ride-bottom">
+                    <div class="booking-frame">
+                        <h4>Boka din plats</h4>
+                        <form method="post" asp-controller="Rides" asp-action="Booking">
+                            <div class="content">
+                                <div id="form-seat">
+                                    <label asp-for="@Model.RequiredSeats"></label>
+                                    <input asp-for="@Model.RequiredSeats" class="form-control" />
+                                </div>
+                                <div id="form-message" class="input-group">
+                                    <label asp-for="@Model.PassangerMessage"></label>
+                                    <textarea asp-for="@Model.PassangerMessage" class="form-control" rows="3"></textarea>
+                                </div>
+                                <input type="hidden" asp-for="@Model.Id" />
+                                <input type="hidden" asp-for="@Model.Origin" />
+                                <input type="hidden" asp-for="@Model.DriverName" />
+                                <input type="hidden" asp-for="@Model.Destination" />
+                            </div>
+                            <button id="form-button" class="btn-accent-yellow" type="submit">Boka</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+	
 		</div>
 				
-		<div id="rideChat" class="ride-messages" style="display: none;">
-			<div id="messagesBox" class="messages-box">
-				@if (Model.Messages != null && Model.Messages.Any())
-				{
-					foreach (var msg in Model.Messages)
-					{
-						<div class="message-item">
-							<strong>@msg.Sender:</strong> @msg.Text
-							<div class="timestamp">@msg.Timestamp.ToString("g")</div>
-						</div>
-					}
-				}
-				
-			</div>
-			<form id="chatForm" onsubmit="sendMessage(event)">
-				<input type="text" id="messageText" placeholder="Skriv ett meddelande..." required />
-				<button type="submit" class="btn-gray">Skicka</button>
-			</form>
-		
-		</div>
+	
     </div>
     
 </section>

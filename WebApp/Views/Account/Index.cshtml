@@ -1,7 +1,7 @@
 ﻿
 @model AccountDetailViewModel
 @{
-	ViewData["Title"] = $"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}'s profile"; 
+	ViewData["Title"] = $"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName} profil"; 
 }
 
 <div class="container">
@@ -14,7 +14,7 @@
 			<section class="basic-info">
 				<form method="post" asp-controller="Account" asp-action="Index">
 					<h2>Kontouppgifter</h2>
-					<h5>Basic info</h5>
+					<h5>Personuppgifter</h5>
 
 					<div class="content">
 						<div id="form-firstname" class="input-group">
@@ -64,12 +64,12 @@
 							<input asp-for="BasicInfo.Phone" />
 						</div>
 						<div id="form-bio" class="input-group">
-							<label asp-for="BasicInfo.Biography">Bio <span>(optional)</span></label>
+							<label asp-for="BasicInfo.Biography">Bio <span>(valfritt)</span></label>
 							<textarea asp-for="BasicInfo.Biography"></textarea>
 						</div>
 						<div class="form-buttons">
-							<button class="btn-gray" type="reset">Cancel</button>
-							<button class="btn-theme" type="submit">Save changes</button>
+							<button class="btn-gray" type="reset">Avbryt</button>
+							<button class="btn-theme" type="submit">Spara ändringar</button>
 						</div>
 					</div>
 				</form>
@@ -87,7 +87,7 @@
 							<input asp-for="AddressInfo.Addressline_1" />
 						</div>
 						<div id="form-addressline_2" class="input-group">
-							<label asp-for=AddressInfo.Addressline_2>Addressline_2 <span>(optional)</span></label>
+							<label asp-for=AddressInfo.Addressline_2>Adressrad 2 <span>(valfritt)</span></label>
 							<span asp-validation-for="AddressInfo.Addressline_2"></span>
 							<input asp-for="AddressInfo.Addressline_2" />
 						</div>
@@ -102,8 +102,9 @@
 							<input asp-for="AddressInfo.City" />
 						</div>
 						<div class="form-buttons">
-							<button class="btn-gray" type="reset">Cancel</button>
-							<button class="btn-theme" type="submit">Save changes</button>
+							<button class="btn-gray" type="reset">Avbryt</button>
+							<button class="btn-theme" type="submit">Spara ändringar</button>
+
 						</div>
 
 					</div>

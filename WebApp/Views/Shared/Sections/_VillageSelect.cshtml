@@ -1,0 +1,9 @@
+﻿@model string
+
+<select id="@Model.Replace(".", "_")"
+        name="@Model"
+        class="form-select village-select"
+        required>
+</select>
+
+<script src="~/js/load-villages.js" defer></script>

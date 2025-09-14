@@ -219,6 +219,7 @@ public class RideService(RideRepository rideRepository, BookingRepository bookin
             return ResponseFactory.NotFound();
         }
         catch (Exception ex)
+
         {
             return ResponseFactory.Error(ex.Message);
         }

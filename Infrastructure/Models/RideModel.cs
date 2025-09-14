@@ -45,4 +45,9 @@ public class RideModel
 
     public int BookingId { get; set; }
 
+	// New fields
+	public double DistanceKm { get; set; }
+	public TimeSpan Duration { get; set; }
+	public DateTime EstimatedArrival { get; set; }
+
 }

@@ -11,7 +11,9 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
     public DbSet<RideEntity> Rides { get; set; }
     public DbSet<BookingEntity> Bookings { get; set; }
     public DbSet<MessageEntity> Messages { get; set; }
+    public DbSet<SearchMessageEntity> SearchMessages { get; set; }
     public DbSet<ReviewEntity> Reviews { get; set; }
+    public DbSet<SearchRequestEntity> SearchRequests { get; set; }
 
 
 }

@@ -5,23 +5,22 @@ namespace Infrastructure.Models;
 
 public class AccountDetailAddressInfoModel
 {
-	[Display(Name = "Address line 1", Prompt = "Enter your address", Order = 0)]
-	[Required(ErrorMessage = "First name is required")]
-    [DataType(DataType.Text)]
-    public string Addressline_1 { get; set; } = null!;
+	[Display(Name = "Adressrad 1", Prompt = "Ange din adress", Order = 0)]
+	[Required(ErrorMessage = "Adressrad 1 är obligatorisk")] 
+	[DataType(DataType.Text)]
+	public string Addressline_1 { get; set; } = null!;
 
+	[Display(Name = "Adressrad 2", Prompt = "Ange din andra adressrad", Order = 1)]
+	[DataType(DataType.Text)]
+	public string? Addressline_2 { get; set; }
 
-	[Display(Name = "Address line 2", Prompt = "Enter your second address line", Order = 1)]
-    [DataType(DataType.Text)]
-    public string? Addressline_2 { get; set; }
-
-	[Display(Name = "Postal code", Prompt = "Enter your postal code", Order = 2)]
-	[Required(ErrorMessage = "Postal code is required")]
+	[Display(Name = "Postnummer", Prompt = "Ange ditt postnummer", Order = 2)]
+	[Required(ErrorMessage = "Postnummer är obligatoriskt")]
 	[DataType(DataType.PostalCode)]
 	public string PostalCode { get; set; } = null!;
 
-
-	[Display(Name = "City", Prompt = "Enter your city", Order = 3)]
-	[Required(ErrorMessage = "City is required")]
+	[Display(Name = "Stad", Prompt = "Ange din stad", Order = 3)]
+	[Required(ErrorMessage = "Stad är obligatorisk")]
 	public string City { get; set; } = null!;
+
 }

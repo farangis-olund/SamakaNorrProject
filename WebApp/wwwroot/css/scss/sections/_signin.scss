@@ -24,7 +24,11 @@
         }
 
         form {
-            padding: 1.7rem;
+            padding: 0;
+
+            @include lg {
+                padding: 1.7rem;
+            }
 
             .content {
                 display: grid;

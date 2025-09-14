@@ -16,19 +16,19 @@
             <nav>
                 <a class="menu-link" asp-controller="Home" asp-action="Index" asp-fragment="overview">Om oss</a>
                 <a class="menu-link" asp-controller="Rides" asp-action="Index" >Resor</a>
-                <a class="menu-link" asp-controller="Wanted" asp-action="Index">Sökes</a>
+                <a class="menu-link" asp-controller="Search" asp-action="Index">Sökes</a>
                 <a class="menu-link" asp-controller="Contact" asp-action="Index">Kontakta oss</a>
             </nav>
         </div>
 
-        <div class="btn-switch">
-            <label>Light</label>
+      @*   <div class="btn-switch">
+            <label>Ljus</label>
             <label class="switch" for="switch-mode">
                 <input type="checkbox" id="switch-mode" checked="@isDark">
                 <span class="slider round"></span>
             </label>
-            <label>Dark</label>
-        </div>
+            <label>Mörk</label>
+        </div> *@
 
         <div class="account-buttons">
             @if (_signInManager.IsSignedIn(User))
@@ -44,8 +44,8 @@
                 
             } else
             {
-                <a class="btn-gray" asp-controller="Auth" asp-action="SignIn"><i class="fas fa-sign-in-alt"></i><span>Sign In</span></a>
-                <a class="btn-accent-yellow" asp-controller="Auth" asp-action="SignUp"><i class="fas fa-user-plus"></i><span>Sign Up</span></a>
+                <a class="btn-gray" asp-controller="Auth" asp-action="SignIn"><i class="fas fa-sign-in-alt"></i><span>Logga In</span></a>
+                <a class="btn-accent-yellow" asp-controller="Auth" asp-action="SignUp"><i class="fas fa-user-plus"></i><span>Registrera</span></a>
 
             }
             </div>

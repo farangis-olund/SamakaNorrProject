@@ -41,4 +41,9 @@ public class BookedRideModel
 
     public List<MessageModel>? Messages { get; set; } = [];
     public bool HasUnreadMessages { get; set; }
+
+    // New fields
+    public double DistanceKm { get; set; }
+    public TimeSpan Duration { get; set; }
+    public DateTime EstimatedArrival { get; set; }
 }
