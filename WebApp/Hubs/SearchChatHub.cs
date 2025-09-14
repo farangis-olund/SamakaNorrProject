@@ -19,7 +19,7 @@ public class SearchChatHub : Hub
     {
         try
         {
-            // ✅ Lookup sender by email
+            // ✅ Lookup sender 
             var senderUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == sender);
 
             if (senderUser == null)
