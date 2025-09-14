@@ -52,4 +52,6 @@ jobs:
           app-name: 'Samaka'
           slot-name: 'Production'
           package: .
+
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4BE9DEC5DF284456913053394FC30BD9 }}
+
