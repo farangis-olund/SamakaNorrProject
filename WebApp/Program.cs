@@ -65,6 +65,17 @@ builder.Services.AddAuthentication().AddGoogle(x =>
 
 builder.Services.AddHttpClient<OpenRouteService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials()
+              .SetIsOriginAllowed(_ => true); // ?? for testing only
+    });
+});
+
 
 
 builder.Services.AddSignalR();
@@ -87,6 +98,7 @@ app.UseAuthentication();
 app.UseUserSessionValidation();
 app.UseAuthorization();
 
+app.UseCors();
 
 app.MapControllerRoute(
     name: "default",
