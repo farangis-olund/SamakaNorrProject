@@ -10,7 +10,9 @@ using WebApp.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRouting(x => x.LowercaseUrls = true);
-builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllersWithViews()
+    .AddRazorRuntimeCompilation();
 
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 builder.Services.AddScoped<AddressRepository>();
@@ -75,6 +77,8 @@ builder.Services.AddCors(options =>
               .SetIsOriginAllowed(_ => true); // ?? for testing only
     });
 });
+
+
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
