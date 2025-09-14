@@ -28,25 +28,14 @@
 	 
 
   </ItemGroup>
+
+	<Target Name="CopyCustomContentOnPublish" AfterTargets="Publish">
+		<ItemGroup>
+			<Views Include="Views\**" />
+		</ItemGroup>
+		<Copy SourceFiles="@(Views)" DestinationFolder="$(PublishDir)%(Views.RelativeDir)" />
+	</Target>
 	
-
-	<ItemGroup>
-		<ViewFiles Include="$(ProjectDir)Views\**\*.cshtml" />
-	</ItemGroup>
-
-	<Target Name="CopyViewFilesAfterPublish" AfterTargets="Publish">
-		<Copy SourceFiles="@(ViewFiles)" DestinationFolder="$(PublishDir)\Views\%(RecursiveDir)" />
-	</Target>
-
-	<ItemGroup>
-		<ViewFiles Include="$(ProjectDir)Areas\**\*.cshtml" />
-	</ItemGroup>
-
-	<Target Name="CopyViewFilesAfterPublishAreas" AfterTargets="Publish">
-		<Copy SourceFiles="@(ViewFiles)" DestinationFolder="$(PublishDir)\Areas\%(RecursiveDir)" />
-	</Target>
-
-
 
 	<ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
