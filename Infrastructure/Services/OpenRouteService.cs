@@ -26,7 +26,7 @@ public class OpenRouteService
 		var (lat1, lon1) = LocationData.Coordinates[origin];
 		var (lat2, lon2) = LocationData.Coordinates[destination];
 		Console.WriteLine("API Key: " + _apiKey);
-		var url = $"https://api.openrouteservice.org/v2/directions/driving-car?api_key={_apiKey}&start={lon1.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lat1.ToString(System.Globalization.CultureInfo.InvariantCulture)}&end={lon2.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lat2.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
+		var url = Environment.GetEnvironmentVariable("OpenRouteServiceApiKey");
 
 
 
