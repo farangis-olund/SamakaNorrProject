@@ -24,11 +24,7 @@
 
 	 
   </ItemGroup>
-
-	<ItemGroup>
-		<None Include="Views\**\*.cshtml" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
-	</ItemGroup>
-
+	
 	<ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
