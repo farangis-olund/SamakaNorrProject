@@ -48,21 +48,21 @@ builder.Services.ConfigureApplicationCookie(x =>
     x.SlidingExpiration = true;
 });
 
-builder.Services.AddAuthentication().AddFacebook(x =>
-{
-    x.AppId = "2959151207556497";
-    x.AppSecret = "46e72e1affb7b4d0cf8e7e0eca1f4537";
-    x.Fields.Add("first_name");
-    x.Fields.Add("last_name");
+//builder.Services.AddAuthentication().AddFacebook(x =>
+//{
+//    x.AppId = "2959151207556497";
+//    x.AppSecret = "46e72e1affb7b4d0cf8e7e0eca1f4537";
+//    x.Fields.Add("first_name");
+//    x.Fields.Add("last_name");
 
-});
+//});
 
-builder.Services.AddAuthentication().AddGoogle(x =>
-{
-    x.ClientId = "1042689527093-td0lbn8c93e52u562eka48n8djj40ui7.apps.googleusercontent.com";
-    x.ClientSecret = "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";
+//builder.Services.AddAuthentication().AddGoogle(x =>
+//{
+//    x.ClientId = "1042689527093-td0lbn8c93e52u562eka48n8djj40ui7.apps.googleusercontent.com";
+//    x.ClientSecret = "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";
 
-});
+//});
 
 
 builder.Services.AddHttpClient<OpenRouteService>();
