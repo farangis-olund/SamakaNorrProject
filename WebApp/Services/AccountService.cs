@@ -94,13 +94,15 @@ public class AccountService(UserManager<UserEntity> userManager,
                         .OrderBy(m => m.Timestamp)
                         .Select(m => new MessageModel
                         {
+                            SenderEmail = m.Sender,
                             Sender = _context.Users
                                 .Where(u => u.Email == m.Sender)
                                 .Select(u => u.FirstName + " " + u.LastName)
                                 .FirstOrDefault() ?? m.Sender,
 
                             Text = m.Text,
-                            Timestamp = m.Timestamp
+                            Timestamp = m.Timestamp,
+                           
                         }).ToList(),
                     HasUnreadMessages = ride.HasUnreadMessages
                 };
@@ -144,6 +146,7 @@ public class AccountService(UserManager<UserEntity> userManager,
                         .OrderBy(m => m.Timestamp)
                         .Select(m => new MessageModel
                         {
+                            SenderEmail = m.Sender,
                             Sender = _context.Users
                                 .Where(u => u.Email == m.Sender)
                                 .Select(u => u.FirstName + " " + u.LastName)

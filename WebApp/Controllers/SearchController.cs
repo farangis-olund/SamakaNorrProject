@@ -28,28 +28,34 @@ namespace WebApp.Controllers
         // ✅ GET: Show all ride requests
         [HttpGet]
         [Route("/search")]
+   
         public async Task<IActionResult> Index(string? statusMessage)
         {
+            var userEntity = await _userManager.GetUserAsync(User);
+
             var viewModel = new SearchViewModel
             {
-                SearchModel = new RideSearchModel()
+                SearchModel = new RideSearchModel(),
+                CurrentUser = userEntity!.FirstName + " " + userEntity.LastName   // 👈 Pass full name
             };
 
             if (statusMessage != null)
                 ViewData["StatusMessage"] = statusMessage;
 
             var result = await _searchService.GetAllRequestsAsync();
+            
             if (result.StatusCode == Infrastructure.Models.StatusCode.Ok)
             {
                 var requests = (List<SearchRequestEntity>)result.ContentResult!;
+                var today = DateTime.Today;
                 var futureRequests = requests
-                    .Where(r => r.DepartureTime >= DateTime.Now)
+                     .Where(r => r.DepartureTime.Date >= today)
                     .OrderBy(r => r.DepartureTime)
                     .ToList();
 
                 foreach (var req in futureRequests)
                 {
-                    var userEntity = await _userManager.FindByIdAsync(req.UserId);
+                    var reqUser = await _userManager.FindByIdAsync(req.UserId);
                     var drivingInfo = await _openRouteService.GetDrivingInfoAsync(req.Origin, req.Destination);
 
                     viewModel.Requests.Add(new SearchRequestModel
@@ -58,32 +64,32 @@ namespace WebApp.Controllers
                         Origin = req.Origin,
                         Destination = req.Destination,
                         DepartureTime = req.DepartureTime,
-                        UserName = userEntity!.FirstName + " " + userEntity.LastName,
-                        UserImgUrl = userEntity.ProfileImgUrl,
+                        UserName = reqUser!.FirstName + " " + reqUser.LastName,
+                        UserId = reqUser.Id,
+                        UserImgUrl = reqUser.ProfileImgUrl,
                         SeatsRequired = req.SeatsRequired,
                         Notes = req.Notes,
                         DistanceKm = drivingInfo?.DistanceKm ?? 0,
                         Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
                         EstimatedArrival = req.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero),
 
-                        // 🔹 Map entity messages into DTOs
                         Messages = req.Messages.Select(m => new SearchMessageModel
                         {
                             Sender = _context.Users
-                            .Where(u => u.Email == m.SenderId)
-                            .Select(u => u.FirstName + " " + u.LastName)
-                            .FirstOrDefault() ?? m.SenderId,
+                                .Where(u => u.Email == m.SenderId)
+                                .Select(u => u.FirstName + " " + u.LastName)
+                                .FirstOrDefault() ?? m.SenderId,
                             Text = m.MessageContent,
                             Timestamp = m.Timestamp,
                             IsRead = m.IsRead
-                        }).OrderByDescending(m => m.Timestamp).ToList()
+                        }).OrderBy(m => m.Timestamp).ToList() 
                     });
-
                 }
             }
 
             return View(viewModel);
         }
+
 
         // ✅ POST: Add new request
         [HttpPost]

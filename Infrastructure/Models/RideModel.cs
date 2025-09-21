@@ -9,12 +9,12 @@ public class RideModel
 {
     public int Id { get; set; }
 
-    [Display(Name = "Avresa", Prompt = "Ange avreseplats")]
+    [Display(Name = "Från", Prompt = "Ange avreseplats")]
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Avreseplats krävs")]
     public string Origin { get; set; } = null!;
 
-    [Display(Name = "Destination", Prompt = "Ange destination plats")]
+    [Display(Name = "Till", Prompt = "Ange destination plats")]
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Destination plats krävs")]
     public string Destination { get; set; } = null!;
@@ -49,5 +49,7 @@ public class RideModel
 	public double DistanceKm { get; set; }
 	public TimeSpan Duration { get; set; }
 	public DateTime EstimatedArrival { get; set; }
+
+    public string? CurrentUser { get; set; }
 
 }

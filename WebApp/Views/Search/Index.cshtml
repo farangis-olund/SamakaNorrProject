@@ -19,11 +19,11 @@
                     <div id="form-date" class="input-group">
                         <input asp-for="SearchModel!.DepartureTime" />
                     </div>
-                    <button id="form-button" class="btn-accent-yellow" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button id="form-button" class="btn-accent-mustard" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
 
                     <!-- 📌 Toggle button for new request -->
                     <div class="input-group">
-                        <button class="btn-theme" type="button" data-bs-toggle="collapse" data-bs-target="#postRequestForm">
+                        <button class="btn-accent-mustard" type="button" data-bs-toggle="collapse" data-bs-target="#postRequestForm">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
@@ -69,7 +69,7 @@
                                 <span class="text-danger" asp-validation-for="NewRequest.Notes"></span>
                             </div>
                             <div class="input-group">
-                                <button type="submit" class="btn btn-theme-s">Posta</button>
+                                <button type="submit" class="btn btn-accent-mustard">Posta</button>
                             </div>
                         </form>
                     </div>
@@ -108,21 +108,29 @@
                             </div>
 
                             <div class="text-center">
+                                 <a asp-controller="Account"
+                                   asp-action="Profile"
+                                   asp-route-id="@req.UserId"
+                                   asp-route-returnUrl="@Url.Action("Index", "Search")">
                                 @if (req.UserImgUrl != null)
                                 {
-                                    <img src="~/images/uploads/profiles/@req.UserImgUrl" class="rounded-circle mb-1" width="48" height="48" />
+                                    <img src="@req.UserImgUrl" class="rounded-circle mb-1" width="48" height="48" />
                                 }
                                 else
                                 {
                                     <img src="~/images/uploads/profiles/avatar.svg" class="rounded-circle mb-1" width="48" height="48" />
                                 }
+                               
+                                </a>
+
+
 
                                 <div class="small">@req.UserName</div>
 
                                 <button class="btn-chat" type="button"
                                         data-request-id="@req.Id"
                                         onclick="toggleSearchChat(this)">
-                                    <i class="fa-regular fa-comment"></i>
+                                    <i class="fa-regular fa-comment"></i> chatta
                                 </button>
 
                          
@@ -136,9 +144,16 @@
                                 {
                                     foreach (var msg in req.Messages)
                                     {
-                                        <div class="message-item">
-                                            <strong>@msg.Sender:</strong> @msg.Text
-                                            <div class="timestamp">@msg.Timestamp.ToString("g")</div>
+                                        var type = msg.Sender == Model.CurrentUser ? "sent" : "received";
+                                        <div class="message-item @type">
+                                            <div class="bubble">
+                                                @if (type == "received")
+                                                {
+                                                    <div class="sender-name">@msg.Sender</div>
+                                                }
+                                                <div class="text">@msg.Text</div>
+                                                <div class="timestamp">@msg.Timestamp.ToString("g")</div>
+                                            </div>
                                         </div>
                                     }
                                 }
@@ -147,10 +162,16 @@
                                     <p class="text-muted">Inga meddelanden ännu.</p>
                                 }
                             </div>
-                            <form onsubmit="sendSearchMessage(event, @req.Id)">
-                                <input type="text" id="messageText-@req.Id" placeholder="Skriv ett meddelande..." required />
-                                <button type="submit" class="btn-gray">Skicka</button>
+
+                            <form onsubmit="sendSearchMessage(event, @req.Id)" class="chat-form">
+                                <div class="chat-input-wrapper">
+                                    <input type="text" id="messageText-@req.Id" placeholder="Skriv ett meddelande..." required />
+                                    <button type="submit" class="send-btn">
+                                        <i class="fa fa-paper-plane"></i>
+                                    </button>
+                                </div>
                             </form>
+
                         </div>
 
                     </div>

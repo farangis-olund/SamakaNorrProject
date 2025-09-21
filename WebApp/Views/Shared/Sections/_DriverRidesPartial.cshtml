@@ -41,13 +41,13 @@
 
                             </div>
                         </div>
-                        <button id="chatButton-@ride.Id" class="btn-message"
+                        <button id="chatButton-@ride.Id" class="btn-message btn-chat"
                                 data-ride-id="@ride.Id"
                                 data-booking-id="@ride.BookingId"
                                 data-receiver="@ride.DriverId"
                                 onclick="toggleChat(this)"
                                 title="Visa chat">
-                            <i style="color:@(ride.HasUnreadMessages ? "#636363" : "#636363")" class="fa-solid fa-comment-dots"></i>
+                            <i class="fa-solid fa-comment-dots"></i>
                             <span id="unreadBadge-@ride.Id" class="badge-unread" style="display:none;">0</span>
                         </button>
                     </div>
@@ -70,7 +70,7 @@
                             {
                                 case BookingStatus.Pending:
                                     <span class="badge bg-warning text-dark">Förfrågan</span>
-                                    <button type="button" class="btn btn-transparent-accent-orange" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadBookingInfo('@ride.Id', '@ride.BookingId')">Bokningsinformation</button>
+                                    <button type="button" class="btn btn-theme-secondary-transparent" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadBookingInfo('@ride.Id', '@ride.BookingId')">Bokningsinformation</button>
 
                                     <form asp-controller="Booking" asp-action="Confirm" method="post">
                                         <input type="hidden" name="bookingId" value="@ride.BookingId" />
@@ -85,7 +85,7 @@
 
                                 case BookingStatus.Confirmed:
                                     <span class="badge bg-success">Bekräftad</span>
-                                    <button type="button" class="btn btn-transparent-accent-orange" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadBookingInfo('@ride.Id', '@ride.BookingId')">Bokningsinformation</button>
+                                    <button type="button" class="btn btn-theme-secondary-transparent" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="loadBookingInfo('@ride.Id', '@ride.BookingId')">Bokningsinformation</button>
 
                                     <form asp-controller="Booking" asp-action="Complete" method="post">
                                         <input type="hidden" name="bookingId" value="@ride.BookingId" />
@@ -130,28 +130,41 @@
                     </div>
                 </div>
 
+               
+
                 <div id="rideChat-@ride.Id-booking-@ride.BookingId" class="ride-messages" style="display: none;">
                     <div id="messagesBox-@ride.Id-booking-@ride.BookingId" class="messages-box">
                         @if (ride.Messages != null && ride.Messages.Any())
                         {
                             foreach (var msg in ride.Messages)
                             {
-                                <div class="message-item">
-                                    <strong>@msg.Sender:</strong> @msg.Text
-                                    <div class="timestamp">@msg.Timestamp.ToString("g")</div>
+                                var type = msg.SenderEmail == @User.Identity.Name ? "sent" : "received";
+                                <div class="message-item @type">
+                                    <div class="bubble">
+                                        @if (type == "received")
+                                        {
+                                            <div class="sender-name">@msg.Sender</div>
+                                        }
+                                        <div class="text">@msg.Text</div>
+                                        <div class="timestamp">@msg.Timestamp.ToString("g")</div>
+                                    </div>
                                 </div>
                             }
                         }
                     </div>
-                    <form onsubmit="sendMessage(event, '@ride.Id')">
-                        <input type="text" id="messageText-@ride.Id" placeholder="Skriv ett meddelande..." required />
-                        <button type="submit" class="btn-gray">Skicka</button>
+
+                    <form onsubmit="sendMessage(event, '@ride.Id')" class="chat-form">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="messageText-@ride.Id" placeholder="Skriv ett meddelande..." required />
+                            <button type="submit" class="send-btn">
+                                <i class="fa fa-paper-plane"></i>
+                            </button>
+                        </div>
                     </form>
                 </div>
 
 
-
-            </div>
+             </div>
             
 
             

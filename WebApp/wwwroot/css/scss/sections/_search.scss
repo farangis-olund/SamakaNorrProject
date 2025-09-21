@@ -4,7 +4,11 @@
         max-width: 1320px;
         margin: 0 auto;
         box-sizing: border-box;
-        padding: 0 15px;
+        padding-top: 20px;
+
+        @include lg {
+            padding-top: 80px;
+        }
 
         form {
             .content {
@@ -80,7 +84,7 @@
 
             i {
                 right: 15px;
-                color: $gray-700;
+               
             }
 
             .card-header {

@@ -6,7 +6,7 @@
 <div class="container">
 	<section id="saved-rides">
 	
-		<partial name="_AsideProfile.cshtml" />
+	@* 	<partial name="_AsideProfile.cshtml" /> *@
 		
 		<div class="details">
 			<partial name="~/Views/Shared/Sections/_StatusMessage.cshtml" />
@@ -24,8 +24,8 @@
 			<div class="title-bar">
                 <h2>Som chaufför dina inlagda resor</h2>
                     <div class="button-group">
-                    <button id="addRideButton" class="btn-accent-yellow"><i class="fa-solid fa-plus"></i> Resa</button>
-                    <button class="btn-gray" asp-controller="Rides" asp-action="Delete"><i class="fa-sharp fa-solid fa-trash"></i> Radera allt</button>
+                    <button id="addRideButton" class="btn-accent-mustard"><i class="fa-solid fa-plus"></i> Resa</button>
+                    <button class="btn-red" asp-controller="Rides" asp-action="Delete"><i class="fa-sharp fa-solid fa-trash"></i> Radera allt</button>
                     </div>
               	</div>
 
@@ -82,7 +82,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn-accent-yellow">Spara</button>
+                <button type="submit" class="btn-accent-mustard">Spara</button>
             </div>
         </form>
     </div>

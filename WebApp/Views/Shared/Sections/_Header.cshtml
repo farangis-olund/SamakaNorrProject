@@ -34,22 +34,157 @@
             @if (_signInManager.IsSignedIn(User))
             {                
                 var user = await _userManager.FindByNameAsync(User.Identity!.Name!);
+
+
+                <!-- 📄 Mina resor -->
+                <div class="mina-resor-dropdown">
+                    <button id="minaResorToggle" class="mina-resor-btn">
+                        Mina resor
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+
+                    <div id="minaResorMenu" class="mina-resor-menu">
+                        <ul>
+                            <li>
+                                <a asp-controller="Account" asp-action="Driver">
+                                    <i class="fa-solid fa-car-side"></i> <span>Du är chaufför</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Account" asp-action="Passenger">
+                                    <i class="fa-solid fa-location-dot"></i> <span>Du är passagerare</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <!-- 🚗 Car icon with badge + dropdown -->
+                <div class="notification-dropdown">
+                    <button id="notificationToggle" class=" notification-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span id="notificationBadge" class="badge">0</span>
+                    </button>
+
+                    <div id="notificationMenu" class="notification-menu">
+                        <div class="menu-header">Aviseringar</div>
+                        <ul id="notificationList">
+                            <li class="empty">Inga nya avisering</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 👤 Avatar -->
                 if(user!.ProfileImgUrl == null)
                 {
                     <a asp-controller="Account" asp-action="Index"> <img class="avatar" src="~/images/uploads/profiles/avatar.svg" /></a>
                 }else
                 {
-                    <a asp-controller="Account" asp-action="Index"> <img class="avatar" src="~/images/uploads/profiles/@user!.ProfileImgUrl" /></a>
+                    <a asp-controller="Account" asp-action="Index"> <img class="avatar" src="@user!.ProfileImgUrl" /></a>
+
+                   
                 }
                 
             } else
             {
-                <a class="btn-gray" asp-controller="Auth" asp-action="SignIn"><i class="fas fa-sign-in-alt"></i><span>Logga In</span></a>
-                <a class="btn-accent-yellow" asp-controller="Auth" asp-action="SignUp"><i class="fas fa-user-plus"></i><span>Registrera</span></a>
+                <a class="btn-theme" asp-controller="Auth" asp-action="SignIn"><i class="fas fa-sign-in-alt"></i><span>Logga In</span></a>
+                <a class="btn-accent-mustard" asp-controller="Auth" asp-action="SignUp"><i class="fas fa-user-plus"></i><span>Registrera</span></a>
 
             }
-            </div>
+        </div>
+        
+        
         <div id="menu-overlay"></div>
        
     </div>
 </header>
+
+<script>
+    const toggleBtn = document.getElementById("notificationToggle");
+    const menu = document.getElementById("notificationMenu");
+    const badge = document.getElementById("notificationBadge");
+    const list = document.getElementById("notificationList");
+
+    // Toggle dropdown
+    toggleBtn.addEventListener("click", async () => {
+        menu.parentElement.classList.toggle("open");
+
+        if (menu.parentElement.classList.contains("open")) {
+            await loadNotifications();
+
+            // Mark all as read once opened
+            await markAllAsRead();
+            badge.style.display = "none"; // hide badge instantly
+        }
+    });
+
+    async function updateBadge() {
+        const res = await fetch('/Notifications/GetUnreadCount');
+        if (!res.ok) return;
+
+        const count = await res.json();
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = "inline-block";
+        } else {
+            badge.style.display = "none";
+        }
+    }
+
+    async function loadNotifications() {
+        const response = await fetch('/Notifications/GetAll');
+        if (!response.ok) return;
+
+        const data = await response.json();
+
+        list.innerHTML = "";
+        if (data.length === 0) {
+            list.innerHTML = '<li class="empty">Inga nya aviseringar</li>';
+        } else {
+            data.forEach(n => {
+                const li = document.createElement("li");
+                li.classList.add("read"); // will all be read once opened
+                li.innerHTML = `
+                        <strong>${n.title}</strong><br/>
+                        <small>${n.message}</small>
+                    `;
+                list.appendChild(li);
+            });
+        }
+    }
+
+    // Mark all unread as read
+    async function markAllAsRead() {
+        const response = await fetch('/Notifications/GetAll');
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const unread = data.filter(n => !n.isRead);
+
+        for (const n of unread) {
+            await fetch('/Notifications/MarkAsRead?id=' + n.id, { method: 'POST' });
+        }
+    }
+
+    // Initial badge
+    document.addEventListener("DOMContentLoaded", updateBadge);
+    setInterval(updateBadge, 30000);
+</script>
+
+
+<script>
+    const minaResorBtn = document.getElementById("minaResorToggle");
+    const minaResorMenu = document.getElementById("minaResorMenu");
+
+    minaResorBtn.addEventListener("click", () => {
+        minaResorMenu.parentElement.classList.toggle("open");
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+        if (!minaResorBtn.contains(e.target) && !minaResorMenu.contains(e.target)) {
+            minaResorMenu.parentElement.classList.remove("open");
+        }
+    });
+</script>

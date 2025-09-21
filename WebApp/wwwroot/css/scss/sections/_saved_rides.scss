@@ -1,18 +1,22 @@
 ﻿#saved-rides {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    padding-top: 20px;
 
     @include lg {
         display: grid;
-        grid-template-columns: 2fr 5fr;
-        gap: 150px;
+        padding-top: 80px;
     }
 
     .details {
         padding-top: 40px;
         padding-bottom: 80px;
         width: 100%;
+        margin: 0 auto;
+
+        @include lg {
+            width: 70%;
+        }
 
         .title-bar {
             display: flex;

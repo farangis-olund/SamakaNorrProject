@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Contexts;
+using Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -54,6 +55,20 @@ namespace WebApp.Controllers
                 .CountAsync();
 
             return Ok(count);
+        }
+
+
+        public IActionResult RenderMessage(MessageModel message, string currentUser)
+        {
+            var cssClass = message.Sender == currentUser ? "sent" : "received";
+            return PartialView("~/Views/Shared/Sections/_SingleMessagePartial.cshtml",
+                new MessageModel
+                {
+                    CssClass = cssClass,
+                    Sender = message.Sender,
+                    Text = message.Text,
+                    Timestamp = message.Timestamp
+                });
         }
 
     }

@@ -8,4 +8,6 @@ public class MessageModel
 	public string Text { get; set; } = null!;
 	public DateTime Timestamp { get; set; }
 	public bool IsRead { get; set; }
+	public string? CssClass { get; set; }
+	public string SenderEmail { get; set; } = null!;
 }

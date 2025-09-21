@@ -6,20 +6,22 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
 
-public class RidesController(DataContext context, RideService rideService, UserManager<UserEntity> userManager, BookingService bookingService, OpenRouteService openRouteService) : Controller
+public class RidesController(DataContext context, RideService rideService, UserManager<UserEntity> userManager, BookingService bookingService, OpenRouteService openRouteService, NotificationService notificationService) : Controller
 {
     private readonly UserManager<UserEntity> _userManager = userManager;
     private readonly RideService _rideService = rideService;
     private readonly BookingService _bookingService = bookingService;
     private readonly DataContext _context = context;
 	private readonly OpenRouteService _openRouteService = openRouteService;
+    private readonly NotificationService _notificationService = notificationService;
 
-	#region Index
-	[HttpGet]
+    #region Index
+    [HttpGet]
 	[Route("/trips")]
 	public async Task<IActionResult> Index(string? statusMessage)
 	{
@@ -135,57 +137,177 @@ public class RidesController(DataContext context, RideService rideService, UserM
 
     #endregion
 
+    //   #region Single trip
+    //   [Authorize]
+    //[HttpGet]
+    //   [Route("/trip")]
+    //   public async Task<IActionResult> SingleRide(int id)
+    //   {
+    //       var result = await _rideService.GetRideAsync(id);
+    //       var ride = (RideEntity)result.ContentResult!;
+    //       var userEntity = _userManager.FindByIdAsync(ride.DriverId);
+    //       var user = await _userManager.GetUserAsync(User);
+
+    //       // ✅ Get driving info from ORS
+    //       var drivingInfo = await _openRouteService.GetDrivingInfoAsync(ride.Origin, ride.Destination);
+
+
+
+    //       var viewModel = new RideModel
+    //       {
+
+    //           Id = ride.Id,
+    //           Origin = ride.Origin,
+    //           Destination = ride.Destination,
+    //           DepartureTime = ride.DepartureTime,
+    //           DriverName = userEntity.Result!.FirstName + " " + userEntity.Result!.LastName,
+    //           UserImgUrl = userEntity.Result!.ProfileImgUrl,
+    //           Price = ride.Price,
+    //           Free = ride.Free,
+    //           TripDetails = ride.TripDetails,
+    //           AvailableSeats = ride.AvailableSeats,
+    //           DriverId= ride.DriverId,
+    //		DistanceKm = drivingInfo?.DistanceKm ?? 0,
+    //		Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
+    //		EstimatedArrival = ride.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero),
+    //           CurrentUser = user!.FirstName + " " + user.LastName,   // 👈 Pass full name
+
+    //           Messages = ride.Messages
+    //           .OrderBy(m => m.Timestamp)
+    //           .Select(m => new MessageModel
+    //           {
+    //               Sender = _context.Users
+    //                   .Where(u => u.Email == m.SenderId)
+    //                   .Select(u => u.FirstName + " " + u.LastName)
+    //                   .FirstOrDefault() ?? m.SenderId, 
+
+    //               Text = m.MessageContent,
+    //               Timestamp = m.Timestamp
+    //           }).ToList()
+    //       };
+
+    //       return View(viewModel);
+    //   }
+    //   #endregion
+
     #region Single trip
     [Authorize]
-	[HttpGet]
+    [HttpGet]
     [Route("/trip")]
     public async Task<IActionResult> SingleRide(int id)
     {
         var result = await _rideService.GetRideAsync(id);
-        var ride = (RideEntity)result.ContentResult!;
-        var userEntity = _userManager.FindByIdAsync(ride.DriverId);
 
-		// ✅ Get driving info from ORS
-		var drivingInfo = await _openRouteService.GetDrivingInfoAsync(ride.Origin, ride.Destination);
+        // ✅ Check if ride exists
+        if (result == null || result.ContentResult == null)
+        {
+            // Redirect to list page with error message instead of crashing
+            return RedirectToAction("Index", "Search", new { statusMessage = "Resan hittades inte eller har tagits bort." });
+        }
 
+        var ride = (RideEntity)result.ContentResult;
 
-		var viewModel = new RideModel
+        // ✅ Get driver
+        var userEntity = await _userManager.FindByIdAsync(ride.DriverId);
+        if (userEntity == null)
+        {
+            return RedirectToAction("Index", "Search", new { statusMessage = "Föraren hittades inte." });
+        }
+
+        // ✅ Current logged in user
+        var user = await _userManager.GetUserAsync(User);
+
+        // ✅ Get driving info from ORS
+        var drivingInfo = await _openRouteService.GetDrivingInfoAsync(ride.Origin, ride.Destination);
+
+        var viewModel = new RideModel
         {
             Id = ride.Id,
             Origin = ride.Origin,
             Destination = ride.Destination,
             DepartureTime = ride.DepartureTime,
-            DriverName = userEntity.Result!.FirstName + " " + userEntity.Result!.LastName,
-            UserImgUrl = userEntity.Result!.ProfileImgUrl,
+            DriverName = $"{userEntity.FirstName} {userEntity.LastName}",
+            UserImgUrl = userEntity.ProfileImgUrl,
             Price = ride.Price,
             Free = ride.Free,
             TripDetails = ride.TripDetails,
             AvailableSeats = ride.AvailableSeats,
-            DriverId= ride.DriverId,
-			DistanceKm = drivingInfo?.DistanceKm ?? 0,
-			Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
-			EstimatedArrival = ride.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero),
+            DriverId = ride.DriverId,
+            DistanceKm = drivingInfo?.DistanceKm ?? 0,
+            Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
+            EstimatedArrival = ride.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero),
+            CurrentUser = user != null ? $"{user.FirstName} {user.LastName}" : string.Empty,
 
-			Messages = ride.Messages
-            .OrderBy(m => m.Timestamp)
-            .Select(m => new MessageModel
-            {
-                Sender = _context.Users
-                    .Where(u => u.Email == m.SenderId)
-                    .Select(u => u.FirstName + " " + u.LastName)
-                    .FirstOrDefault() ?? m.SenderId, 
-
-                Text = m.MessageContent,
-                Timestamp = m.Timestamp
-            }).ToList()
+            Messages = ride.Messages
+                .OrderBy(m => m.Timestamp)
+                .Select(m => new MessageModel
+                {
+                    Sender = _context.Users
+                        .Where(u => u.Email == m.SenderId)
+                        .Select(u => u.FirstName + " " + u.LastName)
+                        .FirstOrDefault() ?? m.SenderId,
+                    Text = m.MessageContent,
+                    Timestamp = m.Timestamp
+                }).ToList()
         };
 
         return View(viewModel);
     }
     #endregion
 
-    #region Booking
-    [Authorize] 
+    //#region Booking
+    //[Authorize] 
+    //[HttpPost]
+    //[Route("/booking")]
+    //public async Task<IActionResult> Booking(RideModel model)
+    //{
+    //    try
+    //    {
+    //        var userEntity = await _userManager.GetUserAsync(User);
+
+    //        if (ModelState.IsValid)
+    //        {
+    //            var bookingEntity = new BookingEntity
+    //            {
+    //                RideId = model.Id,
+    //                PassengerId = userEntity.Id,
+    //                BookingTime = DateTime.Now,
+    //                NumberOfSeatsBooked = model.RequiredSeats,
+    //                BookingStatus = BookingStatus.Pending,
+    //                BookingDetails = model.PassangerMessage
+    //            };
+
+    //            var response = await _bookingService.AddBookingAsync(bookingEntity);
+    //            if (response.StatusCode == Infrastructure.Models.StatusCode.Ok)
+    //            {
+    //                var statusMessage = "success|Bokningen har skickats!";
+    //                return RedirectToAction("Index", new { statusMessage });
+    //            } else if(response.StatusCode == Infrastructure.Models.StatusCode.Exists)
+    //            {
+    //                var statusMessage = "warning|Du har redan bokat denna resa.";
+    //                return RedirectToAction("Index", new { statusMessage });
+    //            }
+    //            else if (response.StatusCode == Infrastructure.Models.StatusCode.Error && response.Message == "Du kan inte boka din egen resa.")
+    //            {
+    //                var statusMessage = "warning|Du kan inte boka din egen resa.";
+    //                return RedirectToAction("Index", new { statusMessage });
+    //            }
+    //        }
+
+    //        ViewData["StatusMessage"] = "danger|Incorrect data!";
+    //        return View(model);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        // Optional: log the error
+    //        ViewData["StatusMessage"] = "danger|Ett fel inträffade vid bokningen. Försök igen senare.";
+    //        return View(model);
+    //    }
+    //}
+    //#endregion
+
+    #region Booking 
+    [Authorize]
     [HttpPost]
     [Route("/booking")]
     public async Task<IActionResult> Booking(RideModel model)
@@ -209,9 +331,24 @@ public class RidesController(DataContext context, RideService rideService, UserM
                 var response = await _bookingService.AddBookingAsync(bookingEntity);
                 if (response.StatusCode == Infrastructure.Models.StatusCode.Ok)
                 {
+                    // 🔔 Send notification to driver
+                    var ride = await _context.Rides
+                        .FirstOrDefaultAsync(r => r.Id == model.Id);
+
+                    if (ride != null)
+                    {
+                        await _notificationService.AddNotificationAsync(new NotificationEntity
+                        {
+                            UserId = ride.DriverId, // notify the driver
+                            Title = "Ny bokning 📩",
+                            Message = $"{userEntity.FirstName} {userEntity.LastName} har skickat en bokningsförfrågan för resan {ride.Origin} → {ride.Destination}."
+                        });
+                    }
+
                     var statusMessage = "success|Bokningen har skickats!";
                     return RedirectToAction("Index", new { statusMessage });
-                } else if(response.StatusCode == Infrastructure.Models.StatusCode.Exists)
+                }
+                else if (response.StatusCode == Infrastructure.Models.StatusCode.Exists)
                 {
                     var statusMessage = "warning|Du har redan bokat denna resa.";
                     return RedirectToAction("Index", new { statusMessage });
@@ -234,6 +371,7 @@ public class RidesController(DataContext context, RideService rideService, UserM
         }
     }
     #endregion
+
 
     #region Deleting
     [Authorize]

@@ -1,4 +1,4 @@
-﻿:root {
+﻿/*:root {
     --color-gray-000: #FFFFFF;
     --color-gray-100: #F3F6FF;
     --color-gray-200: #EFF2FC;
@@ -12,28 +12,28 @@
     --color-transparent: transparent;
     --color-white: #FFFFFF;
     --color-gray: #B4B7C9;
-    --color-black: #000000;
+    --color-black: #000000;*/
     /* Primary Theme Colors */
-    --color-theme: #f4b740;
+    /*--color-theme: #f4b740;
     --color-theme-secondary: #2b4b5a;
-    --color-theme-hover: #d89f36;
+    --color-theme-hover: #d89f36;*/
     /* Accent Colors */
-    --color-accent-yellow: #f4b740;
-    --color-accent-orange: #C47A00;
+    /*--color-accent-yellow: #f4b740;
+    --color-accent-orange: #C47A00;*/
     /* Alert Colors */
-    --color-danger-dark: #D10000;
+    /*--color-danger-dark: #D10000;
     --color-danger: #F5D7DA;
     --color-success: #BCF7D2;
     --color-success-dark: #22C55E;
     --color-warning: #FFE8AD;
     --color-warning-dark: #FFCC00;
-    --color-info: #CFDEFD;
+    --color-info: #CFDEFD;*/
     /* Gradients */
-    --theme-opacity: #00566214;
+    /*--theme-opacity: #00566214;
     --theme-gradient: linear-gradient(90deg, #005662 0%, #007b83 50%, #FF7F50 100%);
-    --theme-gradient-bg: linear-gradient(-1deg, rgba(0, 86, 98, 0.10) 0%, rgba(0, 123, 131, 0.05) 45%, rgba(255, 127, 80, 0.07) 75%);
+    --theme-gradient-bg: linear-gradient(-1deg, rgba(0, 86, 98, 0.10) 0%, rgba(0, 123, 131, 0.05) 45%, rgba(255, 127, 80, 0.07) 75%);*/
     /* Fonts */
-    --font-standard: "Manrope", sans-serif;
+    /*--font-standard: "Manrope", sans-serif;
 }
 
 :root.dark {
@@ -50,21 +50,70 @@
     --color-transparent: transparent;
     --color-white: #FFFFFF;
     --color-gray: #B4B7C9;
-    --color-black: #000000;
+    --color-black: #000000;*/
     /* Dark Mode Primary Theme Colors */
-    --color-theme: #007b83; /* Pacific Blue for dark mode */
-    --color-theme-secondary: #005662; /* Dark Teal */
+    /*--color-theme: #007b83;*/ /* Pacific Blue for dark mode */
+    /*--color-theme-secondary: #005662;*/ /* Dark Teal */
     /* Accent Colors */
-    --color-accent-yellow: #FFCC00;
-    --color-accent-orange: #C47A00;
+    /*--color-accent-yellow: #FFCC00;
+    --color-accent-orange: #C47A00;*/
     /* Alert Colors */
-    --color-danger-dark: #E57E88;
+    /*--color-danger-dark: #E57E88;
+    --color-danger: #F5D7DA;
+    --color-success: #BCF7D2;
+    --color-success-dark: #22C55E;
+    --color-warning: #FFE8AD;
+    --color-warning-dark: #FFCC00;
+    --color-info: #CFDEFD;*/
+    /* Fonts */
+    /*--font-standard: "Manrope", sans-serif;
+}*/
+
+:root {
+    --color-gray-000: #FFFFFF;
+    --color-gray-100: #F3F6FF;
+    --color-gray-200: #EFF2FC;
+    --color-gray-300: #E2E5F1;
+    --color-gray-400: #D4D7E5;
+    --color-gray-500: #B4B7C9;
+    --color-gray-600: #9397AD;
+    --color-gray-700: #565973;
+    --color-gray-800: #33354D;
+    --color-gray-900: #0B0F19;
+    --color-transparent: transparent;
+    --color-white: #FFFFFF;
+    --color-gray: #B4B7C9;
+    --color-black: #000000;
+    /* green */
+    --color-theme: #4F6F64;
+    --color-theme-hover: #3f5950;
+    /* mint */
+    --color-theme-tertiary: #73A580;
+    --color-theme-tertiary-hover: #5e8c68;
+
+    --color-theme-secondary: #8B5E3C;
+    --color-theme-secondary-hover: #A16B47;
+    --color-accent-mustard: #C6AA58;
+    --color-accent-mustard-hover: #a98f47;
+   
+    /* Accent Colors */
+    --color-accent-teal: #496A65;
+    --color-accent-tan: #C69373;
+    --color-accent-green: #879C76;
+    --color-accent-beige: #faf0e6;
+    --color-accent-mustard: #E1AD01;
+    /* Alert Colors (keeping as-is unless you want them updated to match palette) */
+    --color-danger-dark: #D10000;
     --color-danger: #F5D7DA;
     --color-success: #BCF7D2;
     --color-success-dark: #22C55E;
     --color-warning: #FFE8AD;
     --color-warning-dark: #FFCC00;
     --color-info: #CFDEFD;
+    /* Gradients */
+    --theme-opacity: #496A6514;
+    --theme-gradient: linear-gradient(90deg, #496A65 0%, #879C76 50%, #C69373 100%);
+    --theme-gradient-bg: linear-gradient(-1deg, rgba(73, 106, 101, 0.1) 0%, rgba(135, 156, 118, 0.08) 45%, rgba(198, 147, 115, 0.05) 75%);
     /* Fonts */
     --font-standard: "Manrope", sans-serif;
 }

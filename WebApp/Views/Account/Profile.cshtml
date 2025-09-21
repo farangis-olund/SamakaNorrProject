@@ -1,0 +1,32 @@
+﻿@model PublicProfileModel
+
+<div class="public-profile">
+    <div class="container">
+
+        <img src="@(Model.ProfileImgUrl ?? "avatar.svg")"
+             alt="@Model.FullName" class="profile-photo" />
+
+        <div class="profile-divider"></div>
+        
+        <div class="profile-info">
+            <h2>@Model.FullName</h2>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Bio))
+            {
+                <p class="bio">@Model.Bio</p>
+            }
+            else
+            {
+                <p class="bio muted">Ingen bio tillagd ännu.</p>
+            }
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ReturnUrl))
+        {
+            <a href="@Model.ReturnUrl" class="btn-accent-mustard profile-return">
+                <i class="fa-solid fa-arrow-left"></i> Tillbaka
+            </a>
+        }
+    </div>
+  
+</div>

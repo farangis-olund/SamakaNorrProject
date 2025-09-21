@@ -55,8 +55,10 @@ public class SearchChatHub : Hub
             _context.SearchMessages.Add(messageEntity);
             await _context.SaveChangesAsync();
 
-            // ✅ Broadcast to group
-            await Clients.Group(requestId).SendAsync("ReceiveMessage", senderFullName, message);
+            //// ✅ Broadcast to group
+            //await Clients.Group(requestId).SendAsync("ReceiveMessage", senderFullName, message);
+            await Clients.OthersInGroup(requestId).SendAsync("ReceiveMessage", senderFullName, message);
+
 
             Console.WriteLine($"✅ Message sent: [{id}] {senderFullName}: {message}");
         }

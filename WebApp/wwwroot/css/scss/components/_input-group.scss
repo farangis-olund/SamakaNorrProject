@@ -12,7 +12,7 @@
         padding: 1rem;
         padding-left: 40px;
         border-radius: 0.5rem !important;
-        border: 0.063rem solid $gray-400;
+        border: 0.063rem solid var(--color-accent-green);
 
         &::placeholder {
             opacity: 0.6;
@@ -24,22 +24,22 @@
 
         &:focus {
             outline: none;
-            border: 0.063rem solid $gray-600
+            border: 0.063rem solid var(--color-accent-green)
         }
     }
 
     select {
         -webkit-appearance: none;
-        -moz-appearance: none; 
+        -moz-appearance: none;
         appearance: none;
     }
 
 
-        i {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            color: $gray-400;
-        }
+    i {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: var(--color-accent-green);
     }
+}

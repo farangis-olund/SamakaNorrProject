@@ -26,6 +26,8 @@ builder.Services.AddScoped<BookingRepository>();
 builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped< OpenRouteService > ();
 builder.Services.AddScoped<SearchService>();
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<NotificationRepository>();
 
 builder.Services.AddHttpClient();
 
@@ -78,7 +80,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+builder.Services.AddHostedService<CleanupService>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();

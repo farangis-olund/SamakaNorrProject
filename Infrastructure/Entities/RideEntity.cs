@@ -30,4 +30,5 @@ public class RideEntity
     public ICollection<BookingEntity> Bookings { get; set; } = [];
 	public ICollection<MessageEntity> Messages { get; set; } = [];
 
+
 }

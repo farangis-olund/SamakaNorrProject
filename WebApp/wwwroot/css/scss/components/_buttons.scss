@@ -8,44 +8,63 @@
     align-items: center;
     gap: 12px;
     text-decoration: none;
+    border: none;
+    font-weight: 600;
 }
 
 .btn-theme {
     @include button;
     background: var(--color-theme);
     color: var(--color-white);
-    border: none;
 
     &:hover {
-        text-decoration: none;
         background: var(--color-theme-hover);
-        color: var(--color-white);
     }
 }
 
-.btn-accent-yellow {
+.btn-theme-mint {
     @include button;
-    background: var(--color-accent-yellow);
+    background: var(--color-theme-tertiary);
     color: var(--color-white);
-    border: none;
-   
+
     &:hover {
-        text-decoration: none;
-        background: #E0A800;
-        color: var(--color-white);
+        background: var(--color-theme-tertiary-hover);
+    }
+}
+
+.btn-theme-secondary {
+    @include button;
+    background: var(--color-theme-secondary);
+    color: var(--color-white);
+
+    &:hover {
+        background: var(--color-theme-secondary-hover);
+    }
+}
+
+.btn-accent-mustard {
+    @include button;
+    background: var(--color-accent-mustard);
+    border: none;
+    color: var(--color-white);
+
+    &:hover {
+        background: var(--color-accent-mustard-hover);
     }
 }
 
 
-.btn-transparent-accent-orange {
+.btn-theme-secondary-transparent {
     @include button;
     background: var(--color-transparent);
-    color: var(--color-accent-orange);
-    border-color: var(--color-accent-orange);
+    border: solid 2px;
+    color: var(--color-theme-secondary);
+    border-color: var(--color-theme-secondary);
+   
 
     &:hover {
         text-decoration: none;
-        background: #E0A800;
+        background: var(--color-accent-mustard-hover);
         color: var(--color-white);
     }
 }
@@ -102,29 +121,28 @@
     }
 }
 
-.btn-gray {
+.btn-beige {
     @include button;
-    background: var(--color-gray-200);
-    color: var(--color-gray-800);
-    border: none;
-
+    background: var(--color-accent-beige);
+    color: var(--color-theme-tertiary);
+    border: solid 2px var(--color-theme);
+    font-weight: 800;
     &:hover {
         text-decoration: none;
-        background: var(--color-gray-300);
-        color: var(--color-gray-900);
+        color: var(--color-theme);
     }
 }
 
 .btn-transparent {
     @include button;
     background: var(--color-transparent);
-    color: var(--color-gray-800);
+    color: var(--color-theme);
     border: none;
 
     &:hover {
         text-decoration: none;
-        background: var(--color-gray-700);
-        color: var(--color-white);
+        background: var(--color-accent-beige);
+        color: var(--color-theme);
     }
 }
 
@@ -215,27 +233,27 @@
     border-radius: 8px;
     width: 44px;
     height: 44px;
-    background-color: var(--color-gray-200);
-    color: var(--color-theme-secondary);
+    background-color: var(--color-accent-beige);
+    color: var(--color-theme-tertiary);
     text-decoration: none;
 
     &:hover {
         text-decoration: none;
-        background: var(--color-gray-400);
-        color: var(--color-theme-secondary);
+        background: var(--color-accent-beige);
+        color: var(--color-theme);
     }
 }
 
 .btn-mobile {
     @include button;
-    background: var(--color-gray-100);
+    background: var(--color-accent-beige);
     padding: 7px 10px 6px 10px;
 
     i {
-        color: var(--color-gray-700);
+        color: var(--color-theme);
 
         &:hover {
-            color: var(--color-gray-100);
+            color: var(--color-theme-tertiary);
         }
     }
 
@@ -244,24 +262,30 @@
 
     &:hover {
         text-decoration: none;
-        background: var(--color-gray-700);
+        background: var(--color-accent-beige);
     }
 }
 
 .btn-chat {
-    background: none; /* no background */
-    border: none; /* no border */
+    background: none;
+    border: none;
     cursor: pointer;
-    padding: 4px; /* small clickable area */
-    color: #666; /* neutral gray */
+    padding: 4px 8px;
+    color: var(--color-theme);
     transition: color 0.2s ease, transform 0.2s ease;
+    font-weight: 600;
+    display: inline-flex; /* inline + flex for alignment */
+    align-items: center; /* vertical center */
+    gap: 6px; /* space between icon and text */
+}
 
-    i {
-        font-size: 18px; /* clean size */
-    }
+.btn-chat i {
+    font-size: 18px;
+    color: var(--color-theme);
+    line-height: 1;
+}
 
-    &:hover {
-        color: #007bff; /* blue hover */
-        transform: scale(1.1); /* subtle grow */
-    }
+.btn-chat:hover {
+    color: var(--color-theme-hover);
+    transform: scale(1.05);
 }

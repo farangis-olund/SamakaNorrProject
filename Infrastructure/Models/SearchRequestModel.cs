@@ -15,6 +15,7 @@ public class SearchRequestModel : RideSearchModel
     // For displaying request results
     public int Id { get; set; }
     public string? UserName { get; set; }
+    public string? UserId { get; set; }
     public string? UserImgUrl { get; set; }
     public double DistanceKm { get; set; }
     public TimeSpan Duration { get; set; }
@@ -28,4 +29,6 @@ public class SearchViewModel
     public RideSearchModel? SearchModel { get; set; } = new();
     public SearchRequestModel? NewRequest { get; set; } = new();
     public List<SearchRequestModel> Requests { get; set; } = new();
+
+    public string? CurrentUser { get; set; }
 }

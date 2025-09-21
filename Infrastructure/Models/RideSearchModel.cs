@@ -2,12 +2,12 @@
 namespace Infrastructure.Models;
 public class RideSearchModel
 {
-    [Display(Name = "Avresa", Prompt = "Ange avreseplats")]
+    [Display(Name = "Från", Prompt = "Ange avreseplats")]
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Avreseplats krävs")]
     public string Origin { get; set; } = null!;
 
-    [Display(Name = "Destination", Prompt = "Ange destination plats")]
+    [Display(Name = "Till", Prompt = "Ange destination plats")]
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Destination plats krävs")]
     public string Destination { get; set; } = null!;

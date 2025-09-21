@@ -1,0 +1,91 @@
+﻿.public-profile {
+    margin: 3rem 1rem;
+
+    .container {
+        text-align: center;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 14px var(--color-theme);
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+        align-items: center;
+        min-height: 220px; // 👈 ensures enough height for divider
+
+        @include lg {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+        }
+
+        .profile-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-theme);
+        }
+
+        .profile-divider {
+            width: 2px; // thin line
+            background: var(--color-gray-400); // line color
+            min-height: 150px; // 👈 force visible height
+            align-self: center; // center it vertically
+            flex-shrink: 0; // don’t let flex shrink it
+            display: none;
+
+            @include lg {
+                display: inline-flex;
+            }
+        }
+
+
+
+        .profile-info {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; // 👈 keeps text vertically centered
+            text-align: left;
+            padding: 10px;
+
+            h2 {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--color-theme-secondary);
+                margin-bottom: 0.5rem;
+            }
+
+            .bio {
+                font-size: 1rem;
+                line-height: 1.4;
+                color: var(--color-gray-700);
+
+                &.muted {
+                    color: var(--color-gray-500);
+                    font-style: italic;
+                }
+            }
+        }
+
+        .profile-return {
+            align-self: center;
+            padding: 0.5rem 1rem;
+            height: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            @include lg {
+                align-items: flex-start;
+                align-self: flex-start;
+            }
+
+            i {
+                padding-top: 5px;
+            }
+        }
+    }
+}

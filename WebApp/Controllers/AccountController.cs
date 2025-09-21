@@ -4,20 +4,25 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using WebApp.Services;
 using WebApp.ViewModels;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace WebApp.Controllers;
 
 [Authorize]
 public class AccountController(UserManager<UserEntity> userManager, 
 							   SignInManager<UserEntity> signInManager, 
-							   AccountService accountService, RideService rideService) : Controller
+							   AccountService accountService, RideService rideService, IConfiguration configuration) : Controller
 {
     private readonly UserManager<UserEntity> _userManager = userManager;
 	private readonly SignInManager<UserEntity> _signInManager = signInManager;
 	private readonly AccountService _accountService = accountService;
     private readonly RideService _rideService = rideService;
+    private readonly IConfiguration _configuration = configuration;
+
 
     #region Index
     [HttpGet]
@@ -172,27 +177,90 @@ public class AccountController(UserManager<UserEntity> userManager,
 	}
 	#endregion
 
-	[HttpPost]
-	[Route("/account/upload")]
-	public async Task<IActionResult> UploadProfileImage(IFormFile file)
-	{
-		var user = await _userManager.GetUserAsync(User);
-		if (user != null && file != null && file.Length != 0)
-		{
-			var fileName = $"p_{user.Id}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/uploads/profiles", fileName);
+	//[HttpPost]
+	//[Route("/account/upload")]
+	//public async Task<IActionResult> UploadProfileImage(IFormFile file)
+	//{
+	//	var user = await _userManager.GetUserAsync(User);
+	//	if (user != null && file != null && file.Length != 0)
+	//	{
+	//		var fileName = $"p_{user.Id}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+	//		var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/uploads/profiles", fileName);
 
-			using var fs = new FileStream(filePath, FileMode.Create);
-			await file.CopyToAsync(fs);
+	//		using var fs = new FileStream(filePath, FileMode.Create);
+	//		await file.CopyToAsync(fs);
 
-			user.ProfileImgUrl = fileName;
-			await _userManager.UpdateAsync(user);
-		}
-		else
-		{
-			TempData["StatusMessage"] = "Unable to upload profile image!";
-		}
+	//		user.ProfileImgUrl = fileName;
+	//		await _userManager.UpdateAsync(user);
+	//	}
+	//	else
+	//	{
+	//		TempData["StatusMessage"] = "Unable to upload profile image!";
+	//	}
 
-		return RedirectToAction("Index", "Account");
-	}
+	//	return RedirectToAction("Index", "Account");
+	//}
+
+	
+
+[HttpPost]
+[Route("/account/upload")]
+public async Task<IActionResult> UploadProfileImage(IFormFile file)
+{
+    var user = await _userManager.GetUserAsync(User);
+
+    if (user != null && file != null && file.Length > 0)
+    {
+        var fileName = $"p_{user.Id}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+
+        // 🔹 Get connection string from appsettings.json or Azure portal
+        string connectionString = _configuration.GetConnectionString("AzureBlobStorage");
+        string containerName = "profile-img";
+
+        var blobServiceClient = new BlobServiceClient(connectionString);
+        var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+            // Ensure container exists
+            await containerClient.CreateIfNotExistsAsync(PublicAccessType.None);
+
+
+            var blobClient = containerClient.GetBlobClient(fileName);
+
+        using (var stream = file.OpenReadStream())
+        {
+            await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = file.ContentType });
+        }
+
+        // Save only blob URL in DB
+        user.ProfileImgUrl = blobClient.Uri.ToString();
+        await _userManager.UpdateAsync(user);
+    }
+    else
+    {
+        TempData["StatusMessage"] = "Unable to upload profile image!";
+    }
+
+    return RedirectToAction("Index", "Account");
+}
+
+
+[HttpGet("Account/Profile/{id}")]
+    public async Task<IActionResult> Profile(string id, string? returnUrl = null)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+
+        if (user == null)
+            return NotFound();
+
+        var model = new PublicProfileModel
+        {
+            FullName = user.FirstName + " " + user.LastName,
+            Bio = user.Bio, 
+            ProfileImgUrl = user.ProfileImgUrl,
+            ReturnUrl = returnUrl
+        };
+
+        return View(model);
+    }
+
 }

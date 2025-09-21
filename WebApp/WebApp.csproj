@@ -9,8 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\chatHelpers.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\chatHelpers.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\chatHelpers.js" />
+  </ItemGroup>
+
+  <ItemGroup>
      <!--<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.3" />
      <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.3" />-->
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.25.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspnetCore.SignalR.Client" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">

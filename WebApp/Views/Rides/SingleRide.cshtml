@@ -1,11 +1,18 @@
 ﻿@using Microsoft.AspNetCore.SignalR.Client
 @model RideModel
 
+
 <section id="single-ride">
      <div class="container">
 		@await Html.PartialAsync("~/Views/Shared/Sections/_StatusMessage.cshtml")
-		<div class="ride-content">
-			<p>Avgångstid: <span>@Model.DepartureTime.ToString("dd MMM yyyy")</span> <span class="time">@Model.DepartureTime.ToString("HH:mm")</span> </p>
+        <!-- Hidden fields for JS -->
+        <input type="hidden" id="rideChatId" value="@Model.Id" />
+        <input type="hidden" id="rideReceiverId" value="@Model.DriverId" />
+        <input type="hidden" id="currentUsername" value="@User.Identity.Name" />
+
+        <div class="ride-content">
+			<h4>@Model.Origin -> @Model.Destination </h4>
+            <p>Avgångstid: <span>@Model.DepartureTime.ToString("dd MMM yyyy")</span> <span class="time">@Model.DepartureTime.ToString("HH:mm")</span> </p>
             
             <div class="ride-meta">
                 <div class="ride-top">
@@ -24,45 +31,33 @@
                     </div>
 
                     <div class="driver-info">
-                        @if (Model.UserImgUrl != null)
-                        {
-                            <img src="~/images/uploads/profiles/@Model.UserImgUrl" />
-                        }
-                        else
-                        {
-                            <img src="~/images/uploads/profiles/avatar.svg" />
-                        }
+                        <a asp-controller="Account"
+                           asp-action="Profile"
+                           asp-route-id="@Model.DriverId"
+                           asp-route-returnUrl="@Url.Action("SingleRide", "Rides", new { id = Model.Id })">
+                            @if (Model.UserImgUrl != null)
+                            {
+                                <img src="@Model.UserImgUrl" alt="@Model.DriverName" />
+                            }
+                            else
+                            {
+                                <img src="~/images/uploads/profiles/avatar.svg" alt="@Model.DriverName" />
+                            }
+                        </a>
 
-                        <div class="driver-meta">
+                         <div class="driver-meta">
                             <p>@Model.DriverName</p>
                             <button class="btn-chat" type="button" onclick="toggleChat()" title="Öppna meddelanden">
-                                <i class="fa-regular fa-comment"></i>
+                                <i class="fa-regular fa-comment"></i> 
+                                chatta
                             </button>
                         </div>
                     </div>
                 </div>
+              
 
-                <div id="rideChat" class="ride-messages" style="display: none;">
-                    <div id="messagesBox" class="messages-box">
-                        @if (Model.Messages != null && Model.Messages.Any())
-                        {
-                            foreach (var msg in Model.Messages)
-                            {
-                                <div class="message-item">
-                                    <strong>@msg.Sender:</strong> @msg.Text
-                                    <div class="timestamp">@msg.Timestamp.ToString("g")</div>
-                                </div>
-                            }
-                        }
-
-                    </div>
-                    <form id="chatForm" onsubmit="sendMessage(event)">
-                        <input type="text" id="messageText" placeholder="Skriv ett meddelande..." required />
-                        <button type="submit" class="btn-gray">Skicka</button>
-                    </form>
-
-                </div>
-
+                @await Html.PartialAsync("~/Views/Shared/Sections/_ChatPartial.cshtml", Model)
+               
                 <div class="ride-bottom">
                     <div class="booking-frame">
                         <h4>Boka din plats</h4>
@@ -81,7 +76,7 @@
                                 <input type="hidden" asp-for="@Model.DriverName" />
                                 <input type="hidden" asp-for="@Model.Destination" />
                             </div>
-                            <button id="form-button" class="btn-accent-yellow" type="submit">Boka</button>
+                            <button id="form-button" class="btn-accent-mustard" type="submit">Boka</button>
                         </form>
                     </div>
                 </div>
@@ -96,7 +91,7 @@
 </section>
 
 
-<script>
+ <script>
 	const rideId = "@Model.Id";
 	const sender = "@User.Identity.Name";
 	const receiver = "@Model.DriverId";
@@ -106,6 +101,9 @@
 		chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
 	}
 </script>
+
+
+
 
 <script src="~/js/chatbox.js"></script>
 

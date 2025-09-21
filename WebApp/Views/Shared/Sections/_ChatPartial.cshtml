@@ -1,0 +1,34 @@
+﻿@model RideModel
+
+<div id="rideChat" class="ride-messages" style="display:none;">
+    <div id="messagesBox" class="messages-box">
+        @if (Model.Messages != null && Model.Messages.Any())
+        {
+            foreach (var msg in Model.Messages)
+            {
+                var type = msg.Sender == Model.CurrentUser ? "sent" : "received";
+                <div class="message-item @type">
+                    <div class="bubble">
+                        @if (type == "received")
+                        {
+                            <div class="sender-name">@msg.Sender</div>
+                        }
+                        <div class="text">@msg.Text</div>
+                        <div class="timestamp">@msg.Timestamp.ToString("g")</div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <form id="chatForm" onsubmit="sendMessage(event)" class="chat-form">
+        <div class="chat-input-wrapper">
+            <input type="text" id="messageText" placeholder="Skriv ett meddelande..." required />
+            <button type="submit" class="send-btn">
+                <i class="fa fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+
+</div>
+

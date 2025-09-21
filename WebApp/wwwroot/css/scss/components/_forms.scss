@@ -23,7 +23,7 @@
 
     .checkbox-group {
         position: relative;
-       
+
         .input-group {
             display: flex;
             justify-content: flex-start;
@@ -33,7 +33,7 @@
             input[type="checkbox"] {
                 height: 1.2rem;
                 width: 1.2rem;
-                
+
                 &.input-validation-error {
                     position: relative;
                     box-shadow: 0 0 0 0.063rem $danger;
@@ -60,7 +60,7 @@
     input {
         padding: 1rem;
         border-radius: 0.5rem !important;
-        border: 0.063rem solid $gray-400;
+        border: 0.063rem solid var(--color-accent-green);
 
         &::placeholder {
             opacity: 0.4;
@@ -78,14 +78,14 @@
 
         &:focus {
             outline: none;
-            border: 0.063rem solid $gray-600
+            border: 0.063rem solid var(--color-accent-green)
         }
     }
 
     textarea {
         padding: 1rem;
         border-radius: 0.5rem !important;
-        border: 0.063rem solid $gray-400;
+        border: 0.063rem solid var(--color-accent-green);
         resize: none;
 
         &::placeholder {
@@ -109,8 +109,6 @@
             right: 0;
             @include text-s;
             color: $danger;
-
-           
         }
     }
 }

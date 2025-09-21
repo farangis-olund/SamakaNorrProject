@@ -8,12 +8,15 @@
 			}
 			else
 			{
-				<img src="~/images/uploads/profiles/@Model.ProfileInfo.ProfileImgUrl" alt="@($"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}")" />
+				<img src="@Model.ProfileInfo.ProfileImgUrl" alt="@($"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}")" />
 			}
 
-			<form enctype="multipart/form-data" method="post" asp-action="UploadProfileImage" asp-controller="Account">
+
+			<form id="uploadForm" enctype="multipart/form-data" method="post" asp-action="UploadProfileImage" asp-controller="Account">
 				<input id="fileUploader" type="file" name="file" hidden />
-				<label for="fileUploader" class="button-circle"><i class="fa-solid fa-refresh"></i> </label>
+				<label for="fileUploader" class="button-circle">
+					<i class="fa-solid fa-refresh"></i>
+				</label>
 			</form>
 		</div>
 		<h5>@($"{Model.ProfileInfo.FirstName} {Model.ProfileInfo.LastName}")</h5>
@@ -27,13 +30,19 @@
 		<a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "AccountSecurity" ? "btn-theme-s" : "btn-transparent")" asp-controller="Account" asp-action="AccountSecurity">
 			<i class="fa-solid fa-lock"></i> <span>Säkerhet</span>
 		</a>
-		<a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Driver" ? "btn-theme-s" : "btn-transparent")" asp-controller="Account" asp-action="Driver">
+	@* 	<a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Driver" ? "btn-theme-s" : "btn-transparent")" asp-controller="Account" asp-action="Driver">
 			<i class="fa-solid fa-car-side"></i> <span>Du är chaufför</span>
 		</a>
 		<a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Passenger" ? "btn-theme-s" : "btn-transparent")" asp-controller="Account" asp-action="Passenger">
 			<i class="fa-solid fa-location-dot"></i> <span>Du är passagerare</span>
-		</a>
+		</a> *@
 		<a class="btn-transparent" asp-controller="Auth" asp-action="SignOut"><i class="fa-solid fa-right-from-bracket"></i> <span>Logga ut</span></a>
 	</nav>
 
 </aside>
+
+	<script>
+    document.getElementById("fileUploader").addEventListener("change", function () {
+        document.getElementById("uploadForm").submit();
+    });
+</script>
