@@ -4,11 +4,7 @@
         max-width: 1320px;
         margin: 0 auto;
         box-sizing: border-box;
-        padding-top: 20px;
-
-        @include lg {
-            padding-top: 80px;
-        }
+        
 
         form {
             .content {
@@ -25,15 +21,13 @@
                 }
 
 
-                .btn-accent-orange {
+                .btn-accent-mustard {
                     width: 100%;
+                    padding: 16px 22px;
                 }
             }
         }
 
-        button {
-            padding: 16px 28px;
-        }
 
         h1 {
             padding-bottom: 20px;
@@ -84,7 +78,6 @@
 
             i {
                 right: 15px;
-               
             }
 
             .card-header {
@@ -128,6 +121,13 @@
                 border-style: solid;
                 border-color: #f5e27f transparent transparent transparent;
             }
+        }
+
+        .edit-form {
+            padding: 1rem;
+            background: var(--color-gray-100);
+            border-radius: 8px;
+            border: 1px solid var(--color-gray-300);
         }
     }
 }

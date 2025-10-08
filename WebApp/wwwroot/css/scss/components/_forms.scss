@@ -111,4 +111,16 @@
             color: $danger;
         }
     }
+
+    #form-password {
+        display: flex;
+        flex-direction: column;
+
+        span.field-validation-error {
+            position: static;
+            top: 0;
+            display: block;
+            color: $danger;
+        }
+    }
 }

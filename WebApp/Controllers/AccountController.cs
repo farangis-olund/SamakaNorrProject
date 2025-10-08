@@ -177,30 +177,6 @@ public class AccountController(UserManager<UserEntity> userManager,
 	}
 	#endregion
 
-	//[HttpPost]
-	//[Route("/account/upload")]
-	//public async Task<IActionResult> UploadProfileImage(IFormFile file)
-	//{
-	//	var user = await _userManager.GetUserAsync(User);
-	//	if (user != null && file != null && file.Length != 0)
-	//	{
-	//		var fileName = $"p_{user.Id}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-	//		var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/uploads/profiles", fileName);
-
-	//		using var fs = new FileStream(filePath, FileMode.Create);
-	//		await file.CopyToAsync(fs);
-
-	//		user.ProfileImgUrl = fileName;
-	//		await _userManager.UpdateAsync(user);
-	//	}
-	//	else
-	//	{
-	//		TempData["StatusMessage"] = "Unable to upload profile image!";
-	//	}
-
-	//	return RedirectToAction("Index", "Account");
-	//}
-
 	
 
 [HttpPost]

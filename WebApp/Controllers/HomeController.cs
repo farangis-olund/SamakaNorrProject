@@ -13,4 +13,14 @@ public class HomeController : Controller
 
     [Route("/error")]
     public IActionResult Error404(int statusCode) => View();
+
+    public IActionResult About()
+    {
+        return View();
+    }
+
+    public IActionResult Contact()
+    {
+        return View();
+    }
 }

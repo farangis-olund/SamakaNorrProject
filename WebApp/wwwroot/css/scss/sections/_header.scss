@@ -2,7 +2,11 @@
     background-color: var(--color-gray-100);
 }
 header {
-    padding: 15px 0;
+    padding: 20px 0;
+
+    @include lg {
+        padding: 40px 0;
+    }
 
     .container {
         display: grid;
@@ -21,7 +25,6 @@ header {
 
             img {
                 width: 150px;
-               
             }
         }
 
@@ -94,21 +97,21 @@ header {
             }
         }
 
-        .account-buttons {
-            grid-area: buttons;
-            gap: 15px;
-            z-index: 4;
-            display: none;
+        .resa-menu {
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            grid-column: 1 / -1;
 
-            i {
-                font-size: 20px;
+            @include lg {
+                grid-column: auto; // reset to default grid cell
+                width: auto; // don’t force 100%
+                justify-content: flex-end; // align back to right
+                padding: 0; // optional: remove mobile padding
+                gap: 20px;
             }
 
-            .avatar {
-                width: 36px;
-                height: 36px;
-                border-radius: 50%;
-            }
 
             .mina-resor-dropdown {
                 position: relative;
@@ -119,7 +122,6 @@ header {
                     border: none;
                     cursor: pointer;
                     font-weight: 700;
-                    color: white;
                     font-size: 16px;
                     display: flex;
                     align-items: center;
@@ -130,7 +132,7 @@ header {
                     }
 
                     &:hover {
-                        color: var(--color-accent-beige);
+                        color: var(--color-theme-secondary);
 
                         @include lg {
                             color: var(--color-theme-secondary);
@@ -247,7 +249,10 @@ header {
                     position: absolute;
                     top: 120%; // just below the button
                     left: 50%; // align horizontally to the center of button
-                    transform: translateX(-50%); // correct centering
+                    transform: translateX(-90%); // correct centering
+                    @include lg {
+                        transform: translateX(-50%);
+                    }
 
                     width: 280px;
                     background: #fff;
@@ -301,6 +306,24 @@ header {
                     display: flex;
                 }
             }
+        }
+
+        .account-buttons {
+            grid-area: buttons;
+            gap: 15px;
+            z-index: 4;
+            display: none;
+
+            i {
+                font-size: 20px;
+            }
+
+            .avatar {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+            }
+
 
 
 

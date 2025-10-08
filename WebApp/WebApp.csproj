@@ -9,14 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Shared\Sections\_AddRidePartial.cshtml" />
     <Content Remove="wwwroot\js\chatHelpers.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Shared\Sections\_AddRidePartial.cshtml" />
     <_ContentIncludedByDefault Remove="wwwroot\js\chatHelpers.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Shared\Sections\_AddRidePartial.cshtml" />
     <None Include="wwwroot\js\chatHelpers.js" />
   </ItemGroup>
 
@@ -42,5 +45,10 @@
 	<ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
+
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Views\Shared\Sections\_AddRidePartial.cshtml" />
+	</ItemGroup>
 
 </Project>

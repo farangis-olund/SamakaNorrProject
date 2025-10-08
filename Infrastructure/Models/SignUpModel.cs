@@ -24,13 +24,13 @@ public class SignUpModel
     public string Email { get; set; } = null!;
 
     [Display(Name = "Lösenord", Prompt = "Ange ditt lösenord", Order = 3)]
-    [Required(ErrorMessage = "Lösenord är obligatoriskt")]
+    [Required(ErrorMessage = "Lösenordet måste vara minst 8 tecken, innehålla stora och små bokstäver, en siffra och ett specialtecken")]
     [DataType(DataType.Password)]
-    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=])[A-Za-z\d!@#$%^&*()_\-+=]{8,}$", ErrorMessage = "Ogiltigt lösenord")]
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=])[A-Za-z\d!@#$%^&*()_\-+=]{8,}$", ErrorMessage = "Lösenordet måste vara minst 8 tecken och innehålla stora och små bokstäver, en siffra och ett specialtecken.")]
     public string Password { get; set; } = null!;
 
     [Display(Name = "Bekräfta lösenord", Prompt = "Bekräfta ditt lösenord", Order = 4)]
-    [Required(ErrorMessage = "Du måste bekräfta ditt lösenord")]
+    [Required(ErrorMessage = "Lösenorden stämmer inte överens")]
     [DataType(DataType.Password)]
     [Compare(nameof(Password), ErrorMessage = "Lösenorden stämmer inte överens")]
     public string ConfirmPassword { get; set; } = null!;

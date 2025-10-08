@@ -97,6 +97,26 @@ public class ChatHub : Hub
         };
 
         _context.Messages.Add(messageEntity);
+        
+        // ✅ Create notification for receiver
+        var receiverUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == receiver);
+        if (receiverUser != null)
+        {
+            var notification = new NotificationEntity
+            {
+                UserId = receiverUser.Id,
+                Title = "Nytt meddelande i resa",
+                Message = $"{senderFullName} skickade: {message}",
+                CreatedAt = DateTime.UtcNow,
+                IsRead = false
+            };
+
+            _context.Notifications.Add(notification);
+
+            await Clients.User(receiverUser.Id)
+                .SendAsync("ReceiveNotification", notification.Title, notification.Message);
+        }
+
         await _context.SaveChangesAsync();
 
         // ✅ Broadcast only to others (no duplicate for sender)

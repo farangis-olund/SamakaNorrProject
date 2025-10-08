@@ -95,13 +95,14 @@
                                     break;
 
                                 case BookingStatus.NotBooked:
+                                    <span class="badge bg-secondary">Ej bokad</span>
                                     <form asp-controller="Rides" asp-action="Delete" method="post" class="delete-button ">
                                         <input type="hidden" name="rideId" value="@ride.Id" />
                                         <button type="submit" class="btn btn-sm" title="Ta bort resa">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </form>
-                                    <span class="badge bg-secondary">Ej bokad</span>
+                                    
                                     break;
                                 case BookingStatus.Completed:
                                     <form asp-controller="Rides" asp-action="Delete" method="post" class="delete-button">
@@ -112,16 +113,7 @@
                                     </form>
                                     <span class="badge bg-success">Avslutad</span>
                                     break;
-                                case BookingStatus.Rejected:
-                                    <form asp-controller="Rides" asp-action="Delete" method="post" class="delete-button ">
-                                        <input type="hidden" name="rideId" value="@ride.Id" />
-                                        <button type="submit" class="btn btn-sm" title="Ta bort resa">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </form>
-                                    <span class="badge text-danger">Avvisad</span>
-                                    break;
-
+                               
                                 default:
                                     <span class="badge bg-info">Unknown Status</span>
                                     break;

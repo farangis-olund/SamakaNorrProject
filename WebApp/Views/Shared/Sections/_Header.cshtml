@@ -14,10 +14,10 @@
         </button>
         <div id="menu">
             <nav>
-                <a class="menu-link" asp-controller="Home" asp-action="Index" asp-fragment="overview">Om oss</a>
+                <a class="menu-link" asp-controller="Home" asp-action="About" asp-fragment="overview">Om oss</a>
                 <a class="menu-link" asp-controller="Rides" asp-action="Index" >Resor</a>
                 <a class="menu-link" asp-controller="Search" asp-action="Index">Sökes</a>
-                <a class="menu-link" asp-controller="Contact" asp-action="Index">Kontakta oss</a>
+                <a class="menu-link" asp-controller="Home" asp-action="Contact">Kontakta oss</a>
             </nav>
         </div>
 
@@ -29,12 +29,9 @@
             </label>
             <label>Mörk</label>
         </div> *@
-
-        <div class="account-buttons">
-            @if (_signInManager.IsSignedIn(User))
-            {                
-                var user = await _userManager.FindByNameAsync(User.Identity!.Name!);
-
+        <div class="resa-menu">
+             @if (_signInManager.IsSignedIn(User))
+            {
 
                 <!-- 📄 Mina resor -->
                 <div class="mina-resor-dropdown">
@@ -74,6 +71,14 @@
                         </ul>
                     </div>
                 </div>
+            }
+        </div>
+        <div class="account-buttons">
+            @if (_signInManager.IsSignedIn(User))
+            {                
+                var user = await _userManager.FindByNameAsync(User.Identity!.Name!);
+
+
 
                 <!-- 👤 Avatar -->
                 if(user!.ProfileImgUrl == null)

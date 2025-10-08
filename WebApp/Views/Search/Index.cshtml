@@ -6,7 +6,7 @@
         <h1>Tillgängliga Förfrågningar</h1>
         
         <div class="heading">
-            <form method="post" asp-controller="Search" asp-action="Index">
+            <form method="post" asp-controller="Search" asp-action="Search">
                 <div class="content">
 
                     <div id="form-departure" class="input-group">
@@ -133,8 +133,114 @@
                                     <i class="fa-regular fa-comment"></i> chatta
                                 </button>
 
-                         
+                                <!-- 📝 Only for owner -->
+                                @if (req.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
+                                {
+                                    <div class="mt-2 d-flex gap-2 justify-content-center">
+                                        <!-- Edit Icon -->
+                                        <button type="button"
+                                                class="btn-icon-warning"
+                                                onclick="toggleEditForm(@req.Id)"
+                                                title="Redigera">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </button>
+
+                                        <!-- Delete -->
+                                        <form asp-controller="Search"
+                                              asp-action="Delete"
+                                              asp-route-id="@req.Id"
+                                              method="post"
+                                              style="display:inline;">
+                                            <button type="submit" class="btn-icon-danger" title="Ta bort">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
                             </div>
+                        </div>
+
+                        <!-- 🔹 Inline hidden edit form -->
+                        <div id="editForm-@req.Id" class="edit-form mt-3" style="display:none;">
+                            <form asp-controller="Search" asp-action="Edit" method="post" class="row g-2">
+                                <input type="hidden" name="Id" value="@req.Id" />
+
+                                <!-- Origin -->
+                                <div class="form-group">
+                                    <label for="origin">Från:</label>
+
+                                    <!-- Show current -->
+                                    <input type="text" id="originText-@req.Id"
+                                           name="Origin"
+                                           class="form-control mb-2"
+                                           value="@req.Origin" readonly />
+
+                                    <!-- Dropdown (optional change) -->
+                                    <div class="select-wrapper">
+                                        @await Html.PartialAsync("~/Views/Shared/Sections/_VillageSelect.cshtml", "OriginSelect-" + req.Id)
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                document.querySelectorAll("#OriginSelect-@req.Id, #DestinationSelect-@req.Id")
+                                                    .forEach(el => el.removeAttribute("required"));
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+
+                                <!-- Destination -->
+                                <div class="form-group">
+                                    <label for="destination">Till:</label>
+
+                                    <!-- Show current -->
+                                    <input type="text" id="destinationText-@req.Id"
+                                           name="Destination"
+                                           class="form-control mb-2"
+                                           value="@req.Destination" readonly />
+
+                                    <!-- Dropdown (optional change) -->
+                                    <div class="select-wrapper">
+                                        @await Html.PartialAsync("~/Views/Shared/Sections/_VillageSelect.cshtml", "DestinationSelect-" + req.Id)
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                document.querySelectorAll("#OriginSelect-@req.Id, #DestinationSelect-@req.Id")
+                                                    .forEach(el => el.removeAttribute("required"));
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-6">
+                                    <label>Avgångstid</label>
+                                    <input type="datetime-local" name="DepartureTime"
+                                           value="@(req.DepartureTime.HasValue ? req.DepartureTime.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
+                                           class="form-control" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Platser</label>
+                                    <input type="number" name="SeatsRequired" value="@req.SeatsRequired"
+                                           class="form-control" min="1" required />
+                                </div>
+
+                                <div class="col-12">
+                                    <label>Noteringar</label>
+                                    <textarea name="Notes" class="form-control">@req.Notes</textarea>
+                                </div>
+
+                                <div class="col-12 mt-2 d-flex gap-2">
+                                    <button type="submit" class="btn-theme-mint"><i class="fa-solid fa-floppy-disk"></i> Spara</button>
+                                    <button type="button" class="btn-beige"
+                                            onclick="toggleEditForm(@req.Id)">
+                                        <i class="fa-solid fa-xmark"></i> Avbryt
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- ✅ Hook the script after this request’s edit form -->
+                            <script>
+                                hookVillageSelect(@req.Id);
+                            </script>
                         </div>
 
                         <!-- 💬 Chat box -->
@@ -182,6 +288,7 @@
                 <p class="text-muted">Inga förfrågningar hittades.</p>
             }
 
+
             
 
         </div>
@@ -191,3 +298,36 @@
 </section>
 
 <script src="~/js/searchChatbox.js"></script>
+
+<script>
+    function toggleEditForm(id) {
+        const form = document.getElementById("editForm-" + id);
+        form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+</script>
+
+<script>
+    function hookVillageSelect(reqId) {
+        const originSelect = document.getElementById("OriginSelect-" + reqId);
+        const originText = document.getElementById("originText-" + reqId);
+
+        const destSelect = document.getElementById("DestinationSelect-" + reqId);
+        const destText = document.getElementById("destinationText-" + reqId);
+
+        if (originSelect) {
+            originSelect.addEventListener("change", () => {
+                if (originSelect.value && originSelect.value !== "") {
+                    originText.value = originSelect.value;
+                }
+            });
+        }
+
+        if (destSelect) {
+            destSelect.addEventListener("change", () => {
+                if (destSelect.value && destSelect.value !== "") {
+                    destText.value = destSelect.value;
+                }
+            });
+        }
+    }
+</script>

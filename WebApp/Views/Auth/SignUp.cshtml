@@ -36,8 +36,9 @@
                 <!-- Password Input -->
                 <div id="form-password" class="input-group">
                     <label asp-for="Form.Password" class="form-label" for="password">Lösenord</label>
-                    <input asp-for="Form.Password" id="password" type="password" aria-required="true" aria-describedby="password-error" />
                     <span asp-validation-for="Form.Password" id="password-error" class="form-error" role="alert"></span>
+                    <input asp-for="Form.Password" id="password" type="password" aria-required="true" aria-describedby="password-error" />
+                    
                 </div>
 
                 <!-- Confirm Password Input -->

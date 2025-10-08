@@ -104,16 +104,18 @@ public class RidesController(DataContext context, RideService rideService, UserM
                 {
                     // ✅ Get driving info (same as in GET)
                     var drivingInfo = await _openRouteService.GetDrivingInfoAsync(ride.Origin, ride.Destination);
-
+                    var userEntity = await _userManager.FindByIdAsync(ride.DriverId);
                     rideModels.Add(new RideModel
                     {
                         Id = ride.Id,
                         Origin = ride.Origin,
                         Destination = ride.Destination,
                         DepartureTime = ride.DepartureTime,
+                        DriverName = userEntity!.FirstName + " " + userEntity.LastName,
+                        UserImgUrl = userEntity.ProfileImgUrl,
                         Price = ride.Price,
                         Free = ride.Free,
-
+                        TripDetails = ride.TripDetails,
                         DistanceKm = drivingInfo?.DistanceKm ?? 0,
                         Duration = drivingInfo?.Duration ?? TimeSpan.Zero,
                         EstimatedArrival = ride.DepartureTime + (drivingInfo?.Duration ?? TimeSpan.Zero)

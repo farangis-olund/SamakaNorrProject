@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Kontakta oss";
+}
+
+<section class="contacts-header">
+    <div class="container">
+        <h1>Kontakta oss</h1>
+        <p class="lead mt-3 text-muted">
+            Har du frågor, förslag eller vill komma i kontakt med oss?
+            Fyll i formuläret nedan eller skicka ett mejl direkt till vårt team.
+        </p>
+    </div>
+</section>
+
+<section class="contacts bg-light">
+    <div class="container">
+             <!-- Contact Info -->
+            <div class="contact-info">
+                <h4>Vår information</h4>
+                <div class="info">
+                    <p><i class="fa fa-envelope text-accent-mustard"></i> support@samaka.se</p>
+                    <p><i class="fa fa-phone text-accent-mustard"></i> +46 90 123 45 67</p>
+                    <p><i class="fa fa-map-marker-alt text-accent-mustard"></i> Glommersträsk, Sverige</p>
+                </div>
+               
+            </div>
+
+            <!-- Contact Form -->
+
+        <form class="content" method="post" asp-controller="Home" asp-action="Contact">
+            <div class="input-group">
+                    <label for="name">Namn</label>
+                    <input type="text" id="name" name="Name" required />
+                </div>
+            <div class="input-group">
+                    <label for="email" >E-post</label>
+                    <input type="email"  id="email" name="Email" required />
+                </div>
+            <div class="input-group">
+                    <label for="message" >Meddelande</label>
+                    <textarea id="message" name="Message" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-accent-mustard">Skicka</button>
+            </form>
+           
+
+    </div>
+</section>

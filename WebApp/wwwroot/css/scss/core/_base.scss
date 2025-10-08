@@ -1,7 +1,7 @@
 html, body {
     @include standard-text;
     font-size: 16px;
-    background: #fffff0;
+  
 }
 
 .text-xs { @include text-xs; }
@@ -77,4 +77,7 @@ a {
 
 .bg-red-100 {
     background-color: #f8d7da;
+}
+.text-color-mint {
+    color: var(--color-theme-tertiary);
 }

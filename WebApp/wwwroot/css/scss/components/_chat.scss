@@ -68,11 +68,11 @@
 
     i {
         font-size: 24px;
-        color: var(--color-theme-secondary);
+        color: var(--color-theme);
     }
 
     &:hover i {
-        color: var(--color-theme-secondary-hover);
+        color: var(--color-theme-hover);
     }
 
     .badge-unread {

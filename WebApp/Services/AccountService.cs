@@ -83,7 +83,9 @@ public class AccountService(UserManager<UserEntity> userManager,
                     Free = ride.Free,
                     TripDetails = ride.TripDetails,
                     AvailableSeats = ride.AvailableSeats,
-                    BookingStatus = ride.BookingStatus,
+                    BookingStatus = ride.BookingStatus == BookingStatus.Rejected
+                    ? BookingStatus.NotBooked
+                    : ride.BookingStatus,
                     BookingId = ride.BookingId,
 
                     DistanceKm = drivingInfo?.DistanceKm ?? 0,

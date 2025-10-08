@@ -53,6 +53,31 @@ public class SearchChatHub : Hub
             };
 
             _context.SearchMessages.Add(messageEntity);
+
+            // ✅ Create notification for owner
+            var requestOwner = await _context.SearchRequests
+                .Where(r => r.Id == id)
+                .Select(r => r.UserId)
+                .FirstOrDefaultAsync();
+
+            if (requestOwner != null && requestOwner != senderUser.Id)
+            {
+                var notification = new NotificationEntity
+                {
+                    UserId = requestOwner,
+                    Title = "Nytt meddelande på förfrågan",
+                    Message = $"{senderFullName} skickade: {message}",
+                    CreatedAt = DateTime.UtcNow,
+                    IsRead = false
+                };
+
+                _context.Notifications.Add(notification);
+
+                // Push real-time notification
+                await Clients.User(requestOwner)
+                    .SendAsync("ReceiveNotification", notification.Title, notification.Message);
+            }
+
             await _context.SaveChangesAsync();
 
             //// ✅ Broadcast to group
